@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String        @id @default(uuid())
+  name        String
+  email       String        @unique
+  password    String
+  limit       Decimal
+  expired     Int
+  avatar      String
+  created_at  DateTime
+  updated_at  DateTime
+  application Application[]
+  card        Card[]
+  Invoice     Invoice[]
+
+  @@map("users")
+}
+
+model Invoice {
+  id                     String   @id @default(uuid())
+  name                   String
+  type_invoice           String
+  payment_method         String
+  value                  Decimal
+  pay                    Boolean
+  expired                DateTime
+  description            String
+  number_of_installments Int?
+  created_at             DateTime
+  updated_at             DateTime
+  Card                   Card[]
+
+  user_id User   @relation(fields: [userId], references: [id])
+  userId  String
+
+  @@map("invoices")
+}
+
+model Card {
+  id             String   @id @default(uuid())
+  name           String
+  invoiceClosing Int
+  expired        Int
+  color_card     String
+  color_font     String
+  created_at     DateTime
+  updated_at     DateTime
+
+  user_id User   @relation(fields: [userId], references: [id])
+  userId  String
+
+  invoice_id Invoice @relation(fields: [invoiceId], references: [id])
+  invoiceId  String
+
+  @@map("cards")
+}
+
+model Application {
+  id                String    @id @default(uuid())
+  name              String
+  target_value      Decimal
+  value             Decimal
+  institution       String
+  color_application String
+  color_font        String
+  icon              String
+  created_at        DateTime
+  updated_at        DateTime
+  Extarct           Extarct[]
+
+  user_id User   @relation(fields: [userId], references: [id])
+  userId  String
+
+  @@map("applications")
+}
+
+model Extarct {
+  id         String   @id @default(uuid())
+  type       String
+  value      Decimal
+  created_at DateTime
+
+  application_id Application @relation(fields: [applicationId], references: [id])
+  applicationId  String
+}

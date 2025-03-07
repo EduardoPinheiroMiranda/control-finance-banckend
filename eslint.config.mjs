@@ -16,8 +16,9 @@ export default [
 	{
 		rules: {
 			"quotes": ["error", "double", { "avoidEscape": true }],
-		  "indent": ["error", "tab"],
-			"semi": ["error", "always"]
+		  	"indent": ["error", "tab"],
+			"semi": ["error", "always"],
+			"@typescript-eslint/no-explicit-any": "off",
 		}
 	}
 ];

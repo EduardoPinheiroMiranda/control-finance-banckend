@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id          String        @id @default(uuid())
+  id          String      @id @default(uuid())
   name        String
   email       String        @unique
   password    String
@@ -36,7 +36,7 @@ model Invoice {
   number_of_installments Int?
   created_at             DateTime
   updated_at             DateTime
-  Card                   Card[]
+  card                   Card[]
 
   user_id User   @relation(fields: [userId], references: [id])
   userId  String

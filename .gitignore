@@ -1,2 +1,8 @@
-.env
+# DDEPENDENCIES
 node_modules
+
+# ENVIRONMENTS
+.env
+
+# DATABASE FILE
+prisma/controlFinance.db

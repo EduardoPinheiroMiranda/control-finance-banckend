@@ -10,19 +10,25 @@ export async function registerUser(request: FastifyRequest, reply: FastifyReply)
 		const scheme = z.object({
 			name: z.string(),
 			email: z.string(),
-			password: z.string(),
-			limit: z.number(),
-			expired: z.number()
+			password: z.string()
 		});
 
 		const body = scheme.parse(request.body);
 		
 
 		const serviceRegisterUser = makeRegisterUser();
-		const user = await serviceRegisterUser.execute(body);
+		await serviceRegisterUser.execute({
+			name: body.name,
+			email: body.email,
+			password: body.password,
+			limit: 1000,
+			expired: 10
+		});
 
 
-		reply.status(201).send(JSON.stringify(user));
+		reply.status(201).send(JSON.stringify({
+			msg: "registration made"
+		}));
 
 	}catch(err: any){
 

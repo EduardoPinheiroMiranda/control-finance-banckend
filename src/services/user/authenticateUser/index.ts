@@ -34,6 +34,11 @@ export class AuthenticateUser{
 		);
 
 
-		return token;
+		return {
+			id: user.id,
+			name: user.name,
+			emial: user.email,
+			token
+		};
 	}
 }

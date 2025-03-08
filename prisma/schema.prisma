@@ -50,6 +50,7 @@ model Card {
   name           String
   invoiceClosing Int
   expired        Int
+  debt_amount    Decimal  @default(0)
   color_card     String
   color_font     String
   created_at     String

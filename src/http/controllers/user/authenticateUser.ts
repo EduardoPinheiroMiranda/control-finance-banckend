@@ -17,15 +17,13 @@ export async function authenticateUser(request: FastifyRequest, reply: FastifyRe
 
 
 		const serviceAuthenticateUser = makeAuthenticateUser();
-		const authorization = await serviceAuthenticateUser.execute(
+		const user = await serviceAuthenticateUser.execute(
 			body.email,
 			body.password
 		);
 
         
-		reply.status(200).send(JSON.stringify({
-			token: authorization
-		}));
+		reply.status(200).send(JSON.stringify(user));
 
 	}catch(err: any){
 
@@ -35,6 +33,8 @@ export async function authenticateUser(request: FastifyRequest, reply: FastifyRe
 			}));
 		}
         
+
+		console.log(err);
 		reply.status(500).send(JSON.stringify({
 			msg: "error internal server!"
 		}));

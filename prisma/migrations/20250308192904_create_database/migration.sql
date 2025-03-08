@@ -35,6 +35,7 @@ CREATE TABLE "cards" (
     "name" TEXT NOT NULL,
     "invoiceClosing" INTEGER NOT NULL,
     "expired" INTEGER NOT NULL,
+    "debt_amount" DECIMAL NOT NULL DEFAULT 0,
     "color_card" TEXT NOT NULL,
     "color_font" TEXT NOT NULL,
     "created_at" TEXT NOT NULL,

@@ -35,7 +35,7 @@ export class RegisterUsers {
 		
 		const passwordHash = await hash(userData.password, 12);
 
-		console.log(getDateNow);
+		
 		const user = await this.userRepository.create({
 			name: userData.name,
 			email: userData.email,

@@ -5,6 +5,7 @@ import "dotenv/config";
 const environmentVariablesPattern = z.object({
 	PORT:           z.coerce.number().default(3300),
 	DATABASE_URL:   z.string(),
+	SECRET:		z.string()
 });
 
 

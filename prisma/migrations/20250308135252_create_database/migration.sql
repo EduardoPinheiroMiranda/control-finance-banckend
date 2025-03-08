@@ -6,9 +6,10 @@ CREATE TABLE "users" (
     "password" TEXT NOT NULL,
     "limit" DECIMAL NOT NULL,
     "expired" INTEGER NOT NULL,
-    "avatar" TEXT NOT NULL,
-    "created_at" DATETIME NOT NULL,
-    "updated_at" DATETIME NOT NULL
+    "avatar" TEXT,
+    "balance" DECIMAL NOT NULL,
+    "created_at" TEXT NOT NULL,
+    "updated_at" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -19,11 +20,11 @@ CREATE TABLE "invoices" (
     "payment_method" TEXT NOT NULL,
     "value" DECIMAL NOT NULL,
     "pay" BOOLEAN NOT NULL,
-    "expired" DATETIME NOT NULL,
+    "expired" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "number_of_installments" INTEGER,
-    "created_at" DATETIME NOT NULL,
-    "updated_at" DATETIME NOT NULL,
+    "created_at" TEXT NOT NULL,
+    "updated_at" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     CONSTRAINT "invoices_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
@@ -36,8 +37,8 @@ CREATE TABLE "cards" (
     "expired" INTEGER NOT NULL,
     "color_card" TEXT NOT NULL,
     "color_font" TEXT NOT NULL,
-    "created_at" DATETIME NOT NULL,
-    "updated_at" DATETIME NOT NULL,
+    "created_at" TEXT NOT NULL,
+    "updated_at" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "invoiceId" TEXT NOT NULL,
     CONSTRAINT "cards_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -54,8 +55,8 @@ CREATE TABLE "applications" (
     "color_application" TEXT NOT NULL,
     "color_font" TEXT NOT NULL,
     "icon" TEXT NOT NULL,
-    "created_at" DATETIME NOT NULL,
-    "updated_at" DATETIME NOT NULL,
+    "created_at" TEXT NOT NULL,
+    "updated_at" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     CONSTRAINT "applications_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
@@ -65,7 +66,7 @@ CREATE TABLE "Extarct" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "type" TEXT NOT NULL,
     "value" DECIMAL NOT NULL,
-    "created_at" DATETIME NOT NULL,
+    "created_at" TEXT NOT NULL,
     "applicationId" TEXT NOT NULL,
     CONSTRAINT "Extarct_applicationId_fkey" FOREIGN KEY ("applicationId") REFERENCES "applications" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );

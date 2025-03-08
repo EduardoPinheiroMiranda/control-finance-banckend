@@ -9,4 +9,16 @@ export class UserPrismaRepository implements UserDatabaseInterface{
 		const user = await prisma.user.create({data});
 	    return user;
 	}
+
+	async findEmail(email: string){
+		
+		const user = prisma.user.findUnique({
+			where: {
+				email
+			}
+		});
+
+		return user;
+
+	}
 }

@@ -8,15 +8,16 @@ datasource db {
 }
 
 model User {
-  id          String      @id @default(uuid())
+  id          String        @id @default(uuid())
   name        String
   email       String        @unique
   password    String
   limit       Decimal
   expired     Int
-  avatar      String
-  created_at  DateTime
-  updated_at  DateTime
+  avatar      String?
+  balance     Decimal
+  created_at  String
+  updated_at  String
   application Application[]
   card        Card[]
   Invoice     Invoice[]
@@ -31,11 +32,11 @@ model Invoice {
   payment_method         String
   value                  Decimal
   pay                    Boolean
-  expired                DateTime
+  expired                String
   description            String
   number_of_installments Int?
-  created_at             DateTime
-  updated_at             DateTime
+  created_at             String
+  updated_at             String
   card                   Card[]
 
   user_id User   @relation(fields: [userId], references: [id])
@@ -51,8 +52,8 @@ model Card {
   expired        Int
   color_card     String
   color_font     String
-  created_at     DateTime
-  updated_at     DateTime
+  created_at     String
+  updated_at     String
 
   user_id User   @relation(fields: [userId], references: [id])
   userId  String
@@ -72,9 +73,9 @@ model Application {
   color_application String
   color_font        String
   icon              String
-  created_at        DateTime
-  updated_at        DateTime
-  Extarct           Extarct[]
+  created_at        String
+  updated_at        String
+  extarct           Extarct[]
 
   user_id User   @relation(fields: [userId], references: [id])
   userId  String
@@ -86,7 +87,7 @@ model Extarct {
   id         String   @id @default(uuid())
   type       String
   value      Decimal
-  created_at DateTime
+  created_at String
 
   application_id Application @relation(fields: [applicationId], references: [id])
   applicationId  String

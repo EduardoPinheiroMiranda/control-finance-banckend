@@ -4,5 +4,4 @@ export interface User{
     password: string,
     limit: number,
     expired: number,
-    avatar: string
 }

@@ -33,14 +33,18 @@ export async function registerUser(request: FastifyRequest, reply: FastifyReply)
 	}catch(err: any){
 
 		if(err.name === "Error"){
+
 			reply.status(400).send(JSON.stringify({
 				msg: err.message
 			}));
+
+		}else{
+			console.log(err);
+			reply.status(500).send(JSON.stringify({
+				msg: "error internal server!"
+			}));
 		}
 
-		console.log(err);
-		reply.status(500).send(JSON.stringify({
-			msg: "error internal server!"
-		}));
+		
 	}
 }

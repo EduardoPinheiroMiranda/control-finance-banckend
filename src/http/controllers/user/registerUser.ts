@@ -26,25 +26,25 @@ export async function registerUser(request: FastifyRequest, reply: FastifyReply)
 		});
 
 
-		reply.status(201).send(JSON.stringify({
-			msg: "registration made"
+		return reply.status(201).send(JSON.stringify({
+			msg: "Usuário cadastrado com sucesso."
 		}));
 
 	}catch(err: any){
 
 		if(err.name === "Error"){
 
-			reply.status(400).send(JSON.stringify({
+			return reply.status(400).send(JSON.stringify({
 				msg: err.message
 			}));
 
 		}else{
+			
 			console.log(err);
-			reply.status(500).send(JSON.stringify({
+
+			return reply.status(500).send(JSON.stringify({
 				msg: "error internal server!"
 			}));
-		}
-
-		
+		}		
 	}
 }

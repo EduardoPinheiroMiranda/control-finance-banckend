@@ -14,12 +14,13 @@ export async function generalSummary(request: FastifyRequest, reply: FastifyRepl
 		const serviceGeneralSummary = makeGeneralSummary();
 		const data = await serviceGeneralSummary.execute(user_id);
 
-		reply.status(200).send(JSON.stringify(data));
+		return reply.status(200).send(JSON.stringify(data));
 
 	}catch(err: any){
 
 		console.log(err);
-		reply.status(500).send(JSON.stringify({
+		
+		return reply.status(500).send(JSON.stringify({
 			msg: "error internal server!"
 		}));
 	}

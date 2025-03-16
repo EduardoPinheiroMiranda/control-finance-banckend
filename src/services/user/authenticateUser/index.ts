@@ -16,14 +16,14 @@ export class AuthenticateUser{
 		const user = await this.userRepository.findEmail(emial);
 
 		if(!user){
-			throw new Error("Incorrect username or password.");
+			throw new Error("Email ou senha inválidos.");
 		}
 
 
 		const checkPassword = await compare(password, user.password);
 
 		if(!checkPassword){
-			throw new Error("Incorrect username or password.");
+			throw new Error("Email ou senha inválidos.");
 		}
 
         

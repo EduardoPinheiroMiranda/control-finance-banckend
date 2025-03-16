@@ -23,20 +23,21 @@ export async function authenticateUser(request: FastifyRequest, reply: FastifyRe
 		);
 
         
-		reply.status(200).send(JSON.stringify(user));
+		return reply.status(200).send(JSON.stringify(user));
 
 	}catch(err: any){
 
 		if(err.name === "Error"){
 
-			reply.status(401).send(JSON.stringify({
+			return reply.status(401).send(JSON.stringify({
 				msg: err.message
 			}));
 
 		}else{
 
 			console.log(err);
-			reply.status(500).send(JSON.stringify({
+			
+			return reply.status(500).send(JSON.stringify({
 				msg: "error internal server!"
 			}));
 		}

@@ -21,4 +21,15 @@ export class UserPrismaRepository implements UserDatabaseInterface{
 		return user;
 
 	}
+
+	async getById(userId: string){
+		
+		const user = await prisma.user.findUnique({
+			where: {
+				id: userId
+			}
+		});
+
+		return user;
+	}
 }

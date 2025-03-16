@@ -2,6 +2,8 @@ import { FastifyInstance } from "fastify";
 import { registerUser } from "../controllers/user/registerUser";
 import { authenticateUser } from "../controllers/user/authenticateUser";
 import { generalSummary } from "../controllers/user/generalSummary";
+import { getUserByToken } from "../controllers/user/getUserByToken";
+import { checkToken } from "@/middlewares/checkToken";
 
 
 
@@ -25,4 +27,10 @@ export async function userRoutes(app: FastifyInstance){
 		handler: generalSummary
 	});
 
+	app.route({
+		method: "GET",
+		url: "/getUserByToken",
+		preHandler: checkToken,
+		handler: getUserByToken
+	});
 }

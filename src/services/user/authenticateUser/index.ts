@@ -30,7 +30,7 @@ export class AuthenticateUser{
 		const token = sign(
 			{ userId: user.id},
 			env.SECRET,
-			{expiresIn: "30m"}
+			{expiresIn: "10m"}
 		);
 
 

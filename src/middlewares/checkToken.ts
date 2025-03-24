@@ -1,6 +1,6 @@
 import { env } from "@/env";
 import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
-import { verify, decode, JwtPayload } from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 
 interface Decoded extends JwtPayload{
@@ -28,9 +28,9 @@ export function checkToken(
 
 	try{
 
-		verify(token, env.SECRET);
+		jwt.verify(token, env.SECRET);
 
-		const decoded = decode(token) as Decoded;
+		const decoded = jwt.decode(token) as Decoded;
 
 		if (decoded.exp && Date.now() >= (decoded.exp * 1000) ) {
 			return reply.status(401).send(JSON.stringify({

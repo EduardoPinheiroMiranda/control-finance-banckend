@@ -1,7 +1,7 @@
 import { env } from "@/env";
 import { UserDatabaseInterface } from "@/repositories/interfaces/user";
 import { compare } from "bcrypt";
-import { sign } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 
 export class AuthenticateUser{
@@ -15,7 +15,7 @@ export class AuthenticateUser{
 
 		const user = await this.userRepository.findEmail(emial);
 
-		if(!user){
+		if(!user || user.email !== emial){
 			throw new Error("Email ou senha inválidos.");
 		}
 
@@ -27,7 +27,7 @@ export class AuthenticateUser{
 		}
 
         
-		const token = sign(
+		const token = jwt.sign(
 			{ userId: user.id},
 			env.SECRET,
 			{expiresIn: "1h"}
@@ -37,7 +37,7 @@ export class AuthenticateUser{
 		return {
 			id: user.id,
 			name: user.name,
-			emial: user.email,
+			email: user.email,
 			token
 		};
 	}

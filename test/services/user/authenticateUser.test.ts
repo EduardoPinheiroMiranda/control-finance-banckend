@@ -35,18 +35,11 @@ describe("Service --> user", () => {
 				updated_at: new Date().toISOString(),
 			};
 
-			jest.spyOn(
-				userRepository,
-				"findEmail"
-			).mockResolvedValue(user);
+			jest.spyOn(userRepository, "findEmail").mockResolvedValue(user);
 		});
 
 
 		it("trigger an error if the email is wrong", async () => {
-
-
-			// jest.spyOn(userRepository,"findEmail").mockResolvedValue(null);
-
 			await expect(
 				 serviceAuthenticateUser.execute(
 					"emailInvalid@gmail.com",
@@ -56,7 +49,6 @@ describe("Service --> user", () => {
 		});
 
 		it("trigger an error if the password is wrong", async () => {
-			
 			await expect(
 				serviceAuthenticateUser.execute(
 					"eduardo@gmail.com",
@@ -67,28 +59,24 @@ describe("Service --> user", () => {
 
 		it("check if the user can log in", async () => {
 
-			jest.spyOn(
-				jwt,
-				"sign"
-			).mockImplementation(() => {
-				return "token valid"; // Retorno simulado
-			  });
+			jest.spyOn(jwt, "sign").mockImplementation(() => {
+				return "token valid";
+			});
 
 
-			const response = {
+			const expectedResponse = {
 				id: user.id,
 				name: user.name,
 				email: user.email,
 				token: "token valid"
 			};
 
-			const service = await serviceAuthenticateUser.execute(
+			const response = await serviceAuthenticateUser.execute(
 				"eduardo@gmail.com",
 				"123"
 			);
 			
-			expect(service).toEqual(response);
-				
+			expect(response).toEqual(expectedResponse);
 		});
 	});
 });

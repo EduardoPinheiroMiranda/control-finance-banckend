@@ -15,13 +15,12 @@ export class RegisterUsers {
 
 		const emailAlreadExist = await this.userRepository.findEmail(userData.email);
 
-
 		if(emailAlreadExist){
 			throw new Error("This email already exist.");
 		}
 
 		if(userData.expired > 31 || userData.expired < 1){
-			throw new Error("The expiration day is invalid. Choose a period between days 1 to 28.");
+			throw new Error("The expiration day is invalid. Choose a period between days 1 to 31.");
 		}
 
 		if(userData.limit < 100){
@@ -46,5 +45,8 @@ export class RegisterUsers {
 			updated_at: getDateNow,
 			created_at: getDateNow
 		});
+
+
+		return "usuário registrado com sucesso!";
 	}
 }

@@ -7,7 +7,7 @@ import { hash } from "bcrypt";
 import jwt from "jsonwebtoken";
 
 
-describe("Service --> user", () => {
+describe("service/user", () => {
 
 	describe("# Authenticate user", () => {
 		

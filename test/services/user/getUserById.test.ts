@@ -4,7 +4,7 @@ import { describe, expect, jest, it, beforeEach } from "@jest/globals";
 import { Decimal } from "@prisma/client/runtime/library";
 
 
-describe("service --> user", () => {
+describe("service/user", () => {
 
 	describe("# Get user by id", () => {
 

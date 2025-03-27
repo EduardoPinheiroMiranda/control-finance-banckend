@@ -6,3 +6,4 @@ node_modules
 
 # DATABASE FILE
 prisma/controlFinance.db
+prisma/controlFinance.db-journal

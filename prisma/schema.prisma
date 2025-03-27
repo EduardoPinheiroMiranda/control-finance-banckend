@@ -34,7 +34,8 @@ model Invoice {
   pay                    Boolean
   expired                String
   description            String
-  number_of_installments Int?
+  number_of_installments Int
+  installments_paid      Int
   created_at             String
   updated_at             String
   card                   Card[]

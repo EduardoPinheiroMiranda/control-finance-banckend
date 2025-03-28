@@ -1,6 +1,9 @@
 # DDEPENDENCIES
 node_modules
 
+# test
+coverage
+
 # ENVIRONMENTS
 .env
 

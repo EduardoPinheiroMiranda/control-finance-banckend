@@ -1,5 +1,5 @@
 import { UserPrismaRepository } from "@/repositories/prisma/user";
-import { GeneralSummary } from "@/services/user/generalSummary";
+import { GeneralSummary } from "@/services/users/generalSummary";
 
 
 export function makeGeneralSummary(){

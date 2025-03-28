@@ -1,5 +1,5 @@
 import { UserPrismaRepository } from "@/repositories/prisma/user";
-import { RegisterUsers } from "@/services/user/registerUser";
+import { RegisterUsers } from "@/services/users/registerUser";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { Decimal } from "@prisma/client/runtime/library";
 import { hash } from "bcrypt";

@@ -30,7 +30,7 @@ export class RegisterInvoice{
 		);
 
 		if(!typeInvoiceIsValid){
-			throw new Error("Tipo de fatura invalido");
+			throw new Error("Tipo de fatura invalido.");
 		}
 
 
@@ -39,9 +39,12 @@ export class RegisterInvoice{
 		}
 
 
-		const currrentDate = new Date().toLocaleDateString("pt-br");
+		const currrentDate = new Date().getDate().toString();
 
-		if(data.paymentMethod !== "card" && data.expired <= currrentDate){
+		if(
+			data.typeInvoice === this.#typeInvoices[1] && 
+			data.expired <= currrentDate
+		){
 			throw new Error("Data de vencimento deve ser superior ao dia atual.");
 		}
 
@@ -55,7 +58,10 @@ export class RegisterInvoice{
 		}
 
 
-		if(data.paymentMethod === "card" && data.numberOfInstallments <= 0){
+		if(
+			data.paymentMethod === this.#paymentMethods[1] && 
+			data.numberOfInstallments <= 0
+		){
 			throw new Error("Quantidade de parcelas invalidas");
 		}
 
@@ -69,7 +75,7 @@ export class RegisterInvoice{
 			expired: data.expired,
 			description: data.description,
 			number_of_installments: data.numberOfInstallments,
-			installments_paid: data.installmentsPaid,
+			installments_paid: 0,
 			created_at: getDateNow,
 			updated_at: getDateNow,
 			userId: user.id

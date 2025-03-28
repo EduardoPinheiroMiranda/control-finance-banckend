@@ -14,5 +14,4 @@ export interface Invoice{
     expired: string,
     description: string,
     numberOfInstallments: number,
-    installmentsPaid: number
 }

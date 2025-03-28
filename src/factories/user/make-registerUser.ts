@@ -1,5 +1,5 @@
 import { UserPrismaRepository } from "@/repositories/prisma/user";
-import { RegisterUsers } from "@/services/user/registerUser";
+import { RegisterUsers } from "@/services/users/registerUser";
 
 
 

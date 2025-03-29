@@ -3,3 +3,9 @@ export class DataValidationError extends Error{
 		super(msg);
 	}
 }
+
+export class ResourceNotFoud extends Error{
+	constructor(msg: string){
+		super(msg);
+	}
+}

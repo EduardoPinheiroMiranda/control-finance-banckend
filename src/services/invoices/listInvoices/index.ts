@@ -1,4 +1,4 @@
-import { DataValidationError } from "@/errors/custonErros";
+import { ResourceNotFoud } from "@/errors/custonErros";
 import { InvoiceDatabaseinterface } from "@/repositories/interfaces/invoice";
 
 
@@ -17,7 +17,7 @@ export class ListInvoices{
 		);
         
 		if(!invoices){
-			throw new DataValidationError("Não foi encontrado movimentações.");
+			throw new ResourceNotFoud("Não foi encontrado movimentações.");
 		}
 
 		return invoices; 

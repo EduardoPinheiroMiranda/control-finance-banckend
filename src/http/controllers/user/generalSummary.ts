@@ -1,5 +1,5 @@
 import { makeGeneralSummary } from "@/factories/user/make-generalSummary";
-import { hendleErrorsInControlles } from "@/utils/handleErrorsInControllers";
+import { handleErrorsInControlles } from "@/utils/handleErrorsInControllers";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 
@@ -19,7 +19,7 @@ export async function generalSummary(request: FastifyRequest, reply: FastifyRepl
 
 	}catch(err: any){
 
-		const {statusCode, error} = hendleErrorsInControlles(err);
+		const {statusCode, error} = handleErrorsInControlles(err);
 		return reply.status(statusCode).send(JSON.stringify({error}));
 	}
 }

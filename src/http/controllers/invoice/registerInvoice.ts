@@ -1,6 +1,6 @@
 import { makeRegisterInvoice } from "@/factories/invoice/make-registerInvoice";
 import { paymentMethods, typeInvoices } from "@/utils/globalValues";
-import { hendleErrorsInControlles } from "@/utils/handleErrorsInControllers";
+import { handleErrorsInControlles } from "@/utils/handleErrorsInControllers";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 
@@ -32,7 +32,7 @@ export async function registerInvoice(request: FastifyRequest, reply: FastifyRep
         
 	}catch(err: any){
 
-		const {statusCode, error} = hendleErrorsInControlles(err);
+		const {statusCode, error} = handleErrorsInControlles(err);
 		return reply.status(statusCode).send(JSON.stringify({error}));
 	}
 }

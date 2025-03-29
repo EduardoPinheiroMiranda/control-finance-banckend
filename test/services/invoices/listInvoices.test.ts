@@ -1,4 +1,4 @@
-import { DataValidationError } from "@/errors/custonErros";
+import { ResourceNotFoud } from "@/errors/custonErros";
 import { InvoicePrismaRepository } from "@/repositories/prisma/invoice";
 import { ListInvoices } from "@/services/invoices/listInvoices";
 import { getDateNow } from "@/utils/getDateNow";
@@ -28,7 +28,7 @@ describe("service/invoices", () => {
 
 			await expect(
 				serviceListInvoices.execute("invalidId", "all")
-			).rejects.toBeInstanceOf(DataValidationError);
+			).rejects.toBeInstanceOf(ResourceNotFoud);
 		});
 
 		it("check if a list of invoices was found.", async () => {

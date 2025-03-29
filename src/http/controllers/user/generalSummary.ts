@@ -1,3 +1,4 @@
+import { DataValidationError } from "@/errors/custonErros";
 import { makeGeneralSummary } from "@/factories/user/make-generalSummary";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
@@ -18,10 +19,22 @@ export async function generalSummary(request: FastifyRequest, reply: FastifyRepl
 
 	}catch(err: any){
 
-		console.log(err);
+		if(err.name === "ZodError"){
+			return reply.status(400).send(JSON.stringify({
+				msg: "dados enviados incorreto, verifique a estrutura do objeto ou seus valores",
+				err: err.errors
+			}));
+		}
 		
+		if(err instanceof DataValidationError){
+			return reply.status(400).send(JSON.stringify({
+				msg: err.message,
+			}));
+		}
+		
+		console.log(err);
 		return reply.status(500).send(JSON.stringify({
-			msg: "error internal server!"
+			msg: "Error internal server",
 		}));
 	}
 }

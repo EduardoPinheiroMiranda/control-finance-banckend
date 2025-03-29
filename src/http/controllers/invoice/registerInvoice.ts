@@ -1,5 +1,6 @@
 import { DataValidationError } from "@/errors/custonErros";
 import { makeRegisterInvoice } from "@/factories/invoice/make-registerInvoice";
+import { paymentMethods, typeInvoices } from "@/utils/globalValues";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 
@@ -12,8 +13,8 @@ export async function registerInvoice(request: FastifyRequest, reply: FastifyRep
         
 		const scheme = z.object({
 			name: z.string(),
-			typeInvoice: z.enum(["fixedExpense", "extraExpenses"]),
-			paymentMethod: z.enum(["invoice", "card", "monney"]),
+			typeInvoice: z.enum(typeInvoices),
+			paymentMethod: z.enum(paymentMethods),
 			value: z.number(),
 			expired: z.string(),
 			description: z.string(),

@@ -57,23 +57,6 @@ describe("service/invoices", () => {
 			).rejects.toThrow("Usuário inexistente.");
 		});
 
-		it("will trigger an error if the invoice type is incorrect.", async () => {
-
-			const invoice = { 
-				name: "Internet - wifi",
-				typeInvoice: "Expense",		//type invalid
-				paymentMethod: "invoice",
-				value: 69.90,
-				expired: "10",
-				description: "boleto para pagar",
-				numberOfInstallments: 0,
-			};
-
-			await expect(
-				serviceRegisterInvoice.execute(invoice, "1234")
-			).rejects.toThrow("Tipo de fatura invalido.");
-		});
-
 		it("will trigger an error if the value is less than or equal to 0.", async () => {
 
 			const invoice = { 
@@ -111,28 +94,6 @@ describe("service/invoices", () => {
 			await expect(
 				serviceRegisterInvoice.execute(invoice, "1234")
 			).rejects.toThrow("Data de vencimento deve ser superior ao dia atual.");
-		});
-
-		it("will trigger an error if the payment method is incorrect.", async () => {
-
-			jest.spyOn(Date.prototype, "getTime").mockReturnValue(
-				new Date("2025-03-27T12:00:00Z").getTime()
-			);
-
-
-			const invoice = { 
-				name: "Internet - wifi",
-				typeInvoice: "fixedExpense",
-				paymentMethod: "ticket", // payment method invalid
-				value: 100,
-				expired: "10",	
-				description: "boleto para pagar",
-				numberOfInstallments: 0,
-			};
-
-			await expect(
-				serviceRegisterInvoice.execute(invoice, "1234")
-			).rejects.toThrow("Metodo de pagamento invalido.");
 		});
 
 		it("will trigger an error if the number of installments is incorrect.", async () => {

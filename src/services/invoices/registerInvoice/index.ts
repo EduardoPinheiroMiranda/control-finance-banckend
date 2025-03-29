@@ -11,14 +11,14 @@ export class RegisterInvoice{
 
 
 	constructor(
-        private userRepositoory: UserDatabaseInterface,
+        private userRepository: UserDatabaseInterface,
         private invoiceRepository: InvoiceDatabaseinterface
 	){}
 
 
 	async execute(data: Invoice, userId: string){
         
-		const user = await this.userRepositoory.getById(userId);
+		const user = await this.userRepository.getById(userId);
 
 		if(!user){
 			throw new Error("Usuário inexistente.");

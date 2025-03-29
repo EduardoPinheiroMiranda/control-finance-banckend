@@ -1,4 +1,5 @@
 import { Invoice } from "@/@types/customTypes";
+import { DataValidationError } from "@/errors/custonErros";
 import { InvoiceDatabaseinterface } from "@/repositories/interfaces/invoice";
 import { UserDatabaseInterface } from "@/repositories/interfaces/user";
 import { getDateNow } from "@/utils/getDateNow";
@@ -35,7 +36,7 @@ export class RegisterInvoice{
 
 
 		if(data.value <= 0){
-			throw new Error("Valor da fatura invalido.");
+			throw new DataValidationError("Valor da fatura invalido.");
 		}
 
 

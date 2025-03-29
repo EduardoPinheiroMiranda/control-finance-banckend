@@ -1,4 +1,5 @@
 import { env } from "@/env";
+import { DataValidationError } from "@/errors/custonErros";
 import { UserDatabaseInterface } from "@/repositories/interfaces/user";
 import { compare } from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -16,14 +17,14 @@ export class AuthenticateUser{
 		const user = await this.userRepository.findEmail(emial);
 
 		if(!user || user.email !== emial){
-			throw new Error("Email ou senha inválidos.");
+			throw new DataValidationError("Email ou senha inválidos.");
 		}
 
 
 		const checkPassword = await compare(password, user.password);
 
 		if(!checkPassword){
-			throw new Error("Email ou senha inválidos.");
+			throw new DataValidationError("Email ou senha inválidos.");
 		}
 
         

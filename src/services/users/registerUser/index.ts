@@ -1,4 +1,5 @@
 import { User } from "@/@types/customTypes";
+import { DataValidationError } from "@/errors/custonErros";
 import { UserDatabaseInterface } from "@/repositories/interfaces/user";
 import { getDateNow } from "@/utils/getDateNow";
 import { hash } from "bcrypt";
@@ -16,19 +17,19 @@ export class RegisterUsers {
 		const emailAlreadExist = await this.userRepository.findEmail(userData.email);
 
 		if(emailAlreadExist){
-			throw new Error("This email already exist.");
+			throw new DataValidationError("This email already exist.");
 		}
 
 		if(userData.expired > 31 || userData.expired < 1){
-			throw new Error("The expiration day is invalid. Choose a period between days 1 to 31.");
+			throw new DataValidationError("The expiration day is invalid. Choose a period between days 1 to 31.");
 		}
 
 		if(userData.limit < 100){
-			throw new Error("The limit is less than 100.");
+			throw new DataValidationError("The limit is less than 100.");
 		}
 
 		if(userData.password.length < 8){
-			throw new Error("Password is less than 8 characters long.");
+			throw new DataValidationError("Password is less than 8 characters long.");
 		}
 
 		

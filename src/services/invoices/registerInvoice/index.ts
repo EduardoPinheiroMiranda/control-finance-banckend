@@ -22,7 +22,7 @@ export class RegisterInvoice{
 		const user = await this.userRepository.getById(userId);
 
 		if(!user){
-			throw new Error("Usuário inexistente.");
+			throw new DataValidationError("Usuário inexistente.");
 		}
 
 
@@ -31,7 +31,7 @@ export class RegisterInvoice{
 		);
 
 		if(!typeInvoiceIsValid){
-			throw new Error("Tipo de fatura invalido.");
+			throw new DataValidationError("Tipo de fatura invalido.");
 		}
 
 
@@ -46,7 +46,7 @@ export class RegisterInvoice{
 			data.typeInvoice === this.#typeInvoices[1] && 
 			data.expired <= currrentDate
 		){
-			throw new Error("Data de vencimento deve ser superior ao dia atual.");
+			throw new DataValidationError("Data de vencimento deve ser superior ao dia atual.");
 		}
 
 
@@ -55,7 +55,7 @@ export class RegisterInvoice{
 		);
 
 		if(!paymentMethodIsValid){
-			throw new Error("Metodo de pagamento invalido.");
+			throw new DataValidationError("Metodo de pagamento invalido.");
 		}
 
 
@@ -63,7 +63,7 @@ export class RegisterInvoice{
 			data.paymentMethod === this.#paymentMethods[1] && 
 			data.numberOfInstallments <= 0
 		){
-			throw new Error("Quantidade de parcelas invalidas");
+			throw new DataValidationError("Quantidade de parcelas invalidas");
 		}
 
 

@@ -1,5 +1,5 @@
-import { DataValidationError } from "@/errors/custonErros";
 import { makeRegisterUser } from "@/factories/user/make-registerUser";
+import { hendleErrorsInControlles } from "@/utils/handleErrorsInControllers";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 
@@ -33,23 +33,7 @@ export async function registerUser(request: FastifyRequest, reply: FastifyReply)
 
 	}catch(err: any){
 
-		if(err.name === "ZodError"){
-			return reply.status(400).send(JSON.stringify({
-				msg: "dados enviados incorreto, verifique a estrutura do objeto ou seus valores",
-				err: err.errors
-			}));
-		}
-		
-		if(err instanceof DataValidationError){
-			return reply.status(400).send(JSON.stringify({
-				msg: err.message,
-			}));
-		}
-		
-		console.log(err);
-		return reply.status(500).send(JSON.stringify({
-			msg: "Error internal server",
-		}));	
-			
+		const {statusCode, error} = hendleErrorsInControlles(err);
+		return reply.status(statusCode).send(JSON.stringify({error}));
 	}
 }

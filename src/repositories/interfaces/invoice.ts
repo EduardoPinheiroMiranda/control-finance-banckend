@@ -5,6 +5,5 @@ export interface InvoiceDatabaseinterface{
 
     create(data: Prisma.InvoiceUncheckedCreateInput): Promise<Invoice>
 
-    
-
+    filterInvoices(userId: string, typeInvoice: string): Promise<Invoice[] | null>
 }

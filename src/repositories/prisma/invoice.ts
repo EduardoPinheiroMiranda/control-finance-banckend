@@ -38,4 +38,15 @@ export class InvoicePrismaRepository implements InvoiceDatabaseinterface{
 
 		return invoices;
 	}
+
+	async findInvoiceById(invoiceId: string){
+
+		const invoice = await prisma.invoice.findUnique({
+			where: {
+				id: invoiceId
+			}
+		});
+
+		return invoice;
+	}
 }

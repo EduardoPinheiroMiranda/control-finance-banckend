@@ -16,54 +16,93 @@ model User {
   expired     Int
   avatar      String?
   balance     Decimal
-  created_at  String
-  updated_at  String
-  application Application[]
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
   card        Card[]
-  Invoice     Invoice[]
+  invoice     Invoice[]
+  application Application[]
 
   @@map("users")
 }
 
-model Invoice {
-  id                     String   @id @default(uuid())
-  name                   String
-  type_invoice           String
-  payment_method         String
-  value                  Decimal
-  pay                    Boolean
-  expired                String
-  description            String
-  number_of_installments Int
-  installments_paid      Int
-  created_at             String
-  updated_at             String
-  card                   Card[]
+model Card {
+  id           String     @id @default(uuid())
+  name         String
+  due_date     Int
+  closing_date Int
+  color_font   String
+  color_card   String
+  created_at   DateTime   @default(now())
+  updated_at   DateTime   @updatedAt
+  shopping     Shopping[]
 
-  user_id User   @relation(fields: [userId], references: [id])
+  user_id User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  String
 
-  @@map("invoices")
+  @@map("cards")
 }
 
-model Card {
-  id             String   @id @default(uuid())
-  name           String
-  invoiceClosing Int
-  expired        Int
-  debt_amount    Decimal  @default(0)
-  color_card     String
-  color_font     String
-  created_at     String
-  updated_at     String
+model Shopping {
+  id                 String        @id @default(uuid())
+  name               String
+  type_invoice       String
+  payment_method     String
+  value              Decimal
+  total_installments Int
+  description        String?
+  created_at         DateTime      @default(now())
+  updated_at         DateTime      @updatedAt
+  installment        Installment[]
 
-  user_id User   @relation(fields: [userId], references: [id])
-  userId  String
+  card_id Card   @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  cardId  String
+
+  categories_id Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId    String
 
   invoice_id Invoice @relation(fields: [invoiceId], references: [id])
   invoiceId  String
 
-  @@map("cards")
+  @@map("shopping")
+}
+
+model Installment {
+  id                 String   @id @default(uuid())
+  installment_number Int
+  total_installments Int
+  due_date           DateTime
+  status             String
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+
+  shopping_id Shopping @relation(fields: [shoppingId], references: [id], onDelete: Cascade)
+  shoppingId  String
+
+  @@map("installments")
+}
+
+model Category {
+  id         String     @id @default(uuid())
+  name       String
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+  shopping   Shopping[]
+
+  @@map("categories")
+}
+
+model Invoice {
+  id            String   @id @default(uuid())
+  pay           Boolean
+  total_invoice Decimal
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  shopping Shopping[]
+
+  user_id  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String
+
+  @@map("invoices")
 }
 
 model Application {
@@ -72,25 +111,27 @@ model Application {
   target_value      Decimal
   value             Decimal
   institution       String
-  color_application String
   color_font        String
+  color_application String
   icon              String
-  created_at        String
-  updated_at        String
-  extarct           Extarct[]
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @updatedAt
+  extract           Extract[]
 
-  user_id User   @relation(fields: [userId], references: [id])
+  user_id User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  String
 
   @@map("applications")
 }
 
-model Extarct {
+model Extract {
   id         String   @id @default(uuid())
   type       String
   value      Decimal
-  created_at String
+  created_at DateTime @default(now())
 
-  application_id Application @relation(fields: [applicationId], references: [id])
+  application_id Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
   applicationId  String
+
+  @@map("extracts")
 }

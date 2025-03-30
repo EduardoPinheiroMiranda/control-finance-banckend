@@ -10,8 +10,8 @@ export interface Invoice{
     name: string,
     typeInvoice: string,
     paymentMethod: string,
-    value: number,
+    installmentValue: number,
+    numberOfInstallments: number,
     expired: string,
     description: string,
-    numberOfInstallments: number,
 }

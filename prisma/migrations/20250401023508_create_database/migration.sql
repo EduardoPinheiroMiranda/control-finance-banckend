@@ -37,12 +37,12 @@ CREATE TABLE "shopping" (
     "description" TEXT,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" DATETIME NOT NULL,
-    "cardId" TEXT NOT NULL,
+    "cardId" TEXT,
     "categoryId" TEXT NOT NULL,
-    "invoiceId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     CONSTRAINT "shopping_cardId_fkey" FOREIGN KEY ("cardId") REFERENCES "cards" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "shopping_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "categories" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT "shopping_invoiceId_fkey" FOREIGN KEY ("invoiceId") REFERENCES "invoices" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "shopping_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -55,7 +55,9 @@ CREATE TABLE "installments" (
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" DATETIME NOT NULL,
     "shoppingId" TEXT NOT NULL,
-    CONSTRAINT "installments_shoppingId_fkey" FOREIGN KEY ("shoppingId") REFERENCES "shopping" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    "invoiceId" TEXT NOT NULL,
+    CONSTRAINT "installments_shoppingId_fkey" FOREIGN KEY ("shoppingId") REFERENCES "shopping" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "installments_invoiceId_fkey" FOREIGN KEY ("invoiceId") REFERENCES "invoices" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -70,7 +72,7 @@ CREATE TABLE "categories" (
 CREATE TABLE "invoices" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "pay" BOOLEAN NOT NULL,
-    "total_invoice" DECIMAL NOT NULL,
+    "due_date" DATETIME NOT NULL,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" DATETIME NOT NULL,
     "userId" TEXT NOT NULL,

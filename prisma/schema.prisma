@@ -21,6 +21,7 @@ model User {
   card        Card[]
   invoice     Invoice[]
   application Application[]
+  shopping    Shopping[]
 
   @@map("users")
 }
@@ -54,14 +55,14 @@ model Shopping {
   updated_at         DateTime      @updatedAt
   installment        Installment[]
 
-  card_id Card   @relation(fields: [cardId], references: [id], onDelete: Cascade)
-  cardId  String
+  card_id Card?   @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  cardId  String?
 
   categories_id Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId    String
 
-  invoice_id Invoice @relation(fields: [invoiceId], references: [id])
-  invoiceId  String
+  user_id User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
 
   @@map("shopping")
 }
@@ -78,6 +79,9 @@ model Installment {
   shopping_id Shopping @relation(fields: [shoppingId], references: [id], onDelete: Cascade)
   shoppingId  String
 
+  invoice_id Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  invoiceId  String
+
   @@map("installments")
 }
 
@@ -92,15 +96,15 @@ model Category {
 }
 
 model Invoice {
-  id            String   @id @default(uuid())
-  pay           Boolean
-  total_invoice Decimal
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
-  shopping Shopping[]
+  id          String        @id @default(uuid())
+  pay         Boolean
+  due_date    DateTime
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+  installment Installment[]
 
-  user_id  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId   String
+  user_id User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
 
   @@map("invoices")
 }

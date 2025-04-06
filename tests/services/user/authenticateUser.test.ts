@@ -1,5 +1,5 @@
 import { UserPrismaRepository } from "@/repositories/prisma/user";
-import { AuthenticateUser } from "@/services/users/authenticateUser";
+import { AuthenticateUser } from "@/services/user/authenticateUser";
 import { expect, it, jest } from "@jest/globals";
 import { User } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";

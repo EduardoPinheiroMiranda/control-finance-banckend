@@ -1,5 +1,5 @@
 import { UserPrismaRepository } from "@/repositories/prisma/user";
-import { GetUserById } from "@/services/users/getUserById";
+import { GetUserById } from "@/services/user/getUserById";
 import { describe, expect, jest, it, beforeEach } from "@jest/globals";
 import { Decimal } from "@prisma/client/runtime/library";
 

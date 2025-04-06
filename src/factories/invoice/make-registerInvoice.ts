@@ -1,6 +1,6 @@
 import { InvoicePrismaRepository } from "@/repositories/prisma/invoice";
 import { UserPrismaRepository } from "@/repositories/prisma/user";
-import { RegisterInvoice } from "@/services/invoices/registerInvoice";
+import { RegisterInvoice } from "@/services/invoice/registerInvoice";
 
 
 export function makeRegisterInvoice(){

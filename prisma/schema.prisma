@@ -14,6 +14,7 @@ model User {
   password    String
   limit       Decimal
   expired     Int
+  close_date  Int
   avatar      String?
   balance     Decimal
   created_at  DateTime      @default(now())
@@ -72,7 +73,7 @@ model Installment {
   installment_number Int
   total_installments Int
   due_date           DateTime
-  status             String
+  pay                Boolean  @default(false)
   created_at         DateTime @default(now())
   updated_at         DateTime @updatedAt
 
@@ -87,7 +88,7 @@ model Installment {
 
 model Category {
   id         String     @id @default(uuid())
-  name       String
+  name       String     @unique
   created_at DateTime   @default(now())
   updated_at DateTime   @updatedAt
   shopping   Shopping[]
@@ -97,8 +98,9 @@ model Category {
 
 model Invoice {
   id          String        @id @default(uuid())
-  pay         Boolean
+  pay         Boolean       @default(false)
   due_date    DateTime      @unique
+  close_date  DateTime      @unique
   created_at  DateTime      @default(now())
   updated_at  DateTime      @updatedAt
   installment Installment[]

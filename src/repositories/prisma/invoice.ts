@@ -5,10 +5,23 @@ import { prisma } from "@/libs/primsa";
 
 export class InvoicePrismaRepository implements InvoiceDatabaseinterface{
 
-	async create(data: Prisma.InvoiceUncheckedCreateInput){
+	async create(data: Prisma.InvoiceUncheckedCreateInput[]){
         
-		const invoice = await prisma.invoice.create({data});
+		const invoice = await prisma.invoice.createMany({data});
 
-		return invoice;
+		return invoice.count;
+	}
+
+	async findInvoicesFromDueDate(userId: string, dueDates: string[]){
+		
+		const invoices = await prisma.invoice.findMany({
+			where: {
+				OR: dueDates.map((date) => {
+					return { due_date: date, userId };
+				})
+			}
+		});
+
+		return invoices;
 	}
 }

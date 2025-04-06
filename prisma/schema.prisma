@@ -98,7 +98,7 @@ model Category {
 model Invoice {
   id          String        @id @default(uuid())
   pay         Boolean
-  due_date    DateTime
+  due_date    DateTime      @unique
   created_at  DateTime      @default(now())
   updated_at  DateTime      @updatedAt
   installment Installment[]

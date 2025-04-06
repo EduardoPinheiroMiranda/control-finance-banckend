@@ -107,3 +107,6 @@ CREATE TABLE "extracts" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "invoices_due_date_key" ON "invoices"("due_date");

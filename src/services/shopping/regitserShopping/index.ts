@@ -10,6 +10,7 @@ import { randomUUID } from "node:crypto";
 interface NewInvoices{
     id: string,
     due_date: string,
+	close_date: string,
     userId: string
 }
 
@@ -49,31 +50,31 @@ export class RegisterShopping{
 	){
 
 		const handlerDueDate = new HandlerDueDate();
-		const dueDates = handlerDueDate.generateMultipleDeuDates(dueDay, closeDate, totalInstallments);
+		const dueDates = handlerDueDate.generateClosingAndDueDates(dueDay, closeDate, totalInstallments);
 		const invoices = await this.invoiceRepository.findInvoicesFromDueDate(userId, dueDates);
 		const newInvoices: NewInvoices[] = [];
         
 
-		dueDates.forEach((date) => {
-			const invoice = invoices.find((invoice) => String(invoice.due_date) == date);
+		// dueDates.forEach((date) => {
+		// 	const invoice = invoices.find((invoice) => String(invoice.due_date) == date);
 
-			if(!invoice){
-				newInvoices.push({
-					id: randomUUID(),
-					due_date: date,
-					close_date: // incluir geração de dadta de vencimento junto ao gerador de vencimentos
-					userId: userId
-				});
-			}
-		});
-
-
-		await this.invoiceRepository.create(newInvoices);
+		// 	if(!invoice){
+		// 		newInvoices.push({
+		// 			id: randomUUID(),
+		// 			due_date: date,
+		// 			close_date: "",
+		// 			userId: userId
+		// 		});
+		// 	}
+		// });
 
 
-		return {
-			invoices: [...invoices, ...newInvoices]
-		};
+		// await this.invoiceRepository.create(newInvoices);
+
+
+		// return {
+		// 	invoices: [...invoices, ...newInvoices]
+		// };
 	}
 
 	async execute(userId: string, data: Shopping){

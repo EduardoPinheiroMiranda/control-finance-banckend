@@ -1,6 +1,6 @@
 interface Dates{
-	dueDate: string,
-	closeDate: string
+	dueDate: Date,
+	closeDate: Date
 }
 
 export class HandlerDueDate{
@@ -21,7 +21,7 @@ export class HandlerDueDate{
 
 	private buildDates(
 		dueDay: number,
-		closeDate: number,
+		closeDay: number,
 		amount: number,
 		month: number,
 		year: number
@@ -38,15 +38,15 @@ export class HandlerDueDate{
 			}
 
 
-			if(closeDate < dueDay){
+			if(closeDay < dueDay){
 				dates.push({
-					dueDate: this.formatDate(year, month, dueDay).toISOString(),
-					closeDate: this.formatDate(year, month, closeDate).toISOString()
+					dueDate: this.formatDate(year, month, dueDay),
+					closeDate: this.formatDate(year, month, closeDay)
 				});
 			}else{
 				dates.push({
-					dueDate: this.formatDate(year, month, dueDay).toISOString(),
-					closeDate: this.formatDate(year, month - 1, closeDate).toISOString()
+					dueDate: this.formatDate(year, month, dueDay),
+					closeDate: this.formatDate(year, month - 1, closeDay)
 				});
 			}
 
@@ -57,24 +57,23 @@ export class HandlerDueDate{
 		return dates;
 	}
 
-	generateDueDates(dueDay: number, closeDate: number, amount: number){
+	generateDueDates(dueDay: number, closeDay: number, amount: number){
 
 
-		let closeDateTheCurrentMonth;
+		let closeDayTheCurrentMonth;
 
-		if(closeDate < dueDay){
-			closeDateTheCurrentMonth = this.formatDate(this.year, this.month, closeDate);
+		if(closeDay < dueDay){
+			closeDayTheCurrentMonth = this.formatDate(this.year, this.month, closeDay);
 		}else{
-			closeDateTheCurrentMonth = this.formatDate(this.year, this.month - 1, closeDate);
-		}
-
-		console.log(closeDateTheCurrentMonth);
-
-		if(this.currentDate.getTime() > closeDateTheCurrentMonth.getTime()){
-			return this.buildDates(dueDay, closeDate, amount, this.month + 1, this.year);
+			closeDayTheCurrentMonth = this.formatDate(this.year, this.month - 1, closeDay);
 		}
 
 
-		return this.buildDates(dueDay, closeDate, amount, this.month, this.year);
+		if(this.currentDate.getTime() > closeDayTheCurrentMonth.getTime()){
+			return this.buildDates(dueDay, closeDay, amount, this.month + 1, this.year);
+		}
+
+
+		return this.buildDates(dueDay, closeDay, amount, this.month, this.year);
 	}
 }

@@ -17,7 +17,7 @@ export class InvoicePrismaRepository implements InvoiceDatabaseinterface{
 		const invoices = await prisma.invoice.findMany({
 			where: {
 				OR: dueDates.map((date) => {
-					return { due_date: date, userId };
+					return { due_date: date, user_id: userId };
 				})
 			}
 		});

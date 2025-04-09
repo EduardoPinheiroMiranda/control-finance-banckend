@@ -38,8 +38,8 @@ model Card {
   updated_at   DateTime   @updatedAt
   shopping     Shopping[]
 
-  user_id User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  String
+  userId User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id  String
 
   @@map("cards")
 }
@@ -56,14 +56,14 @@ model Shopping {
   updated_at         DateTime      @updatedAt
   installment        Installment[]
 
-  card_id Card?   @relation(fields: [cardId], references: [id], onDelete: Cascade)
-  cardId  String?
+  cardId Card?   @relation(fields: [card_id], references: [id], onDelete: Cascade)
+  card_id  String?
 
-  categories_id Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  categoryId    String
+  categoriesId Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  category_id    String
 
-  user_id User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  String
+  userId User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id  String
 
   @@map("shopping")
 }
@@ -72,16 +72,17 @@ model Installment {
   id                 String   @id @default(uuid())
   installment_number Int
   total_installments Int
+  installment_value  Decimal
   due_date           DateTime
   pay                Boolean  @default(false)
   created_at         DateTime @default(now())
   updated_at         DateTime @updatedAt
 
-  shopping_id Shopping @relation(fields: [shoppingId], references: [id], onDelete: Cascade)
-  shoppingId  String
+  shoppingId Shopping @relation(fields: [shopping_id], references: [id], onDelete: Cascade)
+  shopping_id  String
 
-  invoice_id Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
-  invoiceId  String
+  invoiceId Invoice @relation(fields: [invoice_id], references: [id], onDelete: Cascade)
+  invoice_id  String
 
   @@map("installments")
 }
@@ -105,8 +106,8 @@ model Invoice {
   updated_at  DateTime      @updatedAt
   installment Installment[]
 
-  user_id User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  String
+  userId User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String
 
   @@map("invoices")
 }
@@ -124,8 +125,8 @@ model Application {
   updated_at        DateTime  @updatedAt
   extract           Extract[]
 
-  user_id User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  String
+  userId User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String
 
   @@map("applications")
 }
@@ -136,8 +137,8 @@ model Extract {
   value      Decimal
   created_at DateTime @default(now())
 
-  application_id Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  applicationId  String
+  applicationId Application @relation(fields: [application_id], references: [id], onDelete: Cascade)
+  application_id  String
 
   @@map("extracts")
 }

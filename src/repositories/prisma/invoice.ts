@@ -7,9 +7,9 @@ export class InvoicePrismaRepository implements InvoiceDatabaseinterface{
 
 	async create(data: Prisma.InvoiceUncheckedCreateInput[]){
         
-		const invoice = await prisma.invoice.createMany({data});
+		const invoices = await prisma.invoice.createManyAndReturn({data});
 
-		return invoice.count;
+		return invoices;
 	}
 
 	async findInvoicesFromDueDate(userId: string, dueDates: string[]){

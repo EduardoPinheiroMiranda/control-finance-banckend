@@ -1,4 +1,4 @@
-import { Shopping } from "@/@types/customTypes";
+import { Installment, Invoices, Shopping } from "@/@types/customTypes";
 import { DataValidationError, ResourceNotFoud } from "@/errors/custonErros";
 import { CardDatabaseInterface } from "@/repositories/interfaces/card";
 import { InstallmentDatabaseInterface } from "@/repositories/interfaces/installment";
@@ -6,17 +6,8 @@ import { InvoiceDatabaseinterface } from "@/repositories/interfaces/invoice";
 import { ShoppingDatabaseInterface } from "@/repositories/interfaces/shopping";
 import { UserDatabaseInterface } from "@/repositories/interfaces/user";
 import { HandlerDueDate } from "@/utils/handlerDueDate";
-import { Installment } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 import { randomUUID } from "node:crypto";
-
-
-interface Invoices{
-    id: string,
-    due_date: Date,
-	close_date: Date,
-    user_id: string
-}
 
 
 export class RegisterShopping{
@@ -30,103 +21,93 @@ export class RegisterShopping{
 	){}
 
 
-	async getUser(userId: string){
+	// async buildInstallments(
+	// 	shoppingId: string,
+	// 	purchaseValue: number,
+	// 	totalInstalments: number,
+	// 	dueDate: number,
+	// 	invoices: Invoices[],
+	// ){
 
-	    const user = await this.userRepository.getById(userId);
-
-		if(!user){
-			throw new ResourceNotFoud("Usuário não foi encontrado.");
-		}
-
-	    return {
-			invoiceDueDate: user.expired,
-			invoiceCloseDate: user.close_date
-		};
-	}
-
-	async buildInstallments(
-		shoppingId: string,
-		purchaseValue: number,
-		totalInstalments: number,
-		dueDate: number,
-		invoices: Invoices[],
-	){
-
-		const handlerDueDate = new HandlerDueDate();
-		const listOfDates = handlerDueDate.generateDueDates(dueDate, dueDate - 1, totalInstalments);
-		const dueDates = listOfDates.map((dates) => dates.dueDate);
+	// 	const handlerDueDate = new HandlerDueDate();
+	// 	const listOfDates = handlerDueDate.generateDueDates(dueDate, dueDate - 1, totalInstalments);
+	// 	const dueDates = listOfDates.map((dates) => dates.dueDate);
 
 
-		const installments: Installment[] = [];
-		const dateNow = new Date();
+	// 	const createInstallments: Installment[] = [];
 
-		for(let i=0; i<totalInstalments; i++){
-			installments.push({
-				id: randomUUID(),
-				installment_number: i+1,
-				total_installments: totalInstalments,
-				installment_value: Decimal(purchaseValue/totalInstalments),
-				due_date: dueDates[i],
-				pay: false,
-				shopping_id: shoppingId,
-				invoice_id: invoices[i].id,
-				created_at: dateNow,
-				updated_at: dateNow
-			});
-		}
+	// 	for(let i=0; i<totalInstalments; i++){
+	// 		createInstallments.push({
+	// 			installment_number: i+1,
+	// 			total_installments: totalInstalments,
+	// 			installment_value: Decimal(purchaseValue/totalInstalments),
+	// 			due_date: dueDates[i],
+	// 			shopping_id: shoppingId,
+	// 			invoice_id: invoices[i].id,
+	// 		});
+	// 	}
 
 
-		await this.installmentRepository.create(installments);
+	// 	const installments = await this.installmentRepository.create(createInstallments);
 
 
-		return installments;
-	}
+	// 	return {
+	// 		installments,
+	// 		createInstallments
+	// 	};
+	// }
 
-	async buildInvoices(
-		userId: string, 
-		dueDay: number, 
-		closeDay: number, 
-		totalInstallments: number
-	){
+	// async buildInvoices(
+	// 	userId: string, 
+	// 	dueDay: number, 
+	// 	closeDay: number, 
+	// 	totalInstallments: number
+	// ){
 
-		const handlerDueDate = new HandlerDueDate();
-		const invoicesDate = handlerDueDate.generateDueDates(dueDay, closeDay, totalInstallments);
+	// 	const handlerDueDate = new HandlerDueDate();
+	// 	const invoicesDate = handlerDueDate.generateDueDates(dueDay, closeDay, totalInstallments);
 		
-		const dueDates = invoicesDate.map((dates) => dates.dueDate.toISOString());
-		const createdInvoices = await this.invoiceRepository.findInvoicesFromDueDate(userId, dueDates);
+	// 	const dueDates = invoicesDate.map((dates) => dates.dueDate.toISOString());
+	// 	const invoicesCreated = await this.invoiceRepository.findInvoicesFromDueDate(userId, dueDates);
 		
-		const listInvoice: Invoices[] = [];
+	// 	const createInvoices: Invoices[] = [];
         
 
-		invoicesDate.forEach((dates) => {
+	// 	invoicesDate.forEach((dates) => {
 
-			const invoice = createdInvoices.find((invoice) => {
-				if(invoice.due_date.getTime() === dates.dueDate.getTime()){
-					return invoice;
-				}
-			});
+	// 		const invoice = invoicesCreated.find((invoice) => {
+	// 			if(invoice.due_date.getTime() === dates.dueDate.getTime()){
+	// 				return invoice;
+	// 			}
+	// 		});
 
-
-			if(invoice){
-				listInvoice.push(invoice);
-			}else{
-				listInvoice.push({
-					id: randomUUID(),
-					due_date: dates.dueDate,
-					close_date: dates.closeDate,
-					user_id: userId
-				});
-			}
-		});
+	// 		if(!invoice){
+	// 			createInvoices.push({
+	// 				id: randomUUID(),
+	// 				due_date: dates.dueDate,
+	// 				close_date: dates.closeDate,
+	// 				user_id: userId
+	// 			});
+	// 		}
+	// 	});
 
 
-		await this.invoiceRepository.create(listInvoice);
+	// 	const invoices = await this.invoiceRepository.create(createInvoices);
 
 
-		return listInvoice;
-	}
+	// 	return {
+	// 		invoices: [...invoicesCreated, ...invoices].toSorted()
+	// 	};
+	// }
 
 	async execute(userId: string, data: Shopping){
+
+		// const user = await this.userRepository.getById(userId);
+
+		// if(!user){
+		// 	throw new ResourceNotFoud("Usuário não foi encontrado.");
+		// }
+		
 
 		if(data.value <= 0 || data.totalInstallments <= 0){
 			throw new DataValidationError("Valor ou quantidade de parcelas da compra não pode ser menor, ou igual a 0.");

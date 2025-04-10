@@ -5,6 +5,8 @@ import { InstallmentDatabaseInterface } from "@/repositories/interfaces/installm
 import { InvoiceDatabaseInterface } from "@/repositories/interfaces/invoice";
 import { ShoppingDatabaseInterface } from "@/repositories/interfaces/shopping";
 import { UserDatabaseInterface } from "@/repositories/interfaces/user";
+import { createInvoices } from "./createInvoices";
+import { Card } from "@prisma/client";
 
 
 export class RegisterShopping{
@@ -30,6 +32,16 @@ export class RegisterShopping{
 		if(data.value <= 0 || data.totalInstallments <= 0){
 			throw new DataValidationError("Valor ou quantidade de parcelas da compra não pode ser menor, ou igual a 0.");
 		}
+
+
+		let card: Card | null = null;
+
+		if(data.cardId){
+			card = await this.cardRepository.getById(data.cardId);
+		}
+
+
+		
         
 
 		const shopping = await this.shoppingRepository.create({
@@ -45,7 +57,16 @@ export class RegisterShopping{
 		});
 
 
-		// const { invoiceDueDate, invoiceCloseDate} = await this.getUser(userId);
+		const { close_date, expired } = user;
+
+
+		const { invoices } = await createInvoices(
+			userId,
+			expired,
+			close_date,
+			data.totalInstallments,
+			this.invoiceRepository,
+		);
 
 
 		// const listInvoice = await this.buildInvoices(
@@ -54,7 +75,6 @@ export class RegisterShopping{
 		// 	invoiceCloseDate,
 		// 	data.totalInstallments
 		// );
-
 
 
 	}

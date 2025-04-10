@@ -1,0 +1,58 @@
+import { InstallmentPrismaRepository } from "@/repositories/prisma/installment";
+import { createInstallments } from "@/services/shopping/regitserShopping/createInstallments";
+import { beforeEach, describe, expect, it, jest } from "@jest/globals";
+
+
+describe("service/shopping", () => {
+
+	describe("# create installments", () => {
+
+		const installmentRepository = new InstallmentPrismaRepository();
+
+		beforeEach(() => {
+			jest.spyOn(installmentRepository, "create").mockResolvedValue([]);
+		});
+
+
+		it("Check that the number of installments is correct", async () => {
+
+			const shoppingId = "123";
+			const purchaseValue = 1200;
+			const totalInstalments = 2;
+			const dueDate = 3;
+			const repository = installmentRepository;
+			const invoices = [
+				{
+					id: "124",
+					pay: false,
+					due_date: new Date("2025-04-10T23:59:59.000z"),
+					close_date: new Date("2025-04-05T23:59:59.000z"),
+					created_at: new Date("2025-03-09T12:00:00.000z"),
+					updated_at: new Date("2025-03-09T12:00:00.000z"),
+					user_id: "1234"
+				},
+				{
+					id: "125",
+					pay: false,
+					due_date: new Date("2025-05-10T23:59:59.000z"),
+					close_date: new Date("2025-06-05T23:59:59.000z"),
+					created_at: new Date("2025-03-09T12:00:00.000z"),
+					updated_at: new Date("2025-03-09T12:00:00.000z"),
+					user_id: "1234"
+				}
+			];
+
+
+			const installments = await createInstallments(
+				shoppingId,
+				purchaseValue,
+				totalInstalments,
+				dueDate,
+				invoices,
+				repository
+			);
+
+			expect(installments.createInstallments.length).toBe(totalInstalments);
+		});
+	});
+});

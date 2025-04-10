@@ -1,9 +1,9 @@
 import { Prisma } from "@prisma/client";
-import { InvoiceDatabaseinterface } from "../interfaces/invoice";
+import { InvoiceDatabaseInterface } from "../interfaces/invoice";
 import { prisma } from "@/libs/primsa";
 
 
-export class InvoicePrismaRepository implements InvoiceDatabaseinterface{
+export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 
 	async create(data: Prisma.InvoiceUncheckedCreateInput[]){
         

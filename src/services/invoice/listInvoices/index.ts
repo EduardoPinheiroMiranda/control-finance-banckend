@@ -1,11 +1,11 @@
 import { ResourceNotFoud } from "@/errors/custonErros";
-import { InvoiceDatabaseinterface } from "@/repositories/interfaces/invoice";
+import { InvoiceDatabaseInterface } from "@/repositories/interfaces/invoice";
 
 
 export class ListInvoices{
 
 	constructor(
-        private invoiceRepository: InvoiceDatabaseinterface
+        private invoiceRepository: InvoiceDatabaseInterface
 	){}
 
 

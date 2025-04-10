@@ -1,7 +1,7 @@
 import { Invoice, Prisma } from "@prisma/client";
 
 
-export interface InvoiceDatabaseinterface{
+export interface InvoiceDatabaseInterface{
 
     create(data: Prisma.InvoiceUncheckedCreateInput[]): Promise<Invoice[]>
 

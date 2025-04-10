@@ -1,5 +1,5 @@
 import { Invoices } from "@/@types/customTypes";
-import { InvoiceDatabaseinterface } from "@/repositories/interfaces/invoice";
+import { InvoiceDatabaseInterface } from "@/repositories/interfaces/invoice";
 import { HandlerDueDate } from "@/utils/handlerDueDate";
 
 
@@ -8,7 +8,7 @@ export async function createInvoices(
 	dueDay: number, 
 	closeDay: number, 
 	totalInstallments: number,
-	invoiceRepository: InvoiceDatabaseinterface
+	invoiceRepository: InvoiceDatabaseInterface
 ){
 
 	const handlerDueDate = new HandlerDueDate();

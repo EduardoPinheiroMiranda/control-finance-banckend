@@ -56,7 +56,12 @@ describe("service/shopping", () => {
             
 			
 				const { invoices } = await createInvoices(
-					userId, dueDay, closeDay, totalInstallments, invoiceRepository
+					userId,
+					dueDay,
+					closeDay,
+					totalInstallments,
+					invoiceRepository,
+					false
 				);
                 
 				expect(invoices[0].due_date.getMonth()).toBe(new Date().getMonth());
@@ -71,7 +76,12 @@ describe("service/shopping", () => {
             
 			
 				const { invoices } = await createInvoices(
-					userId, dueDay, closeDay, totalInstallments, invoiceRepository
+					userId,
+					dueDay,
+					closeDay,
+					totalInstallments,
+					invoiceRepository,
+					false
 				);
                 
 				expect(invoices.length).toBe(totalInstallments);
@@ -101,7 +111,12 @@ describe("service/shopping", () => {
             
 			
 				const invoices = await createInvoices(
-					userId, dueDay, closeDay, totalInstallments, invoiceRepository
+					userId,
+					dueDay,
+					closeDay,
+					totalInstallments,
+					invoiceRepository,
+					false
 				);
                 
 
@@ -151,7 +166,12 @@ describe("service/shopping", () => {
             
 			
 				const invoices = await createInvoices(
-					userId, dueDay, closeDay, totalInstallments, invoiceRepository
+					userId,
+					dueDay,
+					closeDay,
+					totalInstallments,
+					invoiceRepository,
+					false
 				);
 
                 

@@ -13,7 +13,7 @@ export class HandlerDueDate{
 	constructor(){}
 
 
-	private formatDate(year: number, month: number, dueDay: number){
+	formatDate(year: number, month: number, dueDay: number){
 		return new Date(
 			Date.UTC(year, month, dueDay, 23, 59, 59)
 		);
@@ -57,19 +57,23 @@ export class HandlerDueDate{
 		return dates;
 	}
 
-	generateDueDates(dueDay: number, closeDay: number, amount: number){
+	generateDueDates(
+		dueDay: number,
+		closeDay: number,
+		amount: number,
+		startOnTheInvoice: boolean
+	){
 
-
-		let closeDayTheCurrentMonth;
+		let closeDateTheCurrentMonth;
 
 		if(closeDay < dueDay){
-			closeDayTheCurrentMonth = this.formatDate(this.year, this.month, closeDay);
+			closeDateTheCurrentMonth = this.formatDate(this.year, this.month, closeDay);
 		}else{
-			closeDayTheCurrentMonth = this.formatDate(this.year, this.month - 1, closeDay);
+			closeDateTheCurrentMonth = this.formatDate(this.year, this.month - 1, closeDay);
 		}
 
 
-		if(this.currentDate.getTime() > closeDayTheCurrentMonth.getTime()){
+		if(this.currentDate.getTime() > closeDateTheCurrentMonth.getTime() || startOnTheInvoice){
 			return this.buildDates(dueDay, closeDay, amount, this.month + 1, this.year);
 		}
 

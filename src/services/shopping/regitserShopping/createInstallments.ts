@@ -15,7 +15,9 @@ export async function createInstallments(
 ){
 
 	const handlerDueDate = new HandlerDueDate();
-	const listOfDates = handlerDueDate.generateDueDates(dueDate, dueDate - 1, totalInstalments);
+	const listOfDates = handlerDueDate.generateDueDates(
+		dueDate, dueDate - 1, totalInstalments, false
+	);
 	const dueDates = listOfDates.map((dates) => dates.dueDate);
 
 

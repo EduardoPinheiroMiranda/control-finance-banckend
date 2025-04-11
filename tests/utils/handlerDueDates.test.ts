@@ -32,7 +32,8 @@ describe("utils/handler due dates", () => {
 		const dueDates = new HandlerDueDate().generateDueDates(
 			dueDay,
 			closeDay,
-			amount
+			amount,
+			false
 		);
 
 		// check if the number of objects created is correct
@@ -80,7 +81,8 @@ describe("utils/handler due dates", () => {
 		const dueDates = new HandlerDueDate().generateDueDates(
 			dueDay,
 			closeDay,
-			amount
+			amount,
+			false
 		);
 
 		// check if the number of objects created is correct
@@ -108,5 +110,26 @@ describe("utils/handler due dates", () => {
 		  	}
 		]);
 
+	});
+
+	it("check if the first invoice is for the following month based on the month of purchase if startOnTheInvoice is true.", async () => {
+		
+		const dueDay = 10;
+		const closeDay = 3;
+		const amount = 3;
+		const startOnTheInvoice = true;
+
+
+		const dueDates = new HandlerDueDate().generateDueDates(
+			dueDay,
+			closeDay,
+			amount,
+			startOnTheInvoice
+		);
+
+
+		expect(
+			dueDates[0].closeDate.getTime() > new Date().getTime()
+		).toBe(true);
 	});
 });

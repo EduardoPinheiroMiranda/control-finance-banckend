@@ -8,14 +8,20 @@ export async function createInvoices(
 	dueDay: number, 
 	closeDay: number, 
 	totalInstallments: number,
-	invoiceRepository: InvoiceDatabaseInterface
+	invoiceRepository: InvoiceDatabaseInterface,
+	startOnTheInvoice: boolean
 ){
 
+
 	const handlerDueDate = new HandlerDueDate();
-	const invoicesDate = handlerDueDate.generateDueDates(dueDay, closeDay, totalInstallments);
+	const invoicesDate = handlerDueDate.generateDueDates(
+		dueDay, closeDay, totalInstallments, startOnTheInvoice
+	);
         
 	const dueDates = invoicesDate.map((dates) => dates.dueDate.toISOString());
-	const invoicesCreated = await invoiceRepository.findInvoicesFromDueDate(userId, dueDates);
+	const invoicesCreated = await invoiceRepository.findInvoicesFromDueDate(
+		userId, dueDates
+	);
         
 	const createInvoices: Invoices[] = [];
         
@@ -42,7 +48,9 @@ export async function createInvoices(
 
 
 	return {
-		invoices: [...invoices, ...invoicesCreated].sort((a,b) => a.due_date.getTime() - b.due_date.getTime()),
+		invoices: [...invoices, ...invoicesCreated].sort(
+			(a,b) => a.due_date.getTime() - b.due_date.getTime()
+		),
 		createInvoices
 	};
 }

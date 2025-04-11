@@ -6,7 +6,8 @@ import { InvoiceDatabaseInterface } from "@/repositories/interfaces/invoice";
 import { ShoppingDatabaseInterface } from "@/repositories/interfaces/shopping";
 import { UserDatabaseInterface } from "@/repositories/interfaces/user";
 import { createInvoices } from "./createInvoices";
-import { Card } from "@prisma/client";
+import { createInstallments } from "./createInstallments";
+import { CardValidation } from "./cardValidation";
 
 
 export class RegisterShopping{
@@ -34,15 +35,12 @@ export class RegisterShopping{
 		}
 
 
-		let card: Card | null = null;
+		const startOnTheInvoice = await CardValidation(
+			data.paymentMethod,
+			data.cardId,
+			this.cardRepository
+		);
 
-		if(data.cardId){
-			card = await this.cardRepository.getById(data.cardId);
-		}
-
-
-		
-        
 
 		const shopping = await this.shoppingRepository.create({
 			name: data.name,
@@ -57,26 +55,30 @@ export class RegisterShopping{
 		});
 
 
-		const { close_date, expired } = user;
-
-
 		const { invoices } = await createInvoices(
 			userId,
-			expired,
-			close_date,
+			user.expired,
+			user.close_date,
 			data.totalInstallments,
 			this.invoiceRepository,
+			startOnTheInvoice
 		);
 
 
-		// const listInvoice = await this.buildInvoices(
-		// 	userId,
-		// 	invoiceDueDate,
-		// 	invoiceCloseDate,
-		// 	data.totalInstallments
-		// );
+		const { installments } = await createInstallments(
+			shopping.id,
+			data.value,
+			data.totalInstallments,
+			data.dueDay,
+			invoices,
+			this.installmentRepository
+		);
 
 
+		return {
+			shopping,
+			installments
+		};
 	}
 }
 

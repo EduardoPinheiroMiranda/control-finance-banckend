@@ -1,14 +1,14 @@
 import { Prisma } from "@prisma/client";
-import { InstallmentDatabaseInterface } from "../interfaces/installment";
 import { prisma } from "@/libs/primsa";
+import { ShoppingDatabaseInterface } from "../interfaces/shopping";
 
 
-export class ShoppingPrismaRepository implements InstallmentDatabaseInterface{
+export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 
-	async create(data: Prisma.InstallmentUncheckedCreateInput[]){
+	async create(data: Prisma.ShoppingUncheckedCreateInput){
         
-		const installments = await prisma.installment.createManyAndReturn({data});
+		const shoping = await prisma.shopping.create({data});
 
-		return installments;
+		return shoping;
 	}
 }

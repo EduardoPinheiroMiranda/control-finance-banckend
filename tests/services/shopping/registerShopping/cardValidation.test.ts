@@ -24,7 +24,12 @@ describe("service/shopping", () => {
 
 		it("check if false is returned if the payment method is other than card.", async () => {
 
-			const startOnTheInvoice = await CardValidation("money", "invalidId", cardRepository);
+			const startOnTheInvoice = await CardValidation(
+				"money",
+				"invalidId",
+				cardRepository,
+				"2025-03-02"
+			);
 			expect(startOnTheInvoice).toBe(false);
 
 		});
@@ -32,7 +37,12 @@ describe("service/shopping", () => {
 		it("check if an error is raised if cardId is null.", async () => {
 
 			await expect(
-				CardValidation("card", null, cardRepository)
+				CardValidation(
+					"card",
+					null,
+					cardRepository,
+					"2025-03-02"
+				)
 			).rejects.toBeInstanceOf(DataValidationError);
 
 		});
@@ -42,7 +52,12 @@ describe("service/shopping", () => {
 			jest.spyOn(cardRepository, "getById").mockResolvedValue(null);
 
 			await expect(
-				CardValidation("card", "invalidId", cardRepository)
+				CardValidation(
+					"card",
+					"invalidId",
+					cardRepository,
+					"2025-03-02"
+				)
 			).rejects.toBeInstanceOf(DataValidationError);
 
 		});
@@ -64,7 +79,12 @@ describe("service/shopping", () => {
 			});
 
 
-			const startOnTheInvoice = await CardValidation("card", "validId", cardRepository);
+			const startOnTheInvoice = await CardValidation(
+				"card",
+				"validId",
+				cardRepository,
+				"2025-03-02"
+			);
 
 
 			expect(startOnTheInvoice).toBe(true);
@@ -87,7 +107,12 @@ describe("service/shopping", () => {
 			});
 
 
-			const startOnTheInvoice = await CardValidation("card", "validId", cardRepository);
+			const startOnTheInvoice = await CardValidation(
+				"card",
+				"validId",
+				cardRepository,
+				"2025-03-02"
+			);
 
 
 			expect(startOnTheInvoice).toBe(false);

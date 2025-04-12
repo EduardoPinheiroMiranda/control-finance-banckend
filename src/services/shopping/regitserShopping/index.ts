@@ -38,7 +38,8 @@ export class RegisterShopping{
 		const startOnTheInvoice = await CardValidation(
 			data.paymentMethod,
 			data.cardId,
-			this.cardRepository
+			this.cardRepository,
+			data.purchaseDate
 		);
 
 

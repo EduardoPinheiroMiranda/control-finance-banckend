@@ -19,7 +19,8 @@ export interface Shopping{
     description: string | null,
     dueDay: number,
     categoryId: string,
-    cardId: string | null
+    cardId: string | null,
+    purchaseDate: string
 }
 
 export interface Invoices{

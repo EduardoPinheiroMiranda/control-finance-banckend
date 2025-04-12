@@ -5,12 +5,18 @@ interface Dates{
 
 export class HandlerDueDate{
 
-	private currentDate = new Date();
-	private month = this.currentDate.getMonth();
-	private year = this.currentDate.getFullYear();
+	private currentDate: Date;
+	private month: number;
+	private year: number;
 
 
-	constructor(){}
+	constructor(
+		private purchaseDate?: string
+	){
+		this.currentDate = this.purchaseDate ? new Date(this.purchaseDate) : new Date();
+		this.month = this.currentDate.getMonth();
+		this.year = this.currentDate.getFullYear();
+	}
 
 
 	formatDate(year: number, month: number, dueDay: number){
@@ -27,30 +33,32 @@ export class HandlerDueDate{
 		year: number
 	){
 
+		let currentMonth = month;
+		let currentYear = year;
 		const dates: Dates[] = [];
 
 
 		for(let i=0; i<amount; i++){
 
-			if (month > 11) {
-				month = 0;
-				year += 1;
+			if (currentMonth > 11) {
+				currentMonth = 0;
+				currentYear += 1;
 			}
 
 
 			if(closeDay < dueDay){
 				dates.push({
-					dueDate: this.formatDate(year, month, dueDay),
-					closeDate: this.formatDate(year, month, closeDay)
+					dueDate: this.formatDate(currentYear, currentMonth, dueDay),
+					closeDate: this.formatDate(currentYear, currentMonth, closeDay)
 				});
 			}else{
 				dates.push({
-					dueDate: this.formatDate(year, month, dueDay),
-					closeDate: this.formatDate(year, month - 1, closeDay)
+					dueDate: this.formatDate(currentYear, currentMonth, dueDay),
+					closeDate: this.formatDate(currentYear, currentMonth - 1, closeDay)
 				});
 			}
 
-			month += 1;
+			currentMonth += 1;
 		}
 		
 

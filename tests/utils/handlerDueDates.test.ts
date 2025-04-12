@@ -132,4 +132,25 @@ describe("utils/handler due dates", () => {
 			dueDates[0].closeDate.getTime() > new Date().getTime()
 		).toBe(true);
 	});
+
+	it("Check if you can create invoices from a specific date", async () => {
+
+		const dueDay = 10;
+		const closeDay = 5;
+		const amount = 3;
+		const startOnTheInvoice = false;
+		const purchaseDate = "2025-02-03";
+
+
+		const handlerDueDate = new HandlerDueDate(purchaseDate);
+		const dueDates = handlerDueDate.generateDueDates(
+			dueDay,
+			closeDay,
+			amount,
+			startOnTheInvoice
+		);
+
+		
+		expect(dueDates[0].closeDate.getMonth() == 1).toBe(true);
+	});
 });

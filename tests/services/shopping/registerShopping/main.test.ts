@@ -60,7 +60,8 @@ describe("service/shopping", () => {
 				paymentMethod: "card",
 				totalInstallments: 10,
 				typeInvoice: "fixedExpense",
-				value: 1200
+				value: 1200,
+				purchaseDate: "2025-03-02"
 			};
 
 			await expect(
@@ -77,8 +78,8 @@ describe("service/shopping", () => {
 				name: "Eduardo",
 				avatar: null,
 				balance: Decimal(1000),
-				close_date: 5,
-				expired: 10,
+				close_day: 5,
+				due_day: 10,
 				email: "email@test.com",
 				limit: Decimal(100),
 				password: "senha",
@@ -95,7 +96,8 @@ describe("service/shopping", () => {
 				paymentMethod: "card",
 				totalInstallments: 0,
 				typeInvoice: "fixedExpense",
-				value: 0
+				value: 0,
+				purchaseDate: "2025-03-02"
 			};
 
 			await expect(

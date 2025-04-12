@@ -57,8 +57,8 @@ export class RegisterShopping{
 
 		const { invoices } = await createInvoices(
 			userId,
-			user.expired,
-			user.close_date,
+			user.due_day,
+			user.close_day,
 			data.totalInstallments,
 			this.invoiceRepository,
 			startOnTheInvoice

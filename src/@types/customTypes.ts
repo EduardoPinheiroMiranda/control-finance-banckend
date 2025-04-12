@@ -6,7 +6,8 @@ export interface User{
     email: string,
     password: string,
     limit: number,
-    expired: number,
+    dueDay: number,
+    closeDay: number
 }
 
 export interface Shopping{

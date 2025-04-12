@@ -13,8 +13,8 @@ model User {
   email       String        @unique
   password    String
   limit       Decimal
-  expired     Int
-  close_date  Int
+  due_day     Int
+  close_day   Int
   avatar      String?
   balance     Decimal
   created_at  DateTime      @default(now())

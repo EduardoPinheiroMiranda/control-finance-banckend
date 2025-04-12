@@ -1,7 +1,6 @@
 import { User } from "@/@types/customTypes";
 import { DataValidationError } from "@/errors/custonErros";
 import { UserDatabaseInterface } from "@/repositories/interfaces/user";
-import { getDateNow } from "@/utils/getDateNow";
 import { hash } from "bcrypt";
 
 
@@ -20,7 +19,7 @@ export class RegisterUsers {
 			throw new DataValidationError("This email already exist.");
 		}
 
-		if(userData.expired > 31 || userData.expired < 1){
+		if(userData.dueDay > 31 || userData.dueDay < 1){
 			throw new DataValidationError("The expiration day is invalid. Choose a period between days 1 to 31.");
 		}
 
@@ -40,11 +39,10 @@ export class RegisterUsers {
 			name: userData.name,
 			email: userData.email,
 			password: passwordHash,
-			expired: userData.expired,
+			due_day: userData.dueDay,
+			close_day: userData.closeDay,
 			limit: userData.limit,
 			balance: 0,
-			updated_at: getDateNow,
-			created_at: getDateNow
 		});
 
 

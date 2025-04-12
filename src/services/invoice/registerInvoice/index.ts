@@ -6,7 +6,7 @@
 // import { paymentMethods, typeInvoices } from "@/utils/globalValues";
 
 
-// export class RegisterInvoice{
+export class RegisterInvoice{
 
 // 	constructor(
 //         private userRepository: UserDatabaseInterface,
@@ -69,4 +69,4 @@
 
 // 		// return invoice;
 // 	}
-// }
+}

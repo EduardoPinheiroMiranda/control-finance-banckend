@@ -23,7 +23,8 @@ export async function registerUser(request: FastifyRequest, reply: FastifyReply)
 			email: body.email,
 			password: body.password,
 			limit: 1000,
-			expired: 10
+			dueDay: 10,
+			closeDay: 5
 		});
 
 

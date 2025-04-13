@@ -60,14 +60,19 @@ describe("service/shopping", () => {
 			const purchaseDate = "2025-02-02";
 			const closeDay = 5;
 			const dueDay = 10;
-			const totalInstallments = 3;
+			const totalInstallments = 4;
 
 
 			const invoiceDates = await checkPurchaseDate(purchaseDate, dueDay, closeDay, totalInstallments);
 
 			expect(invoiceDates.length).not.toBe(totalInstallments);
-			expect(invoiceDates.length).toBe(2);
+			expect(invoiceDates.length).toBe(3);
 			expect(invoiceDates[0].dueDate.toISOString()).toBe("2025-03-10T23:59:59.000Z");
+			// check matrix sequence
+			expect(
+				invoiceDates[0].dueDate.getTime() < invoiceDates[1].dueDate.getTime() &&
+				invoiceDates[1].dueDate.getTime() < invoiceDates[2].dueDate.getTime()
+			).toBe(true);
 		});
 
 		it("Check to see if any errors are triggered if the purchase date does not generate a valid invoice date list.", async () => {

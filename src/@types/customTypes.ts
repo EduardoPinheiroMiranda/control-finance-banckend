@@ -29,7 +29,6 @@ export interface Invoices{
     user_id: string
 }
 
-
 export interface Installment{
     installment_number: number,
     total_installments: number,
@@ -37,4 +36,9 @@ export interface Installment{
     due_date: Date,
     shopping_id: string,
     invoice_id: string,
+}
+
+export interface Dates{
+	dueDate: Date,
+	closeDate: Date
 }

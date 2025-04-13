@@ -1,7 +1,5 @@
-interface Dates{
-	dueDate: Date,
-	closeDate: Date
-}
+import { Dates } from "@/@types/customTypes";
+
 
 export class HandlerDueDate{
 
@@ -11,7 +9,7 @@ export class HandlerDueDate{
 
 
 	constructor(
-		private purchaseDate?: string
+		private purchaseDate?: string | null
 	){
 		this.currentDate = this.purchaseDate ? new Date(this.purchaseDate) : new Date();
 		this.month = this.currentDate.getMonth();

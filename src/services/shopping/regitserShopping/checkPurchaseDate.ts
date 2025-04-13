@@ -1,0 +1,58 @@
+import { DataValidationError } from "@/errors/custonErros";
+import { HandlerDueDate } from "@/utils/handlerDueDate";
+
+
+export async function checkPurchaseDate(
+	purchaseDate: string | null,
+	dueDay: number,
+	closeDay: number,
+	totalInstallments: number
+){
+
+	if(purchaseDate && new Date().getTime() < new Date(purchaseDate).getTime()){
+		throw new DataValidationError("Data informada é invalidata.");
+	}
+
+
+	const invoiceDatesBasedOnPurchaseDate = new HandlerDueDate(purchaseDate).generateDueDates(
+		dueDay,
+		closeDay,
+		totalInstallments,
+		false
+	);
+
+
+	if(!purchaseDate || new Date().getTime() === new Date(purchaseDate).getTime()){
+		// dates generated with current date
+		return invoiceDatesBasedOnPurchaseDate;
+	}
+
+
+	const invoiceDatesBasedOnCurrentDate = new HandlerDueDate().generateDueDates(
+		dueDay,
+		closeDay,
+		1,
+		false
+	);
+
+
+	const currentInvoiceDueDate = invoiceDatesBasedOnCurrentDate[0].dueDate.getTime();
+
+
+	const validInvoiceDates = invoiceDatesBasedOnPurchaseDate.filter((invoice) => {
+        
+		const invoiceDueDateBasedOnPurchaseDate = invoice.dueDate.getTime();
+
+		if(invoiceDueDateBasedOnPurchaseDate >= currentInvoiceDueDate){
+			return invoice;
+		}
+	});
+
+
+	if(validInvoiceDates.length === 0){
+		throw new DataValidationError("A data de compra não é valida. Com base na data e no número de parcelas informados, não haverá lançamentos para a fatura atual ou futuras.");
+	}
+
+
+	return validInvoiceDates; 
+}

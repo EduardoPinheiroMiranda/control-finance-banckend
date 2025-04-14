@@ -43,7 +43,7 @@ describe("service/shopping", () => {
 					id: "125",
 					pay: false,
 					due_date: new Date("2025-05-10T23:59:59.000z"),
-					close_date: new Date("2025-06-05T23:59:59.000z"),
+					close_date: new Date("2025-05-05T23:59:59.000z"),
 					created_at: new Date("2025-03-09T12:00:00.000z"),
 					updated_at: new Date("2025-03-09T12:00:00.000z"),
 					user_id: "1234"
@@ -51,7 +51,7 @@ describe("service/shopping", () => {
 			];
 
 
-			const installments = await createInstallments(
+			const { listInstallmentsToCrerate } = await createInstallments(
 				shoppingId,
 				purchaseValue,
 				totalInstalments,
@@ -60,7 +60,7 @@ describe("service/shopping", () => {
 				repository
 			);
 
-			expect(installments.createInstallments.length).toBe(totalInstalments);
+			expect(listInstallmentsToCrerate.length).toBe(invoices.length);
 		});
 
 		it("Check that installments have been assigned to invoices correctly.", async () => {
@@ -92,7 +92,7 @@ describe("service/shopping", () => {
 			];
 
 
-			const installments = await createInstallments(
+			const { listInstallmentsToCrerate } = await createInstallments(
 				shoppingId,
 				purchaseValue,
 				totalInstalments,
@@ -103,7 +103,7 @@ describe("service/shopping", () => {
 
 			
 			expect(
-				installments.createInstallments[0].due_date.getTime()
+				listInstallmentsToCrerate[0].due_date.getTime()
 			).toBeLessThan(
 				invoices[0].close_date.getTime()
 			);

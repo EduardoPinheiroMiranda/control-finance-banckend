@@ -9,7 +9,12 @@ export async function checkPurchaseDate(
 	totalInstallments: number
 ){
 
-	if(purchaseDate && new Date().getTime() < new Date(purchaseDate).getTime()){
+	const currentDate = new Date();
+	const purchaseMoment = !purchaseDate ? currentDate : new Date(purchaseDate);
+
+
+
+	if(purchaseDate && currentDate.getTime() < purchaseMoment.getTime()){
 		throw new DataValidationError("Data informada é invalidata.");
 	}
 
@@ -22,7 +27,7 @@ export async function checkPurchaseDate(
 	);
 
 
-	if(!purchaseDate || new Date().getTime() === new Date(purchaseDate).getTime()){
+	if(!purchaseDate || currentDate.getTime() === purchaseMoment.getTime()){
 		// dates generated with current date
 		return invoiceDatesBasedOnPurchaseDate;
 	}

@@ -23,7 +23,7 @@ export interface Shopping{
     purchaseDate: string
 }
 
-export interface Invoices{
+export interface Invoice{
     due_date: Date,
 	close_date: Date,
     user_id: string

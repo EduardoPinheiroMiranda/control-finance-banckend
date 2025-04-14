@@ -8,6 +8,7 @@ import { UserDatabaseInterface } from "@/repositories/interfaces/user";
 import { createInvoices } from "./createInvoices";
 import { createInstallments } from "./createInstallments";
 import { CardValidation } from "./cardValidation";
+import { checkPurchaseDate } from "./checkPurchaseDate";
 
 
 export class RegisterShopping{
@@ -20,6 +21,16 @@ export class RegisterShopping{
 		private cardRepository: CardDatabaseInterface
 	){}
 
+
+	// async purchaseInCard(){
+
+	// 	const startOnTheInvoice = await CardValidation(
+	// 		data.paymentMethod,
+	// 		data.cardId,
+	// 		this.cardRepository,
+	// 		data.purchaseDate
+	// 	);
+	// }
 
 	async execute(userId: string, data: Shopping){
 
@@ -35,11 +46,11 @@ export class RegisterShopping{
 		}
 
 
-		const startOnTheInvoice = await CardValidation(
-			data.paymentMethod,
-			data.cardId,
-			this.cardRepository,
-			data.purchaseDate
+		const datesForInvoices = await checkPurchaseDate(
+			data.purchaseDate,
+			user.due_day,
+			user.close_day,
+			data.totalInstallments
 		);
 
 
@@ -58,11 +69,8 @@ export class RegisterShopping{
 
 		const { invoices } = await createInvoices(
 			userId,
-			user.due_day,
-			user.close_day,
-			data.totalInstallments,
-			this.invoiceRepository,
-			startOnTheInvoice
+			datesForInvoices,
+			this.invoiceRepository
 		);
 
 

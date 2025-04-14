@@ -75,6 +75,25 @@ describe("service/shopping", () => {
 			).toBe(true);
 		});
 
+		it("checking if it is a purchase made in the previous month, after closing it will generate a list of matrices with a size equal to the number of installments.", async () => {
+            
+			const purchaseDate = "2025-02-06";
+			const closeDay = 5;
+			const dueDay = 10;
+			const totalInstallments = 4;
+
+
+			const invoiceDates = await checkPurchaseDate(purchaseDate, dueDay, closeDay, totalInstallments);
+
+			expect(invoiceDates.length).toBe(totalInstallments);
+			expect(invoiceDates[0].dueDate.toISOString()).toBe("2025-03-10T23:59:59.000Z");
+			// check matrix sequence
+			expect(
+				invoiceDates[0].dueDate.getTime() < invoiceDates[1].dueDate.getTime() &&
+				invoiceDates[1].dueDate.getTime() < invoiceDates[2].dueDate.getTime()
+			).toBe(true);
+		});
+
 		it("Check to see if any errors are triggered if the purchase date does not generate a valid invoice date list.", async () => {
             
 			const purchaseDate = "2025-00-02";

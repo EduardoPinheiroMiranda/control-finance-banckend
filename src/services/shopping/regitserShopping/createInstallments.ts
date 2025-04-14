@@ -16,18 +16,24 @@ export async function createInstallments(
 
 	const handlerDueDate = new HandlerDueDate();
 	const listOfDates = handlerDueDate.generateDueDates(
-		dueDate, dueDate - 1, totalInstalments, false
+		dueDate,
+		dueDate - 1,
+		invoices.length,
+		false
 	);
 	const dueDates = listOfDates.map((dates) => dates.dueDate);
 
 
-	const createInstallments: Installment[] = [];
+	const installmentValue = purchaseValue/totalInstalments;
+	const totalInstallmentsToCreate = invoices.length;
+	const listInstallmentsToCrerate: Installment[] = [];
 
-	for(let i=0; i<totalInstalments; i++){
-		createInstallments.push({
+
+	for(let i = 0; i < totalInstallmentsToCreate; i++){
+		listInstallmentsToCrerate.push({
 			installment_number: i+1,
 			total_installments: totalInstalments,
-			installment_value: Decimal(purchaseValue/totalInstalments),
+			installment_value: Decimal(installmentValue),
 			due_date: dueDates[i],
 			shopping_id: shoppingId,
 			invoice_id: invoices[i].id,
@@ -35,11 +41,11 @@ export async function createInstallments(
 	}
 
 
-	const installments = await installmentRepository.create(createInstallments);
+	const installments = await installmentRepository.create(listInstallmentsToCrerate);
 
 
 	return {
 		installments,
-		createInstallments
+		listInstallmentsToCrerate
 	};
 }

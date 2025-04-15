@@ -31,6 +31,9 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 			where:{
 				user_id: userId,
 				pay: false,
+			},
+			orderBy: {
+				due_date: "asc"
 			}
 		});
 

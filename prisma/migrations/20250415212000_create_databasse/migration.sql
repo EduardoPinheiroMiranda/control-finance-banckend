@@ -35,6 +35,7 @@ CREATE TABLE "shopping" (
     "payment_method" TEXT NOT NULL,
     "value" DECIMAL NOT NULL,
     "total_installments" INTEGER NOT NULL,
+    "pay" BOOLEAN NOT NULL DEFAULT false,
     "description" TEXT,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" DATETIME NOT NULL,

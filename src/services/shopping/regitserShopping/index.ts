@@ -1,4 +1,4 @@
-import { Shopping } from "@/@types/customTypes";
+import { Dates, Shopping } from "@/@types/customTypes";
 import { DataValidationError, ResourceNotFoud } from "@/errors/custonErros";
 import { CardDatabaseInterface } from "@/repositories/interfaces/card";
 import { InstallmentDatabaseInterface } from "@/repositories/interfaces/installment";
@@ -38,7 +38,6 @@ export class RegisterShopping{
 			user_id: userId
 		});
 
-
 		const { installments } = await createInstallments(
 			shopping.id,
 			data.value,
@@ -49,12 +48,45 @@ export class RegisterShopping{
 		);
 
 
-		return {
-			shopping,
-			installments
-		};
+		return { shopping, installments };
 	}
 
+	async registerFixedPurchase(userId: string, datesForInvoices: Dates[], data: Shopping){
+
+		const invoicesCreated = await this.invoiceRepository.findOpenInvoices(userId);
+
+		if(invoicesCreated.length === 0){
+
+			const { invoices } = await createInvoices(userId, datesForInvoices, this.invoiceRepository);
+			const { shopping, installments } = await this.registerShopping(userId, data, invoices);
+			
+			return { shopping, installments };
+		}
+
+
+		const { shopping, installments } = await this.registerShopping(userId, data, invoicesCreated);
+
+		return { shopping, installments };
+	}
+
+	async registerExtraPurchase(userId: string, datesForInvoices: Dates[], data: Shopping){
+
+		const { invoices } = await createInvoices(
+			userId,
+			datesForInvoices,
+			this.invoiceRepository
+		);
+
+
+		const { shopping, installments} = await this.registerShopping(
+			userId,
+			data,
+			invoices
+		);
+
+
+		return { shopping, installments };
+	}
 
 	async execute(userId: string, data: Shopping){
 
@@ -87,50 +119,15 @@ export class RegisterShopping{
 
 
 		if(data.typeInvoice === typeInvoices[0]){
-
-			let invoicesCreated = await this.invoiceRepository.findOpenInvoices(userId);
-
-			if(invoicesCreated.length === 0){
-
-				const { invoices } = await createInvoices(
-					userId,
-					datesForInvoices,
-					this.invoiceRepository
-				);
-			
-				invoicesCreated = invoices;
-			}
-
-
-			const { shopping, installments } = await this.registerShopping(
-				user.id,
-				data,
-				invoicesCreated
-			);
-
-
+			const { shopping, installments } = await this.registerFixedPurchase(user.id, datesForInvoices, data);
 			return { shopping, installments };
 		}
 
 
-		const { invoices } = await createInvoices(
-			user.id,
-			datesForInvoices,
-			this.invoiceRepository
-		);
 
+		const { shopping, installments } = await this.registerExtraPurchase(user.id, datesForInvoices, data);
 
-		const { shopping, installments} = await this.registerShopping(
-			user.id,
-			data,
-			invoices
-		);
-
-
-		return {
-			shopping,
-			installments
-		};		
+		return { shopping, installments };		
 	}
 }
 

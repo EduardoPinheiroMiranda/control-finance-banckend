@@ -51,6 +51,7 @@ model Shopping {
   payment_method     String
   value              Decimal
   total_installments Int
+  pay                Boolean       @default(false)
   description        String?
   created_at         DateTime      @default(now())
   updated_at         DateTime      @updatedAt

@@ -9,6 +9,8 @@ import { createInvoices } from "./createInvoices";
 import { createInstallments } from "./createInstallments";
 import { CardValidation } from "./cardValidation";
 import { checkPurchaseDate } from "./checkPurchaseDate";
+import { typeInvoices } from "@/utils/globalValues";
+import { Invoice } from "@prisma/client";
 
 
 export class RegisterShopping{
@@ -22,37 +24,7 @@ export class RegisterShopping{
 	){}
 
 
-	// async purchaseInCard(){
-
-	// 	const startOnTheInvoice = await CardValidation(
-	// 		data.paymentMethod,
-	// 		data.cardId,
-	// 		this.cardRepository,
-	// 		data.purchaseDate
-	// 	);
-	// }
-
-	async execute(userId: string, data: Shopping){
-
-		const user = await this.userRepository.getById(userId);
-
-		if(!user){
-			throw new ResourceNotFoud("Usuário não foi encontrado.");
-		}
-		
-
-		if(data.value <= 0 || data.totalInstallments <= 0){
-			throw new DataValidationError("Valor ou quantidade de parcelas da compra não pode ser menor, ou igual a 0.");
-		}
-
-
-		const datesForInvoices = await checkPurchaseDate(
-			data.purchaseDate,
-			user.due_day,
-			user.close_day,
-			data.totalInstallments
-		);
-
+	async registerShopping(userId: string, data: Shopping, invoices: Invoice[]){
 
 		const shopping = await this.shoppingRepository.create({
 			name: data.name,
@@ -65,13 +37,6 @@ export class RegisterShopping{
 			card_id: data.cardId,
 			user_id: userId
 		});
-
-
-		const { invoices } = await createInvoices(
-			userId,
-			datesForInvoices,
-			this.invoiceRepository
-		);
 
 
 		const { installments } = await createInstallments(
@@ -88,6 +53,84 @@ export class RegisterShopping{
 			shopping,
 			installments
 		};
+	}
+
+
+	async execute(userId: string, data: Shopping){
+
+		const user = await this.userRepository.getById(userId);
+
+		if(!user){
+			throw new ResourceNotFoud("Usuário não foi encontrado.");
+		}
+		
+
+		if(data.value <= 0 || data.totalInstallments <= 0){
+			throw new DataValidationError("Valor ou quantidade de parcelas da compra não pode ser menor, ou igual a 0.");
+		}
+		
+
+		const startOnTheInvoice = await CardValidation(
+			data.paymentMethod,
+			data.cardId,
+			this.cardRepository
+		);
+
+		
+		const datesForInvoices = await checkPurchaseDate(
+			data.purchaseDate,
+			user.due_day,
+			user.close_day,
+			data.totalInstallments,
+			startOnTheInvoice
+		);
+
+
+		if(data.typeInvoice === typeInvoices[0]){
+
+			let invoicesCreated = await this.invoiceRepository.findOpenInvoices(userId);
+
+			if(invoicesCreated.length === 0){
+
+				const { invoices } = await createInvoices(
+					userId,
+					datesForInvoices,
+					this.invoiceRepository
+				);
+			
+				invoicesCreated = invoices;
+			}
+
+
+			const { shopping, installments } = await this.registerShopping(
+				user.id,
+				data,
+				invoicesCreated
+			);
+
+
+			return { shopping, installments };
+		}
+
+
+		const { invoices } = await createInvoices(
+			user.id,
+			datesForInvoices,
+			this.invoiceRepository
+		);
+
+
+		const { shopping, installments} = await this.registerShopping(
+			user.id,
+			data,
+			invoices
+		);
+
+
+		return {
+			shopping,
+			installments
+		};		
 	}
 }
 

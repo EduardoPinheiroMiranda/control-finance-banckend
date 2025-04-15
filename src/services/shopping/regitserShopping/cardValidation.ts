@@ -7,8 +7,7 @@ import { HandlerDueDate } from "@/utils/handlerDueDate";
 export async function CardValidation(
 	paymentMethod: string,
 	cardId: string | null,
-	cardRepository: CardDatabaseInterface,
-	purchaseDate: string
+	cardRepository: CardDatabaseInterface
 ){
 
 	let startOnTheInvoice = false;
@@ -28,17 +27,19 @@ export async function CardValidation(
 		}
     
        
-		const handlerDueDate = new HandlerDueDate(purchaseDate);
-		const currentDate = new Date(purchaseDate);
+		const handlerDueDate = new HandlerDueDate();
+		const currentDate = new Date();
 
 		const year = currentDate.getFullYear();
 		const month = currentDate.getMonth();
     
+
 		const closeDateTheCurrentMonth = handlerDueDate.formatDate(
 			year,
 			month,
 			card.closing_date
 		);
+		
     
 		if(currentDate.getTime() > closeDateTheCurrentMonth.getTime()){
 			startOnTheInvoice = true;

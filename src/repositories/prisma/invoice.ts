@@ -24,4 +24,16 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 
 		return invoices;
 	}
+
+	async findOpenInvoices(userId: string){
+		
+		const invoices = await prisma.invoice.findMany({
+			where:{
+				user_id: userId,
+				pay: false,
+			}
+		});
+
+		return invoices;
+	}
 }

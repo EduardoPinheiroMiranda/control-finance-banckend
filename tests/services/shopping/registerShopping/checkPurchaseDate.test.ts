@@ -23,9 +23,10 @@ describe("service/shopping", () => {
 			const closeDay = 5;
 			const dueDay = 10;
 			const totalInstallments = 3;
+			const startOnTheInvoice = false;
 
 			await expect(
-				checkPurchaseDate(purchaseDate, dueDay, closeDay, totalInstallments)
+				checkPurchaseDate(purchaseDate, dueDay, closeDay, totalInstallments, startOnTheInvoice)
 			).rejects.toBeInstanceOf(DataValidationError);
 		});
 
@@ -35,9 +36,10 @@ describe("service/shopping", () => {
 			const closeDay = 5;
 			const dueDay = 10;
 			const totalInstallments = 3;
+			const startOnTheInvoice = false;
 
 
-			const invoiceDates = await checkPurchaseDate(purchaseDate, dueDay, closeDay, totalInstallments);
+			const invoiceDates = await checkPurchaseDate(purchaseDate, dueDay, closeDay, totalInstallments, startOnTheInvoice);
 
 			expect(invoiceDates.length).toBe(3);
 		});
@@ -48,11 +50,12 @@ describe("service/shopping", () => {
 			const closeDay = 5;
 			const dueDay = 10;
 			const totalInstallments = 3;
+			const startOnTheInvoice = false;
 
 
-			const invoiceDates = await checkPurchaseDate(purchaseDate, dueDay, closeDay, totalInstallments);
+			const invoiceDates = await checkPurchaseDate(purchaseDate, dueDay, closeDay, totalInstallments, startOnTheInvoice);
 
-			expect(invoiceDates.length).toBe(3);
+			expect(invoiceDates.length).toBe(totalInstallments);
 		});
 
 		it("check if an array of dates is returned with a size smaller than the total installments.", async () => {
@@ -61,9 +64,10 @@ describe("service/shopping", () => {
 			const closeDay = 5;
 			const dueDay = 10;
 			const totalInstallments = 4;
+			const startOnTheInvoice = false;
 
 
-			const invoiceDates = await checkPurchaseDate(purchaseDate, dueDay, closeDay, totalInstallments);
+			const invoiceDates = await checkPurchaseDate(purchaseDate, dueDay, closeDay, totalInstallments, startOnTheInvoice);
 
 			expect(invoiceDates.length).not.toBe(totalInstallments);
 			expect(invoiceDates.length).toBe(3);
@@ -81,9 +85,10 @@ describe("service/shopping", () => {
 			const closeDay = 5;
 			const dueDay = 10;
 			const totalInstallments = 4;
+			const startOnTheInvoice = false;
 
 
-			const invoiceDates = await checkPurchaseDate(purchaseDate, dueDay, closeDay, totalInstallments);
+			const invoiceDates = await checkPurchaseDate(purchaseDate, dueDay, closeDay, totalInstallments, startOnTheInvoice);
 
 			expect(invoiceDates.length).toBe(totalInstallments);
 			expect(invoiceDates[0].dueDate.toISOString()).toBe("2025-03-10T23:59:59.000Z");
@@ -100,10 +105,11 @@ describe("service/shopping", () => {
 			const closeDay = 5;
 			const dueDay = 10;
 			const totalInstallments = 3;
+			const startOnTheInvoice = false;
 
 
 			await expect(
-				checkPurchaseDate(purchaseDate, dueDay, closeDay, totalInstallments)
+				checkPurchaseDate(purchaseDate, dueDay, closeDay, totalInstallments, startOnTheInvoice)
 			).rejects.toBeInstanceOf(DataValidationError);
 		});
 	});

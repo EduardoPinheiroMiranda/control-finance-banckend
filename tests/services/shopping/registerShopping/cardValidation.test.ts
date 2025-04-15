@@ -27,8 +27,7 @@ describe("service/shopping", () => {
 			const startOnTheInvoice = await CardValidation(
 				"money",
 				"invalidId",
-				cardRepository,
-				"2025-03-02"
+				cardRepository
 			);
 			expect(startOnTheInvoice).toBe(false);
 
@@ -40,8 +39,7 @@ describe("service/shopping", () => {
 				CardValidation(
 					"card",
 					null,
-					cardRepository,
-					"2025-03-02"
+					cardRepository
 				)
 			).rejects.toBeInstanceOf(DataValidationError);
 
@@ -55,8 +53,7 @@ describe("service/shopping", () => {
 				CardValidation(
 					"card",
 					"invalidId",
-					cardRepository,
-					"2025-03-02"
+					cardRepository
 				)
 			).rejects.toBeInstanceOf(DataValidationError);
 
@@ -82,8 +79,7 @@ describe("service/shopping", () => {
 			const startOnTheInvoice = await CardValidation(
 				"card",
 				"validId",
-				cardRepository,
-				"2025-03-02"
+				cardRepository
 			);
 
 
@@ -110,8 +106,7 @@ describe("service/shopping", () => {
 			const startOnTheInvoice = await CardValidation(
 				"card",
 				"validId",
-				cardRepository,
-				"2025-03-02"
+				cardRepository
 			);
 
 

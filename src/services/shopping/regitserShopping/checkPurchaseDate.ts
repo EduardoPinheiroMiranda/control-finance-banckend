@@ -6,7 +6,8 @@ export async function checkPurchaseDate(
 	purchaseDate: string | null,
 	dueDay: number,
 	closeDay: number,
-	totalInstallments: number
+	totalInstallments: number,
+	startOnTheInvoice: boolean
 ){
 
 	const currentDate = new Date();
@@ -23,7 +24,7 @@ export async function checkPurchaseDate(
 		dueDay,
 		closeDay,
 		totalInstallments,
-		false
+		startOnTheInvoice
 	);
 
 
@@ -37,7 +38,7 @@ export async function checkPurchaseDate(
 		dueDay,
 		closeDay,
 		1,
-		false
+		startOnTheInvoice
 	);
 
 

@@ -15,28 +15,46 @@ export async function insertFixedPurchasesIntoNewInvoices(
 	const handlerDueDate = new HandlerDueDate();
 	const newInstallments: Installment[] = [];
 	const shoppingFroUpdate: string[] = [];
+
+
 	const fixedPurchases = await shoppingRepository.findFixedTypeOpenPurchase(userId);
-	
+
+	if(fixedPurchases.length === 0){
+		return {
+			installments: [],
+			newInstallments: [],
+			updateShopping: 0
+		};
+	}
             
+
 	fixedPurchases.forEach((purchase) => {
 
-		let numberOfTheLastInstallmetCreated = purchase.installment.length;
-        
+		const lastPosition = purchase.installment.length - 1;
+		const installmentValue = purchase.installment[lastPosition].installment_value;
+		let numberOfTheLastInstallmetCreated = purchase.installment[lastPosition].installment_number;
 
-		invoices.forEach((invoice, index) => {
+		const dueDay = purchase.installment[lastPosition].due_date.getDate();
+		let month = purchase.installment[lastPosition].due_date.getMonth();
+		let year = purchase.installment[lastPosition].due_date.getFullYear();
 
-			const dueDay = purchase.installment[0].due_date.getDate();
-			const invoiceDates = handlerDueDate.generateDueDates(
-				dueDay,
-				dueDay - 1,
-				invoices.length,
-				false
-			);
+
+		invoices.forEach((invoice) => {
+
+			month += 1;
+
+			if(month > 11){
+				year += 1;
+				month = 0;
+			}
+			
+			const dueDate = handlerDueDate.formatDate(year, month, dueDay);
+			numberOfTheLastInstallmetCreated += 1;
   
 			newInstallments.push({
-				installment_number: numberOfTheLastInstallmetCreated += 1,
-				installment_value: purchase.installment[0].installment_value,
-				due_date: invoiceDates[index].dueDate,
+				installment_number: numberOfTheLastInstallmetCreated,
+				installment_value: installmentValue,
+				due_date: dueDate,
 				shopping_id: purchase.id,
 				invoice_id: invoice.id,
 			});
@@ -55,6 +73,7 @@ export async function insertFixedPurchasesIntoNewInvoices(
 	return {
 		installments,
 		newInstallments,
-		updateShopping
+		updateShopping,
+		shoppingFroUpdate
 	};
 }

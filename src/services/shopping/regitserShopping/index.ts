@@ -11,6 +11,7 @@ import { CardValidation } from "./cardValidation";
 import { checkPurchaseDate } from "./checkPurchaseDate";
 import { typeInvoices } from "@/utils/globalValues";
 import { Invoice } from "@prisma/client";
+import { insertFixedPurchasesIntoNewInvoices } from "./insertFixedPurchasesIntoNewInvoices";
 
 
 export class RegisterShopping{
@@ -51,6 +52,7 @@ export class RegisterShopping{
 		return { shopping, installments };
 	}
 
+	
 	async registerFixedPurchase(userId: string, datesForInvoices: Dates[], data: Shopping){
 
 		const invoicesCreated = await this.invoiceRepository.findOpenInvoices(userId);
@@ -69,24 +71,25 @@ export class RegisterShopping{
 		return { shopping, installments };
 	}
 
+
 	async registerExtraPurchase(userId: string, datesForInvoices: Dates[], data: Shopping){
 
-		const { invoices } = await createInvoices(
-			userId,
-			datesForInvoices,
-			this.invoiceRepository
-		);
+		const { invoices, newInvoices } = await createInvoices(userId, datesForInvoices, this.invoiceRepository);
 
+		if(newInvoices){
+			await insertFixedPurchasesIntoNewInvoices(
+				userId,
+				newInvoices,
+				this.shoppingRepository,
+				this.installmentRepository
+			);
+		}
 
-		const { shopping, installments} = await this.registerShopping(
-			userId,
-			data,
-			invoices
-		);
-
+		const { shopping, installments} = await this.registerShopping(userId, data, invoices);
 
 		return { shopping, installments };
 	}
+
 
 	async execute(userId: string, data: Shopping){
 
@@ -124,9 +127,8 @@ export class RegisterShopping{
 		}
 
 
-
 		const { shopping, installments } = await this.registerExtraPurchase(user.id, datesForInvoices, data);
-
+		
 		return { shopping, installments };		
 	}
 }

@@ -20,7 +20,7 @@ export interface Shopping{
     dueDay: number,
     categoryId: string,
     cardId: string | null,
-    purchaseDate: string
+    purchaseDate: string | null
 }
 
 export interface Invoice{
@@ -31,7 +31,6 @@ export interface Invoice{
 
 export interface Installment{
     installment_number: number,
-    total_installments: number,
     installment_value: Decimal,
     due_date: Date,
     shopping_id: string,

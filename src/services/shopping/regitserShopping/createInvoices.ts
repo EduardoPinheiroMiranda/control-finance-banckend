@@ -42,10 +42,15 @@ export async function createInvoices(
 	const invoices = await invoiceRepository.create(createNewInvoices);
 
 
+	const allInvoices = [...invoices, ...invoicesCreated].sort(
+		(a,b) => a.due_date.getTime() - b.due_date.getTime()
+	);
+
+	
 	return {
-		invoices: [...invoices, ...invoicesCreated].sort(
-			(a,b) => a.due_date.getTime() - b.due_date.getTime()
-		),
+		invoices: allInvoices,
+		newInvoices: invoices,
+		invoicesCreated,
 		createNewInvoices
 	};
 }

@@ -32,7 +32,6 @@ export async function createInstallments(
 	for(let i = 0; i < totalInstallmentsToCreate; i++){
 		listInstallmentsToCrerate.push({
 			installment_number: i+1,
-			total_installments: totalInstalments,
 			installment_value: Decimal(installmentValue),
 			due_date: dueDates[i],
 			shopping_id: shoppingId,

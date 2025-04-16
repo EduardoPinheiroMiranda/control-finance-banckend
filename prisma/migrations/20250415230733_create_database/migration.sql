@@ -51,7 +51,6 @@ CREATE TABLE "shopping" (
 CREATE TABLE "installments" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "installment_number" INTEGER NOT NULL,
-    "total_installments" INTEGER NOT NULL,
     "installment_value" DECIMAL NOT NULL,
     "due_date" DATETIME NOT NULL,
     "pay" BOOLEAN NOT NULL DEFAULT false,

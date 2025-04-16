@@ -72,7 +72,6 @@ model Shopping {
 model Installment {
   id                 String   @id @default(uuid())
   installment_number Int
-  total_installments Int
   installment_value  Decimal
   due_date           DateTime
   pay                Boolean  @default(false)

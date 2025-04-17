@@ -24,7 +24,7 @@ export async function createInstallments(
 	const dueDates = listOfDates.map((dates) => dates.dueDate);
 
 
-	const installmentValue = purchaseValue/totalInstalments;
+	const installmentValue = (purchaseValue/totalInstalments).toFixed(2);
 	const totalInstallmentsToCreate = invoices.length;
 	const listInstallmentsToCrerate: Installment[] = [];
 

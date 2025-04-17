@@ -20,7 +20,10 @@ export async function registerShopping(request: FastifyRequest, reply: FastifyRe
 			description: z.string().nullable(),
 			dueDay: z.number(),
 			categoryId: z.string(),
-			cardId: z.string().nullable()
+			cardId: z.string().nullable(),
+			purchaseDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
+				message: "A data deve estar no formato 'YYYY-MM-DD'",
+			}).nullable()
 		});
 
 		const shopping = scheme.parse(request.body);

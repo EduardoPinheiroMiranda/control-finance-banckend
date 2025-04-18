@@ -11,4 +11,32 @@ export class InstallmentPrismaRepository implements InstallmentDatabaseInterface
 
 		return installments;
 	}
+
+	async getInstallmentsInOpen(shoppingId: string){
+		
+		const installments = await prisma.installment.findMany({
+			where: {
+				shopping_id: shoppingId,
+				pay: false
+			},
+			orderBy: {
+				due_date: "asc"
+			}
+		});
+
+		return installments;
+	}
+
+	async updateInstallment(InstallmentId: string, data: Prisma.InstallmentUncheckedUpdateInput){
+
+		const installment = await prisma.installment.update({
+			where: {
+				id: InstallmentId
+			},
+			data
+		});
+
+		return installment;
+	}
+
 }

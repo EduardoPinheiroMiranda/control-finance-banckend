@@ -11,5 +11,9 @@ export interface ShoppingDatabaseInterface{
         }
     }>[]>
 
+    getById(shoppingId: string): Promise<Shopping | null>
+
     updateTotalInstallments(shoppingIds: string[], addedInstallments: number): Promise<number>
+
+    updateShopping(shoppingId: string, data: Prisma.ShoppingUncheckedUpdateInput): Promise<Shopping>
 }

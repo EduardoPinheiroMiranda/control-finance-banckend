@@ -17,7 +17,7 @@ export async function insertFixedPurchasesIntoNewInvoices(
 	const shoppingFroUpdate: string[] = [];
 
 
-	const fixedPurchases = await shoppingRepository.findFixedTypeOpenPurchase(userId);
+	const fixedPurchases = await shoppingRepository.findFixedTypeOpenPurchases(userId);
 
 	if(fixedPurchases.length === 0){
 		return {

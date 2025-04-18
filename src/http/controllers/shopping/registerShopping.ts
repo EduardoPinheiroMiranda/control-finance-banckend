@@ -28,10 +28,11 @@ export async function registerShopping(request: FastifyRequest, reply: FastifyRe
 
 		const shopping = scheme.parse(request.body);
 
-		// console.log(shopping);
+
 		const serviceRegisterShopping = makeRegisterShopping();
 		await serviceRegisterShopping.execute(userId, shopping);
 
+		
 		return reply.status(201).send(JSON.stringify({
 			msg: "compra adicionada"
 		}));

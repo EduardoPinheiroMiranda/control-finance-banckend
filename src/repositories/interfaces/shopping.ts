@@ -5,7 +5,7 @@ export interface ShoppingDatabaseInterface{
 
     create(data: Prisma.ShoppingUncheckedCreateInput): Promise<Shopping>
 
-    findFixedTypeOpenPurchase(userId: string): Promise<Prisma.ShoppingGetPayload<{
+    findFixedTypeOpenPurchases(userId: string): Promise<Prisma.ShoppingGetPayload<{
         include: {
             installment: true
         }

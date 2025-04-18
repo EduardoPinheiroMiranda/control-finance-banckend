@@ -1,6 +1,6 @@
 import { DataValidationError } from "@/errors/custonErros";
 import { CardPrismaRepository } from "@/repositories/prisma/card";
-import { CardValidation } from "@/services/shopping/regitserShopping/cardValidation";
+import { cardValidation } from "@/services/shopping/regitserShopping/cardValidation";
 import { describe, it, expect, jest, beforeEach, afterEach } from "@jest/globals";
 
 
@@ -24,7 +24,7 @@ describe("service/shopping", () => {
 
 		it("check if false is returned if the payment method is other than card.", async () => {
 
-			const startOnTheInvoice = await CardValidation(
+			const startOnTheInvoice = await cardValidation(
 				"money",
 				"invalidId",
 				cardRepository
@@ -36,7 +36,7 @@ describe("service/shopping", () => {
 		it("check if an error is raised if cardId is null.", async () => {
 
 			await expect(
-				CardValidation(
+				cardValidation(
 					"card",
 					null,
 					cardRepository
@@ -50,7 +50,7 @@ describe("service/shopping", () => {
 			jest.spyOn(cardRepository, "getById").mockResolvedValue(null);
 
 			await expect(
-				CardValidation(
+				cardValidation(
 					"card",
 					"invalidId",
 					cardRepository
@@ -76,7 +76,7 @@ describe("service/shopping", () => {
 			});
 
 
-			const startOnTheInvoice = await CardValidation(
+			const startOnTheInvoice = await cardValidation(
 				"card",
 				"validId",
 				cardRepository
@@ -103,7 +103,7 @@ describe("service/shopping", () => {
 			});
 
 
-			const startOnTheInvoice = await CardValidation(
+			const startOnTheInvoice = await cardValidation(
 				"card",
 				"validId",
 				cardRepository

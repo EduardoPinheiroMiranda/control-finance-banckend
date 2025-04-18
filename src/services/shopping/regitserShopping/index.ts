@@ -7,7 +7,7 @@ import { ShoppingDatabaseInterface } from "@/repositories/interfaces/shopping";
 import { UserDatabaseInterface } from "@/repositories/interfaces/user";
 import { createInvoices } from "./createInvoices";
 import { createInstallments } from "./createInstallments";
-import { CardValidation } from "./cardValidation";
+import { cardValidation } from "./cardValidation";
 import { checkPurchaseDate } from "./checkPurchaseDate";
 import { typeInvoices } from "@/utils/globalValues";
 import { Invoice } from "@prisma/client";
@@ -105,7 +105,7 @@ export class RegisterShopping{
 		}
 		
 
-		const startOnTheInvoice = await CardValidation(
+		const startOnTheInvoice = await cardValidation(
 			data.paymentMethod,
 			data.cardId,
 			this.cardRepository

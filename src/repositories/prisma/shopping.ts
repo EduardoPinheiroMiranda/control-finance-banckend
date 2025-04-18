@@ -13,7 +13,7 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 		return shoping;
 	}
 
-	async findFixedTypeOpenPurchase(userId: string){
+	async findFixedTypeOpenPurchases(userId: string){
 		
 		const shoppingList = await prisma.shopping.findMany({
 			where: {

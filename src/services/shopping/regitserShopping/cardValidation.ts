@@ -4,7 +4,7 @@ import { paymentMethods } from "@/utils/globalValues";
 import { HandlerDueDate } from "@/utils/handlerDueDate";
 
 
-export async function CardValidation(
+export async function cardValidation(
 	paymentMethod: string,
 	cardId: string | null,
 	cardRepository: CardDatabaseInterface

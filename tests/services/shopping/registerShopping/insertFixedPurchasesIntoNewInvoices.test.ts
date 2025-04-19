@@ -79,7 +79,7 @@ describe("service/shopping", () => {
 			shoppingRepository = new ShoppingPrismaRepository();
 			installmentRepository = new InstallmentPrismaRepository();
 
-			jest.spyOn(shoppingRepository, "findFixedTypeOpenPurchase").mockResolvedValue(shopping);
+			jest.spyOn(shoppingRepository, "findFixedTypeOpenPurchases").mockResolvedValue(shopping);
 			jest.spyOn(installmentRepository, "create").mockResolvedValue([]);
 			jest.spyOn(shoppingRepository, "updateTotalInstallments").mockResolvedValue(shopping.length);
 		});
@@ -87,7 +87,7 @@ describe("service/shopping", () => {
 
 		it("Check if the function returns null if it finds no open fixed accounts.", async () => {
 
-			jest.spyOn(shoppingRepository, "findFixedTypeOpenPurchase").mockResolvedValue([]);
+			jest.spyOn(shoppingRepository, "findFixedTypeOpenPurchases").mockResolvedValue([]);
 
 			const { 
 				installments,

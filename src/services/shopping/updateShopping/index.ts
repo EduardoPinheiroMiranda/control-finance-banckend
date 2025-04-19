@@ -53,7 +53,7 @@ export class UpdateShopping{
 
 	async execute(shoppingId: string, data: Shopping){
         
-		if(data.value <= 0 || data.totalInstallments <= 0){
+		if(data.value <= 0){
 			throw new DataValidationError("Valor ou quantidade de parcelas da compra não pode ser menor, ou igual a 0.");
 		}
 

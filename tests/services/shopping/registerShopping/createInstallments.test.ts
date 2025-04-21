@@ -34,7 +34,7 @@ describe("service/shopping", () => {
 					id: "124",
 					pay: false,
 					due_date: new Date("2025-04-10T23:59:59.000z"),
-					close_date: new Date("2025-04-05T23:59:59.000z"),
+					closing_date: new Date("2025-04-05T23:59:59.000z"),
 					created_at: new Date("2025-03-09T12:00:00.000z"),
 					updated_at: new Date("2025-03-09T12:00:00.000z"),
 					user_id: "1234"
@@ -43,7 +43,7 @@ describe("service/shopping", () => {
 					id: "125",
 					pay: false,
 					due_date: new Date("2025-05-10T23:59:59.000z"),
-					close_date: new Date("2025-05-05T23:59:59.000z"),
+					closing_date: new Date("2025-05-05T23:59:59.000z"),
 					created_at: new Date("2025-03-09T12:00:00.000z"),
 					updated_at: new Date("2025-03-09T12:00:00.000z"),
 					user_id: "1234"
@@ -75,7 +75,7 @@ describe("service/shopping", () => {
 					id: "124",
 					pay: false,
 					due_date: new Date("2025-04-10T23:59:59.000z"),
-					close_date: new Date("2025-04-05T23:59:59.000z"),
+					closing_date: new Date("2025-04-05T23:59:59.000z"),
 					created_at: new Date("2025-03-09T12:00:00.000z"),
 					updated_at: new Date("2025-03-09T12:00:00.000z"),
 					user_id: "1234"
@@ -84,7 +84,7 @@ describe("service/shopping", () => {
 					id: "125",
 					pay: false,
 					due_date: new Date("2025-05-10T23:59:59.000z"),
-					close_date: new Date("2025-05-05T23:59:59.000z"),
+					closing_date: new Date("2025-05-05T23:59:59.000z"),
 					created_at: new Date("2025-03-09T12:00:00.000z"),
 					updated_at: new Date("2025-03-09T12:00:00.000z"),
 					user_id: "1234"
@@ -105,7 +105,7 @@ describe("service/shopping", () => {
 			expect(
 				listInstallmentsToCrerate[0].due_date.getTime()
 			).toBeLessThan(
-				invoices[0].close_date.getTime()
+				invoices[0].closing_date.getTime()
 			);
 		});
 	});

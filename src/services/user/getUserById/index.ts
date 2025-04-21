@@ -24,7 +24,7 @@ export class GetUserById{
 			email: user.email,
 			limit: user.limit,
 			dueDay: user.due_day,
-			closeDay: user.close_day,
+			closeDay: user.closing_day,
 			avatar: user.avatar,
 			balance: user.balance,
 		};

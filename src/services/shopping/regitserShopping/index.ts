@@ -115,7 +115,7 @@ export class RegisterShopping{
 		const datesForInvoices = await checkPurchaseDate(
 			data.purchaseDate,
 			user.due_day,
-			user.close_day,
+			user.closing_day,
 			data.totalInstallments,
 			startOnTheInvoice
 		);

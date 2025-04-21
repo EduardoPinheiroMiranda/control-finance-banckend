@@ -65,10 +65,11 @@ describe("service/shopping", () => {
 
 			jest.spyOn(cardRepository, "getById").mockResolvedValue({
 				id: "123",
-				closing_date: 1,
-				due_date: 10,
+				closing_day: 1,
+				due_day: 10,
 				color_card: "#000",
 				color_font: "#000",
+				active: true,
 				created_at: currentDate,
 				updated_at: currentDate,
 				user_id: "1234",
@@ -92,10 +93,11 @@ describe("service/shopping", () => {
 
 			jest.spyOn(cardRepository, "getById").mockResolvedValue({
 				id: "123",
-				closing_date: 5,
-				due_date: 10,
+				closing_day: 5,
+				due_day: 10,
 				color_card: "#000",
 				color_font: "#000",
+				active: true,
 				created_at: currentDate,
 				updated_at: currentDate,
 				user_id: "1234",

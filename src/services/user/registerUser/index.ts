@@ -40,7 +40,7 @@ export class RegisterUsers {
 			email: userData.email,
 			password: passwordHash,
 			due_day: userData.dueDay,
-			close_day: userData.closeDay,
+			closing_day: userData.closeDay,
 			limit: userData.limit,
 			balance: 0,
 		});

@@ -115,7 +115,7 @@ describe("service/shopping", () => {
 					updated_at: new Date("2025-03-01"),
 					user_id: "1234",
 					due_date: new Date("2025-03-10"),
-					close_date: new Date("2025-03-05"),
+					closing_date: new Date("2025-03-05"),
 				},
 				{  
 					id: "124",
@@ -124,7 +124,7 @@ describe("service/shopping", () => {
 					updated_at: new Date("2025-03-01"),
 					user_id: "1234",
 					due_date: new Date("2025-04-10"),
-					close_date: new Date("2025-04-05"),
+					closing_date: new Date("2025-04-05"),
 				},
 				{  
 					id: "123",
@@ -133,7 +133,7 @@ describe("service/shopping", () => {
 					updated_at: new Date("2025-03-01"),
 					user_id: "1234",
 					due_date: new Date("2025-05-10"),
-					close_date: new Date("2025-05-05"),
+					closing_date: new Date("2025-05-05"),
 				}
 			];
 
@@ -158,7 +158,7 @@ describe("service/shopping", () => {
 					updated_at: new Date("2025-03-01"),
 					user_id: "1234",
 					due_date: new Date("2025-03-10"),
-					close_date: new Date("2025-03-05"),
+					closing_date: new Date("2025-03-05"),
 				},
 				{  
 					id: "124",
@@ -167,7 +167,7 @@ describe("service/shopping", () => {
 					updated_at: new Date("2025-03-01"),
 					user_id: "1234",
 					due_date: new Date("2025-04-10"),
-					close_date: new Date("2025-04-05"),
+					closing_date: new Date("2025-04-05"),
 				},
 				{  
 					id: "123",
@@ -176,7 +176,7 @@ describe("service/shopping", () => {
 					updated_at: new Date("2025-03-01"),
 					user_id: "1234",
 					due_date: new Date("2025-05-10"),
-					close_date: new Date("2025-05-05"),
+					closing_date: new Date("2025-05-05"),
 				}
 			];
 

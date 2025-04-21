@@ -37,7 +37,7 @@ export async function cardValidation(
 		const closeDateTheCurrentMonth = handlerDueDate.formatDate(
 			year,
 			month,
-			card.closing_date
+			card.closing_day
 		);
 		
     

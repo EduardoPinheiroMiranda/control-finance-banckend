@@ -34,7 +34,7 @@ export interface ShoppingUpdate{
 
 export interface Invoice{
     due_date: Date,
-	close_date: Date,
+	closing_date: Date,
     user_id: string
 }
 
@@ -49,4 +49,13 @@ export interface Installment{
 export interface Dates{
 	dueDate: Date,
 	closeDate: Date
+}
+
+export interface Card{
+    name: string,
+    dueDay: number,
+    closingDay: number,
+    colorFont: string,
+    colorCard: string,
+
 }

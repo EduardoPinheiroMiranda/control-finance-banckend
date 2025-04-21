@@ -14,7 +14,7 @@ model User {
   password    String
   limit       Decimal
   due_day     Int
-  close_day   Int
+  closing_day   Int
   avatar      String?
   balance     Decimal
   created_at  DateTime      @default(now())
@@ -30,10 +30,11 @@ model User {
 model Card {
   id           String     @id @default(uuid())
   name         String
-  due_date     Int
-  closing_date Int
+  due_day      Int
+  closing_day  Int
   color_font   String
   color_card   String
+  active       Boolean    @default(true)
   created_at   DateTime   @default(now())
   updated_at   DateTime   @updatedAt
   shopping     Shopping[]
@@ -98,13 +99,13 @@ model Category {
 }
 
 model Invoice {
-  id          String        @id @default(uuid())
-  pay         Boolean       @default(false)
-  due_date    DateTime      @unique
-  close_date  DateTime      @unique
-  created_at  DateTime      @default(now())
-  updated_at  DateTime      @updatedAt
-  installment Installment[]
+  id            String        @id @default(uuid())
+  pay           Boolean       @default(false)
+  due_date      DateTime      @unique
+  closing_date  DateTime      @unique
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+  installment   Installment[]
 
   userId User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id String

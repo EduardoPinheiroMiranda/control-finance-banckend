@@ -6,7 +6,7 @@ CREATE TABLE "users" (
     "password" TEXT NOT NULL,
     "limit" DECIMAL NOT NULL,
     "due_day" INTEGER NOT NULL,
-    "close_day" INTEGER NOT NULL,
+    "closing_day" INTEGER NOT NULL,
     "avatar" TEXT,
     "balance" DECIMAL NOT NULL,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -17,10 +17,11 @@ CREATE TABLE "users" (
 CREATE TABLE "cards" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
-    "due_date" INTEGER NOT NULL,
-    "closing_date" INTEGER NOT NULL,
+    "due_day" INTEGER NOT NULL,
+    "closing_day" INTEGER NOT NULL,
     "color_font" TEXT NOT NULL,
     "color_card" TEXT NOT NULL,
+    "active" BOOLEAN NOT NULL DEFAULT true,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" DATETIME NOT NULL,
     "user_id" TEXT NOT NULL,
@@ -75,7 +76,7 @@ CREATE TABLE "invoices" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "pay" BOOLEAN NOT NULL DEFAULT false,
     "due_date" DATETIME NOT NULL,
-    "close_date" DATETIME NOT NULL,
+    "closing_date" DATETIME NOT NULL,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" DATETIME NOT NULL,
     "user_id" TEXT NOT NULL,
@@ -118,4 +119,4 @@ CREATE UNIQUE INDEX "categories_name_key" ON "categories"("name");
 CREATE UNIQUE INDEX "invoices_due_date_key" ON "invoices"("due_date");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "invoices_close_date_key" ON "invoices"("close_date");
+CREATE UNIQUE INDEX "invoices_closing_date_key" ON "invoices"("closing_date");

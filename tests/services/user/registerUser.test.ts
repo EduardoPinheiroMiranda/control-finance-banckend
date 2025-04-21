@@ -32,7 +32,7 @@ describe("service/user", () => {
 				created_at: new Date(),
 				updated_at: new Date(),
 				due_day: 10,
-				close_day: 5,
+				closing_day: 5,
 				limit: Decimal(1000),
 				password: await hash("1234", 12)
 			});
@@ -120,7 +120,7 @@ describe("service/user", () => {
 				created_at: new Date(),
 				updated_at: new Date(),
 				due_day: 10,
-				close_day: 5,
+				closing_day: 5,
 				limit: Decimal(1000),
 				password: await hash("1234", 12)
 			});

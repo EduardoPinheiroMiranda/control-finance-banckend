@@ -29,7 +29,7 @@ describe("service/user", () => {
 				password: await hash("123", 12),
 				limit: new Decimal(1000),
 				due_day: 10,
-				close_day: 5,
+				closing_day: 5,
 				avatar: null,
 				balance: new Decimal(500),
 				created_at: new Date(),

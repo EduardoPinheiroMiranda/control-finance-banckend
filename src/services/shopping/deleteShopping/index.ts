@@ -64,15 +64,27 @@ export class DeleteShopping{
 
 
 		if(shopping.type_invoice === typeInvoices[1]){
-			return await this.delete(shoppingId, installmentsHaveBeenPaid);
+			const {shopping, msg} = await this.delete(shoppingId, installmentsHaveBeenPaid);
+			return {
+				shopping,
+				msg
+			};
 		}
 
 
 		if(shopping.type_invoice === typeInvoices[0] && installmentsHaveBeenPaid){
-			return await this.desableShopping(shoppingId, shopping.installment);
+			const {updateShopping, msg} = await this.desableShopping(shoppingId, shopping.installment);
+			return {
+				shopping: updateShopping,
+				msg
+			};
 		}
 
 
-		return await this.delete(shoppingId, installmentsHaveBeenPaid);
+		const {shopping: desableShopping, msg} = await this.delete(shoppingId, installmentsHaveBeenPaid);
+		return {
+			shopping: desableShopping,
+			msg
+		};
 	}
 }

@@ -12,6 +12,17 @@ export class InstallmentPrismaRepository implements InstallmentDatabaseInterface
 		return installments;
 	}
 
+	async delete(installmentId: string[]){
+		
+		const installmentdDeleted = await prisma.installment.deleteMany({
+			where: {
+				id: {in: installmentId}
+			}
+		});
+
+		return installmentdDeleted.count;
+	}
+
 	async getInstallmentsInOpen(shoppingId: string){
 		
 		const installments = await prisma.installment.findMany({

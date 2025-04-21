@@ -13,6 +13,17 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 		return shoping;
 	}
 
+	async delete(shoppingId: string){
+		
+		const installment = await prisma.shopping.delete({
+			where: {
+				id: shoppingId
+			}
+		});
+
+		return installment;
+	}
+
 	async findFixedTypeOpenPurchases(userId: string){
 		
 		const shoppingList = await prisma.shopping.findMany({
@@ -30,14 +41,40 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 	}
 
 	async getById(shoppingId: string){
+
+		const shoping = await prisma.shopping.findUnique({
+			where: {
+				id: shoppingId
+			},
+		});
+
+		return shoping;
+	}
+
+	async getFullDataById(shoppingId: string){
 		
 		const shoping = await prisma.shopping.findUnique({
 			where: {
 				id: shoppingId
+			},
+			include: {
+				installment: true
 			}
 		});
 
 		return shoping;
+	}
+
+	async updateShopping(shoppingId: string, data: Prisma.ShoppingUncheckedUpdateInput){
+		
+		const shopping = await prisma.shopping.update({
+			where: {
+				id: shoppingId
+			},
+			data
+		});
+
+		return shopping;
 	}
 
 	async updateTotalInstallments(shoppingIds: string[], addedInstallments: number){
@@ -55,17 +92,5 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 
 
 		return update.count;
-	}
-
-	async updateShopping(shoppingId: string, data: Prisma.ShoppingUncheckedUpdateInput){
-		
-		const shopping = await prisma.shopping.update({
-			where: {
-				id: shoppingId
-			},
-			data
-		});
-
-		return shopping;
 	}
 }

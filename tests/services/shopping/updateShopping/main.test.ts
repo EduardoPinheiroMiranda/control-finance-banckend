@@ -119,7 +119,7 @@ describe("service/UpdateShopping", () => {
 			type_invoice: "extraExpense",
 			updated_at: date,
 			user_id: "user-123",
-			value: Decimal(1200)
+			value: Decimal(5000)
 		});
 
 		jest.spyOn(installmentRepository, "updateInstallment").mockResolvedValue({
@@ -150,6 +150,156 @@ describe("service/UpdateShopping", () => {
 
 		expect(shoppingRepository.updateShopping).toHaveBeenCalledTimes(1);
 		expect(installmentRepository.updateInstallment).toHaveBeenCalledTimes(2);
-		expect(result.name).toBe("Galaxy S24 ultra 1T");
+		expect(result.name).toBe(updateShopping.name);
+		expect(Number(result.value)).toBe(updateShopping.value);
+
+
 	});
+
+	it("If an extraExpense purchase has at least one installment paid, it will only be possible to update the name and description.", async () => {
+
+		const date = new Date();
+		
+		const mockeShopping = {
+			id: "shopping-123",
+			type_invoice: "extraExpense",
+			name: "celular",
+			card_id: "card-123",
+			category_id: "category-123",
+			created_at: date,
+			description: null,
+			pay: false,
+			payment_method: "card",
+			total_installments: 2,
+			updated_at: date,
+			user_id: "user-123",
+			value: Decimal(1200)
+		};
+
+		jest.spyOn(shoppingRepository, "getById").mockResolvedValue(mockeShopping);
+
+		jest.spyOn(installmentRepository, "getInstallmentsInOpen").mockResolvedValue([
+			{
+				id: "installment-124",
+				pay: false,
+				created_at: date,
+				updated_at: date,
+				installment_number: 2,
+				installment_value: Decimal(2500),
+				due_date: new Date("2025-05-10T23:59:59.000Z"),
+				shopping_id: "shopping-123",
+				invoice_id: "invoice-123",
+			},
+			
+		]);
+
+		jest.spyOn(shoppingRepository, "updateShopping").mockResolvedValue({
+			id: "shopping-123",
+			card_id: "card-123",
+			category_id: "category-123",
+			created_at: date,
+			description: "melhor telefone do mundo",
+			name: "Galaxy S24 ultra 1T 12GB ram",
+			pay: false,
+			payment_method: "card",
+			total_installments: 2,
+			type_invoice: "extraExpense",
+			updated_at: date,
+			user_id: "user-123",
+			value: Decimal(1200)
+		});
+
+
+		const updateShopping = {
+			id: "shopping-123",
+			name: "Galaxy S24 ultra 1T 12GB ram",
+			value: 5000,
+			description: "melhor telefone do mundo",
+			dueDay: 10,
+			categoryId: "category-1234",
+		};
+
+
+		const result = await serviceUpdateShopping.execute(updateShopping);
+
+
+		expect(shoppingRepository.updateShopping).toHaveBeenCalledTimes(1);
+		expect(result.name).toBe(updateShopping.name);
+		expect(result.value).not.toEqual(updateShopping.value);
+		expect(result.description).toEqual(updateShopping.description);
+	});
+
+	it("If an extraExpense purchase has at least one installment paid, it will only be possible to update the name and description.", async () => {
+
+		const date = new Date();
+		
+		const mockeShopping = {
+			id: "shopping-123",
+			type_invoice: "extraExpense",
+			name: "celular",
+			card_id: "card-123",
+			category_id: "category-123",
+			created_at: date,
+			description: null,
+			pay: false,
+			payment_method: "card",
+			total_installments: 2,
+			updated_at: date,
+			user_id: "user-123",
+			value: Decimal(1200)
+		};
+
+		jest.spyOn(shoppingRepository, "getById").mockResolvedValue(mockeShopping);
+
+		jest.spyOn(installmentRepository, "getInstallmentsInOpen").mockResolvedValue([
+			{
+				id: "installment-124",
+				pay: false,
+				created_at: date,
+				updated_at: date,
+				installment_number: 2,
+				installment_value: Decimal(2500),
+				due_date: new Date("2025-05-10T23:59:59.000Z"),
+				shopping_id: "shopping-123",
+				invoice_id: "invoice-123",
+			},
+			
+		]);
+
+		jest.spyOn(shoppingRepository, "updateShopping").mockResolvedValue({
+			id: "shopping-123",
+			card_id: "card-123",
+			category_id: "category-123",
+			created_at: date,
+			description: "melhor telefone do mundo",
+			name: "Galaxy S24 ultra 1T 12GB ram",
+			pay: false,
+			payment_method: "card",
+			total_installments: 2,
+			type_invoice: "extraExpense",
+			updated_at: date,
+			user_id: "user-123",
+			value: Decimal(1200)
+		});
+
+
+		const updateShopping = {
+			id: "shopping-123",
+			name: "Galaxy S24 ultra 1T 12GB ram",
+			value: 5000,
+			description: "melhor telefone do mundo",
+			dueDay: 10,
+			categoryId: "category-1234",
+		};
+
+
+		const result = await serviceUpdateShopping.execute(updateShopping);
+
+
+		expect(shoppingRepository.updateShopping).toHaveBeenCalledTimes(1);
+		expect(result.name).toBe(updateShopping.name);
+		expect(result.value).not.toEqual(updateShopping.value);
+		expect(result.description).toEqual(updateShopping.description);
+	});
+
 });

@@ -23,6 +23,15 @@ export interface Shopping{
     purchaseDate: string | null
 }
 
+export interface ShoppingUpdate{
+    id: string,
+    name: string,
+    value: number,
+    description: string | null,
+    dueDay: number,
+    categoryId: string,
+}
+
 export interface Invoice{
     due_date: Date,
 	close_date: Date,

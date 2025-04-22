@@ -12,11 +12,27 @@ export class CardPrismaRepository implements CardDatabaseInterface{
 		return card;
 	}
 
+	async disable(cardId: string){
+		
+		const disableCard = await prisma.card.update({
+			where: {
+				id: cardId,
+				active: true
+			},
+			data:{
+				active: false
+			}
+		});
+
+		return disableCard;
+	}
+
 	async getAllCards(userId: string){
 
 		const allCards = await prisma.card.findMany({
 			where: {
-				user_id: userId
+				user_id: userId,
+				active: true
 			}
 		});
 
@@ -27,7 +43,8 @@ export class CardPrismaRepository implements CardDatabaseInterface{
         
 		const card = await prisma.card.findUnique({
 			where: {
-				id: cardId
+				id: cardId,
+				active: true
 			}
 		});
 
@@ -38,7 +55,8 @@ export class CardPrismaRepository implements CardDatabaseInterface{
 		
 		const card = await prisma.card.update({
 			where: {
-				id: cardId
+				id: cardId,
+				active: true
 			},
 			data
 		});

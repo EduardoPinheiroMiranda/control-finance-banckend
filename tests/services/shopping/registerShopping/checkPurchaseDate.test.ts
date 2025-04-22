@@ -5,7 +5,7 @@ import { describe, it, expect, jest, beforeEach, afterEach } from "@jest/globals
 
 describe("service/shopping", () => {
 
-	describe("#checkPurchaseDate", () => {
+	describe("#CheckPurchaseDate", () => {
 
 		beforeEach(() => {
 			jest.useFakeTimers();

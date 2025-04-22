@@ -33,4 +33,17 @@ export class CardPrismaRepository implements CardDatabaseInterface{
 
 		return card;
 	}
+
+	async updateCartd(cardId: string, data: Prisma.CardUncheckedUpdateInput){
+		
+		const card = await prisma.card.update({
+			where: {
+				id: cardId
+			},
+			data
+		});
+
+		return card;
+
+	}
 }

@@ -8,7 +8,7 @@ import { Decimal } from "@prisma/client/runtime/library";
 
 describe("service/shopping", () => {
 
-	describe("#insert fixed purchases into new invoices", () => {
+	describe("#Insert fixed purchases into new invoices", () => {
         
 		let shoppingRepository: ShoppingPrismaRepository;
 		let installmentRepository: InstallmentPrismaRepository;

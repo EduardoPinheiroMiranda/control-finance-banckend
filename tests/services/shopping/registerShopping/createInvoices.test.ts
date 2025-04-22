@@ -7,7 +7,7 @@ import { Dates } from "@/@types/customTypes";
 
 describe("service/shopping", () => {
 
-	describe("# create invoices", () => {
+	describe("#Create invoices", () => {
 
 		let invoiceRepository: InvoicePrismaRepository;
 

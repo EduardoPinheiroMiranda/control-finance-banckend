@@ -6,7 +6,7 @@ import { afterEach } from "node:test";
 
 describe("service/shopping", () => {
 
-	describe("# create installments", () => {
+	describe("#Create installments", () => {
 
 		const installmentRepository = new InstallmentPrismaRepository();
 

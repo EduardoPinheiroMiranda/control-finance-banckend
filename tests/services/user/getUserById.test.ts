@@ -6,7 +6,7 @@ import { Decimal } from "@prisma/client/runtime/library";
 
 describe("service/user", () => {
 
-	describe("# Get user by id", () => {
+	describe("#Get user by id", () => {
 
 		let userRepository: UserPrismaRepository;
 		let serviceGetUserById: GetUserById;

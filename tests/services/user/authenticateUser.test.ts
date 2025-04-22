@@ -9,7 +9,7 @@ import jwt from "jsonwebtoken";
 
 describe("service/user", () => {
 
-	describe("# Authenticate user", () => {
+	describe("#Authenticate user", () => {
 		
 		let userRepository: UserPrismaRepository;
 		let serviceAuthenticateUser: AuthenticateUser;

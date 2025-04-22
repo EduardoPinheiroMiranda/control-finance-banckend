@@ -12,7 +12,7 @@ import { Decimal } from "@prisma/client/runtime/library";
 
 describe("service/shopping", () => {
 
-	describe("# register shopping", () => {
+	describe("#Register shopping", () => {
         
 		let userRepository: UserPrismaRepository;
 		let shoppingRepository: ShoppingPrismaRepository;

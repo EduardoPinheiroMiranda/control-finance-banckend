@@ -7,7 +7,7 @@ import { hash } from "bcrypt";
 
 describe("service/user", () => {
 
-	describe("# Register user", () => {
+	describe("#Register user", () => {
 
 		let userRepository: UserPrismaRepository;
 		let serviceRegisterUser: RegisterUsers;

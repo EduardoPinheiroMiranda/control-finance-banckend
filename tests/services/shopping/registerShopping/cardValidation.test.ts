@@ -6,7 +6,7 @@ import { describe, it, expect, jest, beforeEach, afterEach } from "@jest/globals
 
 describe("service/shopping", () => {
 
-	describe("# card validate", () => {
+	describe("#Card validate", () => {
         
 		let cardRepository: CardPrismaRepository;
 

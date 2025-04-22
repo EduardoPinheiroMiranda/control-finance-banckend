@@ -9,4 +9,5 @@ export interface CardDatabaseInterface{
 
     getById(cardId: string): Promise<Card | null>
 
+    updateCartd(cardId: string, data: Prisma.CardUncheckedUpdateInput): Promise<Card>
 }

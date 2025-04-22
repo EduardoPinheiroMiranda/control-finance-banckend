@@ -1,20 +1,20 @@
 import { DataValidationError } from "@/errors/custonErros";
 import { CardPrismaRepository } from "@/repositories/prisma/card";
-import { RegisterCard } from "@/services/card/registerCard";
+import { UpdateCard } from "@/services/card/updateCard";
 import { describe, it, expect, beforeEach, jest } from "@jest/globals";
 
 
 describe("service/card", () => {
 
-	describe("#Register card", () => {
+	describe("#Update card", () => {
 
 		let cardRepository: CardPrismaRepository;
-		let serviceRegisterCard: RegisterCard;
+		let serviceUpdateCard: UpdateCard;
 
 
 		beforeEach(() => {
 			cardRepository = new CardPrismaRepository();
-			serviceRegisterCard = new RegisterCard(
+			serviceUpdateCard = new UpdateCard(
 				cardRepository
 			);
 		});
@@ -23,9 +23,9 @@ describe("service/card", () => {
 		it("will trigger an erro if the colors values is invalid.", async () => {
 
 			await expect(
-				serviceRegisterCard.execute(
-					"user-1233",
+				serviceUpdateCard.execute(
 					{
+						id: "card-123",
 						name: "Mercado pago",
 						closingDay: 5,
 						dueDay: 7,
@@ -38,9 +38,9 @@ describe("service/card", () => {
 
 		it("will trigger an erro if the dates are not valid.", async () => {
 			await expect(
-				serviceRegisterCard.execute(
-					"user-1233",
+				serviceUpdateCard.execute(
 					{
+						id: "card-123",
 						name: "Mercado pago",
 						closingDay: 0,
 						dueDay: 32,
@@ -51,16 +51,16 @@ describe("service/card", () => {
 			).rejects.toBeInstanceOf(DataValidationError);
 		});
 
-		it("test whether the card is registered", async () => {
+		it("test whether the card is updated", async () => {
 
 			const date = new Date();
 
-			jest.spyOn(cardRepository, "create").mockResolvedValue({
+			jest.spyOn(cardRepository, "updateCartd").mockResolvedValue({
 				id: "card-123",
-				name: "mercado pago",
+				name: "Nubanck",
 				active: true,
-				closing_day: 5,
-				due_day: 7,
+				closing_day: 4,
+				due_day: 10,
 				color_card: "#000000",
 				color_font: "#ffffff",
 				created_at: date,
@@ -68,9 +68,9 @@ describe("service/card", () => {
 				user_id: "user-123"
 			});
 
-			const card = await serviceRegisterCard.execute(
-				"user-123",
+			const card = await serviceUpdateCard.execute(
 				{
+					id: "card-123",
 					name: "mercado pago",
 					closingDay: 5,
 					dueDay: 7,
@@ -80,8 +80,7 @@ describe("service/card", () => {
 			);
 
 
-			expect(card.name).toBe("mercado pago");
+			expect(card.name).toBe("Nubanck");
 		});
-    
 	});
 });

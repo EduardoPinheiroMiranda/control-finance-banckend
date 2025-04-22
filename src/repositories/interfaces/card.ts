@@ -5,5 +5,8 @@ export interface CardDatabaseInterface{
     
     create(data: Prisma.CardUncheckedCreateInput): Promise<Card>
 
+    getAllCards(userId: string): Promise<Card[]>
+
     getById(cardId: string): Promise<Card | null>
+
 }

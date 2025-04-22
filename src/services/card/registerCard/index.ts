@@ -1,4 +1,5 @@
 import { Card } from "@/@types/customTypes";
+import { env } from "@/env";
 import { DataValidationError } from "@/errors/custonErros";
 import { CardDatabaseInterface } from "@/repositories/interfaces/card";
 
@@ -11,11 +12,14 @@ export class RegisterCard{
 
 
 	async execute(userId: string, data: Card){
-        
-		const regexValidationHexadecimal = /#([a-f0-9]{6})/;
 
-		const colorFontIsValid = regexValidationHexadecimal.test(data.colorFont);
-		const colorCardIsValid = regexValidationHexadecimal.test(data.colorCard);
+		const colorCard = data.colorCard? data.colorCard : env.COLOR_FONT_DEFAULT;
+		const colorFont = data.colorFont? data.colorFont : env.COLOR_FONT_DEFAULT;
+
+        
+		const regexValidationHexadecimal = /#([a-fA-F0-9]{6}([a-fA-F0-9]{2})?)/;
+		const colorFontIsValid = regexValidationHexadecimal.test(colorCard);
+		const colorCardIsValid = regexValidationHexadecimal.test(colorFont);
 
 
 		if(!colorCardIsValid || !colorFontIsValid){
@@ -32,8 +36,8 @@ export class RegisterCard{
 			name: data.name,
 			due_day: data.dueDay,
 			closing_day: data.closingDay,
-			color_card: data.colorCard,
-			color_font: data.colorFont,
+			color_card: colorCard,
+			color_font: colorFont,
 			user_id: userId
 		});
 

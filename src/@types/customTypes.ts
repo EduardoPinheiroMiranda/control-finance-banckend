@@ -55,7 +55,7 @@ export interface Card{
     name: string,
     dueDay: number,
     closingDay: number,
-    colorFont: string,
-    colorCard: string,
+    colorFont: string | null,
+    colorCard: string | null,
 
 }

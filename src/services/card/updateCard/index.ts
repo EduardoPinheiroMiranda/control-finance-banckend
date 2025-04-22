@@ -1,6 +1,7 @@
 import { CardUpdate } from "@/@types/customTypes";
 import { DataValidationError } from "@/errors/custonErros";
 import { CardDatabaseInterface } from "@/repositories/interfaces/card";
+import { env } from "@/env";
 
 
 export class UpdateCard{
@@ -44,7 +45,10 @@ export class UpdateCard{
 			return card;
 
 		}catch(err){
-			console.log(err);
+			if(env.NODE_ENV !== "test"){
+				console.log(err);
+			}
+						
 			throw new DataValidationError("Houve um erro ao tentar atualizar este cartão, tente novamente mais tarde.");
 		}
 	}

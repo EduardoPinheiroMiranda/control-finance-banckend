@@ -1,3 +1,4 @@
+import { env } from "@/env";
 import { DataValidationError } from "@/errors/custonErros";
 import { CardDatabaseInterface } from "@/repositories/interfaces/card";
 
@@ -17,7 +18,10 @@ export class DisableCard{
 			return disableCard;
 
 		}catch(err){
-			console.log(err);
+			if(env.NODE_ENV !== "test"){
+				console.log(err);
+			}
+			
 			throw new DataValidationError("Houve um erro ao tentar desativar este cartão, tente novamente mais tarde.");
 		}
 	}

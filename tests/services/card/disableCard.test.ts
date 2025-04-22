@@ -29,7 +29,7 @@ describe("service/card", () => {
 			).rejects.toBeInstanceOf(DataValidationError);
 		});
 
-		it("cards is deleted.", async () => {
+		it("cards is disabled.", async () => {
 
 			const date = new Date();
 			const mockCard = {

@@ -1,4 +1,4 @@
-import { prisma } from "@/libs/primsa";
+import { CategoryPrismaRepository } from "@/repositories/prisma/category";
 
 
 const seeds = {
@@ -10,16 +10,18 @@ const seeds = {
 		{ name: "academia" },
 		{ name: "fastFood" },
 		{ name: "restaurante" },
-		{ name: "laser"}
-	]
+		{ name: "laser"},
+		{ name: "mecânico"},
+		{ name: "viagem"},
+		{ name: "despesas da casa"},
+	],
 };
 
-async function createSeeds(seeds: any) {
 
-	await prisma.category.createMany({
-		data: seeds.categories
-	});
+async function createSeeds() {
 
+	const categoryRepository = new CategoryPrismaRepository();
+	await categoryRepository.createMany(seeds.categories);
 }
 
-createSeeds(seeds);
+createSeeds();

@@ -3,7 +3,7 @@ import { Category, Prisma } from "@prisma/client";
 
 export interface CategoryDatabaseInterface{
     
-    create(data: Prisma.CategoryUncheckedCreateInput): Promise<Category>
+    createMany(data: Prisma.CategoryUncheckedCreateInput[]): Promise<Category[]>
 
-    getAllCategories(cursor: string): Promise<Category[]>
+    getAllCategories(cursor?: string): Promise<Category[]>
 }

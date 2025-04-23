@@ -67,3 +67,12 @@ export interface CardUpdate{
     colorFont: string,
     colorCard: string,
 }
+
+export interface Application{
+    name: string | null,
+    targetValue: number,
+    institution: string,
+    colorFont: string | null,
+    colorApplication: string | null,
+    icon: string
+}

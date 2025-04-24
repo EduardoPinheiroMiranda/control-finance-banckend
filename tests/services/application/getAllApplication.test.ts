@@ -1,4 +1,4 @@
-import { DataValidationError } from "@/errors/custonErros";
+import { ResourceNotFoud } from "@/errors/custonErros";
 import { ApplicationPrismaRepository } from "@/repositories/prisma/application";
 import { GetAllApplication } from "@/services/application/getAllApplications";
 import { describe, it, expect, beforeEach, jest } from "@jest/globals";
@@ -30,7 +30,7 @@ describe("service/application", () => {
         
 			await expect(
 				serviceGetAllApplications.execute("user-1233")
-			).rejects.toBeInstanceOf(DataValidationError);
+			).rejects.toBeInstanceOf(ResourceNotFoud);
 		});
 
 		it("check if a list of apps was found.", async () => {

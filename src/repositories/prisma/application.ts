@@ -36,4 +36,19 @@ export class ApplicationPrismaRepository implements ApplicationDatabaseInterface
 			applications
 		};
 	}
+
+	async getById(applicationId: string){
+		
+		const application = await prisma.application.findUnique({
+			where: {
+				id: applicationId
+			},
+			include: {
+				extract: true
+			}
+		});
+
+
+		return application;
+	}
 }

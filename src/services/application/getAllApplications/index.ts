@@ -1,4 +1,4 @@
-import { DataValidationError } from "@/errors/custonErros";
+import { ResourceNotFoud } from "@/errors/custonErros";
 import { ApplicationDatabaseInterface } from "@/repositories/interfaces/application";
 
 
@@ -14,7 +14,7 @@ export class GetAllApplication{
 		const application = await this.applicationRepository.getAllApllications(userId);
 
 		if(application.applications.length === 0){
-			throw new DataValidationError("Não foi encontrada nenhuma aplicação ainda.");
+			throw new ResourceNotFoud("Não foi encontrada nenhuma aplicação ainda.");
 		}
 
 		return application;

@@ -10,4 +10,10 @@ export interface ApplicationDatabaseInterface{
         value: Decimal,
         applications: Application[]
     }>
+
+    getById(applicationId: string): Promise<Prisma.ApplicationGetPayload<{
+        include: {
+            extract: true
+        }
+    }> | null >
 }

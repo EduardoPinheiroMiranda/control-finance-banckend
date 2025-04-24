@@ -69,9 +69,9 @@ export interface CardUpdate{
 }
 
 export interface Application{
-    name: string | null,
+    name: string,
     targetValue: number,
-    institution: string,
+    institution: string | null,
     colorFont: string | null,
     colorApplication: string | null,
     icon: string

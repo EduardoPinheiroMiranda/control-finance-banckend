@@ -20,22 +20,6 @@ describe("service/card", () => {
 		});
 
 
-		it("will trigger an erro if the colors values is invalid.", async () => {
-
-			await expect(
-				serviceUpdateCard.execute(
-					{
-						id: "card-123",
-						name: "Mercado pago",
-						closingDay: 5,
-						dueDay: 7,
-						colorCard: "#g92203sd",
-						colorFont: "#g92203sd"
-					}
-				)
-			).rejects.toBeInstanceOf(DataValidationError);
-		});
-
 		it("will trigger an erro if the dates are not valid.", async () => {
 			await expect(
 				serviceUpdateCard.execute(

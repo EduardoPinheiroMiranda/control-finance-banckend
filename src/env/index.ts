@@ -10,6 +10,8 @@ const environmentVariablesPattern = z.object({
 
 	COLOR_BACKGROUND_DEFAULT: z.string(),
 	COLOR_FONT_DEFAULT: z.string(),
+
+	INSTITUTION: z.string(),
 });
 
 

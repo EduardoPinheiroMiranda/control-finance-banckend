@@ -11,7 +11,7 @@ export class HandlerDueDate{
 	constructor(
 		private purchaseDate?: string | null
 	){
-		this.currentDate = this.purchaseDate ? new Date(this.purchaseDate) : new Date();
+		this.currentDate = new Date(this.purchaseDate ?? new Date().toISOString());
 		this.month = this.currentDate.getMonth();
 		this.year = this.currentDate.getFullYear();
 	}
@@ -23,7 +23,7 @@ export class HandlerDueDate{
 		);
 	}
 
-	private buildDates(
+	buildDates(
 		dueDay: number,
 		closeDay: number,
 		amount: number,
@@ -70,7 +70,7 @@ export class HandlerDueDate{
 		startOnTheInvoice: boolean
 	){
 
-		let closeDateTheCurrentMonth;
+		let closeDateTheCurrentMonth: Date;
 
 		if(closeDay < dueDay){
 			closeDateTheCurrentMonth = this.formatDate(this.year, this.month, closeDay);

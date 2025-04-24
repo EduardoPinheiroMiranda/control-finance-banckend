@@ -153,4 +153,26 @@ describe("utils/handler due dates", () => {
 		
 		expect(dueDates[0].closeDate.getMonth() == 1).toBe(true);
 	});
+
+	it("check if invoice list starts next month by startOnTheInvoice property.", async () => {
+
+		const dueDay = 10;
+		const closeDay = 7;
+		const amount = 12;
+		const startOnTheInvoice = true;
+		const purchaseDate = null;
+
+
+		const handlerDueDate = new HandlerDueDate(purchaseDate);
+		const dueDates = handlerDueDate.generateDueDates(
+			dueDay,
+			closeDay,
+			amount,
+			startOnTheInvoice
+		);
+
+		expect(dueDates[0].dueDate.getMonth() > new Date().getMonth()).toBe(true);
+		expect(dueDates.length).toBe(amount);
+		expect(dueDates[dueDates.length -1].dueDate.getFullYear() > new Date().getFullYear());
+	});
 });

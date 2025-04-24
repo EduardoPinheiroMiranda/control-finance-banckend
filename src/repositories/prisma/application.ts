@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import { ApplicationDatabaseInterface } from "../interfaces/application";
 import { prisma } from "@/libs/primsa";
 import { Decimal } from "@prisma/client/runtime/library";
+import { Filter } from "@/@types/customTypes";
 
 
 export class ApplicationPrismaRepository implements ApplicationDatabaseInterface{
@@ -10,6 +11,33 @@ export class ApplicationPrismaRepository implements ApplicationDatabaseInterface
         
 		const application = await prisma.application.create({data});
 		return application;
+	}
+
+	async filterApplications(filter: Filter){
+
+		const customWhere = {
+			...(filter.type != null && {type: filter.type}),
+			...(filter.date != null && {created_at: {gte: filter.date}}),
+			...(filter.institutionId != null && {application_id: filter.institutionId})
+		};
+
+
+		const [ extracts, amount] = await Promise.all([
+			prisma.extract.findMany({
+				where: customWhere,
+				orderBy: { created_at: "desc" }
+			}),
+			prisma.extract.aggregate({
+				_sum: { value: true },
+				where: customWhere
+			})
+		]);
+
+
+		return {
+			amount: amount._sum.value ?? Decimal(0),
+			extracts
+		};
 	}
 
 	async getAllApllications(userId: string){

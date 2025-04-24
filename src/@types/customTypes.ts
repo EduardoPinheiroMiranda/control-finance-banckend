@@ -76,3 +76,10 @@ export interface Application{
     colorApplication: string | null,
     icon: string
 }
+
+
+export interface Filter{
+    date: Date | null,
+    institutionId: string | null,
+    type: string | null
+}

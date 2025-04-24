@@ -7,8 +7,8 @@ export async function hexValidator(
 	background: string | null
 ){
 
-	const colorFont = font ? font : env.COLOR_FONT_DEFAULT;
-	const backgroundColor = background ? background : env.COLOR_BACKGROUND_DEFAULT;
+	const colorFont = font ?? env.COLOR_FONT_DEFAULT;
+	const backgroundColor = background ?? env.COLOR_BACKGROUND_DEFAULT;
 
 
 	const regexValidationHexadecimal = /#([a-fA-F0-9]{6}([a-fA-F0-9]{2})?)/;

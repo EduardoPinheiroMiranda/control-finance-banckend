@@ -14,7 +14,7 @@ export class RegisterApplication{
 
 	async execute(userId: string, data: Application){
         
-		const institution = data.institution ? data.institution : env.INSTITUTION;
+		const institution = data.institution ?? env.INSTITUTION;
 
 		const { background, font} = await hexValidator(data.colorFont, data.colorApplication);
 

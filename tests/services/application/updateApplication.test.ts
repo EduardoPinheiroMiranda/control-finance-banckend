@@ -1,21 +1,21 @@
 import { DataValidationError } from "@/errors/custonErros";
 import { ApplicationPrismaRepository } from "@/repositories/prisma/application";
-import { RegisterApplication } from "@/services/application/registerApplication";
+import { UpdateApplication } from "@/services/application/updateApplication";
 import { describe, it, expect, beforeEach, jest } from "@jest/globals";
 import { Decimal } from "@prisma/client/runtime/library";
 
 
 describe("service/application", () => {
 
-	describe("#Register application", () => {
+	describe("#Update application", () => {
         
 		let applicationRepository: ApplicationPrismaRepository;
-		let serviceRegisterApplication: RegisterApplication;
+		let serviceUpdateApplication: UpdateApplication;
 
 
 		beforeEach(() => {
 			applicationRepository = new ApplicationPrismaRepository();
-			serviceRegisterApplication = new RegisterApplication(
+			serviceUpdateApplication = new UpdateApplication(
 				applicationRepository
 			);
 		});
@@ -25,8 +25,8 @@ describe("service/application", () => {
             
             
 			await expect(
-				serviceRegisterApplication.execute(
-					"user-123",
+				serviceUpdateApplication.execute(
+					"application-123",
 					{
 						name: "Construi minha carreira",
 						targetValue: 0,
@@ -39,7 +39,7 @@ describe("service/application", () => {
 			).rejects.toBeInstanceOf(DataValidationError);
 		});
 
-		it("check if the application is created.", async () => {
+		it("check if the application is updated.", async () => {
 
 			const mockApplication = {
 				id: "application-123",
@@ -55,11 +55,11 @@ describe("service/application", () => {
 				user_id: "user-123"
 			};
             
-			jest.spyOn(applicationRepository, "create").mockResolvedValue(mockApplication);
+			jest.spyOn(applicationRepository, "update").mockResolvedValue(mockApplication);
 
 
-			const result = await serviceRegisterApplication.execute(
-				"user-123",
+			const result = await serviceUpdateApplication.execute(
+				"application-123",
 				{
 					name: "Construi minha carreira",
 					targetValue: 1100,

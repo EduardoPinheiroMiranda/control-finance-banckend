@@ -22,4 +22,6 @@ export interface ApplicationDatabaseInterface{
             extract: true
         }
     }> | null >
+
+    update(applicationId: string, data: Prisma.ApplicationUncheckedUpdateInput): Promise<Application>
 }

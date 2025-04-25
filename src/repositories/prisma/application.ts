@@ -79,4 +79,16 @@ export class ApplicationPrismaRepository implements ApplicationDatabaseInterface
 
 		return application;
 	}
+
+	async update(applicationId: string, data: Prisma.ApplicationUncheckedUpdateInput){
+		
+		const application = await prisma.application.update({
+			where: {
+				id: applicationId
+			},
+			data
+		});
+
+		return application;
+	}
 }

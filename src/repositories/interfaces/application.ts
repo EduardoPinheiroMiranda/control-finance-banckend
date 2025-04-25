@@ -12,16 +12,18 @@ export interface ApplicationDatabaseInterface{
         extracts: Extract[]
     }>
 
+    getAllInfo(applicationId: string): Promise<Prisma.ApplicationGetPayload<{
+        include: {
+            extract: true
+        }
+    }> | null>
+
     getAllApllications(userId: string): Promise<{
         value: Decimal,
         applications: Application[]
     }>
 
-    getById(applicationId: string): Promise<Prisma.ApplicationGetPayload<{
-        include: {
-            extract: true
-        }
-    }> | null >
+    getById(applicationId: string): Promise<Application | null >
 
     update(applicationId: string, data: Prisma.ApplicationUncheckedUpdateInput): Promise<Application>
 }

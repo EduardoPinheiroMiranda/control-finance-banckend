@@ -47,7 +47,7 @@ describe("service/application", () => {
 				extract: []
 			};
 
-			jest.spyOn(applicationRepository, "getById").mockResolvedValue(mockApplications);
+			jest.spyOn(applicationRepository, "getAllInfo").mockResolvedValue(mockApplications);
         
             
 			const result = await serviceGetApplication.execute("application-123");

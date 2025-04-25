@@ -11,7 +11,7 @@ export class GetApplication{
 
 	async execute(applicationId: string){
         
-		const application = await this.applicationRepositoty.getById(applicationId);
+		const application = await this.applicationRepositoty.getAllInfo(applicationId);
 
 		if(!application){
 			throw new ResourceNotFoud("Aplicação não foi encontrada.");

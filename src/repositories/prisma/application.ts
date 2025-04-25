@@ -40,6 +40,20 @@ export class ApplicationPrismaRepository implements ApplicationDatabaseInterface
 		};
 	}
 
+	async getAllInfo(applicationId: string){
+		
+		const application = await prisma.application.findUnique({
+			where: {
+				id: applicationId
+			},
+			include: {
+				extract: true
+			}
+		});
+
+		return application;
+	}
+
 	async getAllApllications(userId: string){
 
 		const [ applications, sumOfValues ] = await Promise.all([
@@ -70,12 +84,8 @@ export class ApplicationPrismaRepository implements ApplicationDatabaseInterface
 		const application = await prisma.application.findUnique({
 			where: {
 				id: applicationId
-			},
-			include: {
-				extract: true
 			}
 		});
-
 
 		return application;
 	}

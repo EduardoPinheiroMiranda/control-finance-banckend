@@ -1,3 +1,4 @@
+import { DataValidationError } from "@/errors/custonErros";
 import { UserPrismaRepository } from "@/repositories/prisma/user";
 import { RegisterUsers } from "@/services/user/registerUser";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
@@ -46,10 +47,10 @@ describe("service/user", () => {
 					dueDay: 10,
 					closeDay: 5,
 				})
-			).rejects.toThrow("This email already exist.");
+			).rejects.toBeInstanceOf(DataValidationError);
 		});
 
-		it("will trigger an error if the due date is invalid.", async () => {
+		it("will trigger an error if the due day is invalid.", async () => {
 
 			jest.spyOn(userRepository, "findEmail").mockResolvedValue(null);
 
@@ -62,7 +63,7 @@ describe("service/user", () => {
 					dueDay: 32,
 					closeDay: 5,
 				})
-			).rejects.toThrow("The expiration day is invalid. Choose a period between days 1 to 31.");
+			).rejects.toBeInstanceOf(DataValidationError);
 
 			await expect(
 				serviceRegisterUser.execute({
@@ -73,7 +74,7 @@ describe("service/user", () => {
 					dueDay: 0,
 					closeDay: 5
 				})
-			).rejects.toThrow("The expiration day is invalid. Choose a period between days 1 to 31.");
+			).rejects.toBeInstanceOf(DataValidationError);
 		});
 
 		it("will trigger an error if the limit is less than 100.", async () => {
@@ -89,7 +90,7 @@ describe("service/user", () => {
 					dueDay: 10,
 					closeDay: 5,
 				})
-			).rejects.toThrow("The limit is less than 100.");
+			).rejects.toBeInstanceOf(DataValidationError);
 		});
 
 		it("will trigger an error if the password is less than 8 characters.", async () => {
@@ -105,7 +106,7 @@ describe("service/user", () => {
 					dueDay: 10,
 					closeDay: 5,
 				})
-			).rejects.toThrow("Password is less than 8 characters long.");
+			).rejects.toBeInstanceOf(DataValidationError);
 		});
 
 		it("check if the user is registered.", async () => {
@@ -114,7 +115,7 @@ describe("service/user", () => {
 			jest.spyOn(userRepository, "create").mockResolvedValue({
 				id: "123",
 				name: "Eduardo",
-				email: "eduardo@gemail.com",
+				email: "eduardo@gmail.com",
 				avatar: null,
 				balance: Decimal(1000),
 				created_at: new Date(),
@@ -135,7 +136,7 @@ describe("service/user", () => {
 				closeDay: 5,
 			});
 
-			expect(response).toBe("usuário registrado com sucesso!");
+			expect(response.email).toBe("eduardo@gmail.com");
 		});
 	});
 });

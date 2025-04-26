@@ -7,6 +7,8 @@ export interface ApplicationDatabaseInterface{
     
     create(data: Prisma.ApplicationUncheckedCreateInput): Promise<Application>
 
+    delete(applicationId: string): Promise<Application>
+
     filterApplications(filter: Filter): Promise<{
         amount: Decimal,
         extracts: Extract[]

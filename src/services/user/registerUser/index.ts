@@ -35,7 +35,7 @@ export class RegisterUsers {
 		const passwordHash = await hash(userData.password, 12);
 
 		
-		await this.userRepository.create({
+		const user = await this.userRepository.create({
 			name: userData.name,
 			email: userData.email,
 			password: passwordHash,
@@ -46,6 +46,14 @@ export class RegisterUsers {
 		});
 
 
-		return "usuário registrado com sucesso!";
+		return {
+			id: user.id,
+			name: user.name,
+			email: user.email,
+			dueDay: user.due_day,
+			closingDay: user.closing_day,
+			limit: user.limit,
+			avatar: user.avatar
+		};
 	}
 }

@@ -1,3 +1,4 @@
+import { ResourceNotFoud } from "@/errors/custonErros";
 import { UserPrismaRepository } from "@/repositories/prisma/user";
 import { GetUserById } from "@/services/user/getUserById";
 import { describe, expect, jest, it, beforeEach } from "@jest/globals";
@@ -27,7 +28,7 @@ describe("service/user", () => {
 
 			await expect(
 				serviceGetUserById.execute("invalidId")
-			).rejects.toThrow("Usuário não encontrado.");
+			).rejects.toBeInstanceOf(ResourceNotFoud);
 
 		});
 

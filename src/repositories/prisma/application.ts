@@ -13,6 +13,17 @@ export class ApplicationPrismaRepository implements ApplicationDatabaseInterface
 		return application;
 	}
 
+	async delete(applicationId: string){
+		
+		const application = await prisma.application.delete({ 
+			where: {
+				id: applicationId
+			}
+		});
+
+		return application;
+	}
+
 	async filterApplications(filter: Filter){
 
 		const customWhere = {

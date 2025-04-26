@@ -1,4 +1,4 @@
-import { DataValidationError } from "@/errors/custonErros";
+import { ResourceNotFoud } from "@/errors/custonErros";
 import { UserDatabaseInterface } from "@/repositories/interfaces/user";
 
 
@@ -14,7 +14,7 @@ export class GetUserById{
 		const user = await this.userRepository.getById(userId);
 		
 		if(!user){
-			throw new DataValidationError("Usuário não encontrado.");
+			throw new ResourceNotFoud("Usuário não encontrado.");
 		}
 
 

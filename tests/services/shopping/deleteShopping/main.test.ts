@@ -50,6 +50,7 @@ describe("service/shopping", () => {
 				user_id: "user-1234",
 			};
 
+			
 			jest.spyOn(shoppingRepository, "getFullDataById").mockResolvedValue({
 				name: "wi-fi",
 				id: "shopping-123",

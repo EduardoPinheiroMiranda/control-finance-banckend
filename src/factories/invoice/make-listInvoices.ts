@@ -1,5 +1,5 @@
 import { InvoicePrismaRepository } from "@/repositories/prisma/invoice";
-import { ListInvoices } from "@/services/invoice/listInvoices";
+import { ListInvoices } from "@/services/invoice/getCurrentInvoice";
 
 
 export function makeListInvoices(){

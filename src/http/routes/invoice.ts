@@ -1,6 +1,6 @@
 import { checkToken } from "@/middlewares/checkToken";
 import { FastifyInstance } from "fastify";
-import { listInvoices } from "../controllers/invoice/listInvoices";
+import { getCurrentInvoice } from "../controllers/invoice/getCurrentInvoice";
 
 
 export async function invoiceRoutes(app: FastifyInstance){
@@ -9,6 +9,6 @@ export async function invoiceRoutes(app: FastifyInstance){
 		method: "GET",
 		url: "/listInvoices/:typeInvoice",
 		preHandler: checkToken,
-		handler: listInvoices
+		handler: getCurrentInvoice
 	});
 }

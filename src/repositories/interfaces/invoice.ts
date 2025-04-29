@@ -7,5 +7,8 @@ export interface InvoiceDatabaseInterface{
 
     findInvoicesFromDueDate(userId: string, dueDates: string[]): Promise<Invoice[]>
 
-    findOpenInvoices(userId: string): Promise<Invoice[]> 
+    findOpenInvoices(userId: string): Promise<Invoice[]>
+
+    getCurrentInvoice(userId: string, dueDate: Date): Promise<Invoice>
+
 }

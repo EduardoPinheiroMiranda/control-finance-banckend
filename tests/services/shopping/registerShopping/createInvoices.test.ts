@@ -48,7 +48,7 @@ describe("service/shopping", () => {
 				const userId = "1234";
 				const datesForInvoices: Dates[] = [
 					{
-						closeDate: new Date("2025-03-05T12:00:00.000Z"),
+						closingDate: new Date("2025-03-05T12:00:00.000Z"),
 						dueDate: new Date("2025-03-10T12:00:00.000Z")
 					}
 				];
@@ -94,11 +94,11 @@ describe("service/shopping", () => {
 				const userId = "1234";
 				const datesForInvoices: Dates[] = [
 					{
-						closeDate: new Date("2025-03-05T23:59:59.000Z"),
+						closingDate: new Date("2025-03-05T23:59:59.000Z"),
 						dueDate: new Date("2025-03-10T23:59:59.000Z")
 					},
 					{
-						closeDate: new Date("2025-04-05T23:59:59.000Z"),
+						closingDate: new Date("2025-04-05T23:59:59.000Z"),
 						dueDate: new Date("2025-04-10T23:59:59.000Z")
 					},
 				];
@@ -143,11 +143,11 @@ describe("service/shopping", () => {
 				const userId = "1234";
 				const datesForInvoices: Dates[] = [
 					{
-						closeDate: new Date("2025-03-05T23:59:59.000Z"),
+						closingDate: new Date("2025-03-05T23:59:59.000Z"),
 						dueDate: new Date("2025-03-10T23:59:59.000Z")
 					},
 					{
-						closeDate: new Date("2025-04-05T23:59:59.000Z"),
+						closingDate: new Date("2025-04-05T23:59:59.000Z"),
 						dueDate: new Date("2025-04-10T23:59:59.000Z")
 					},
 				];
@@ -194,11 +194,11 @@ describe("service/shopping", () => {
 				const userId = "1234";
 				const datesForInvoices: Dates[] = [
 					{
-						closeDate: new Date("2025-03-05T23:59:59.000Z"),
+						closingDate: new Date("2025-03-05T23:59:59.000Z"),
 						dueDate: new Date("2025-03-10T23:59:59.000Z")
 					},
 					{
-						closeDate: new Date("2025-04-05T23:59:59.000Z"),
+						closingDate: new Date("2025-04-05T23:59:59.000Z"),
 						dueDate: new Date("2025-04-10T23:59:59.000Z")
 					},
 				];
@@ -249,7 +249,7 @@ describe("service/shopping", () => {
 				const userId = "1234";
 				const datesForInvoices: Dates[] = [
 					{
-						closeDate: new Date("2025-04-05T23:59:59.000Z"),
+						closingDate: new Date("2025-04-05T23:59:59.000Z"),
 						dueDate: new Date("2025-04-10T23:59:59.000Z")
 					}
 				];

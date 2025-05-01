@@ -47,12 +47,12 @@ export class HandlerDueDate{
 			if(closeDay < dueDay){
 				dates.push({
 					dueDate: this.formatDate(currentYear, currentMonth, dueDay),
-					closeDate: this.formatDate(currentYear, currentMonth, closeDay)
+					closingDate: this.formatDate(currentYear, currentMonth, closeDay)
 				});
 			}else{
 				dates.push({
 					dueDate: this.formatDate(currentYear, currentMonth, dueDay),
-					closeDate: this.formatDate(currentYear, currentMonth - 1, closeDay)
+					closingDate: this.formatDate(currentYear, currentMonth - 1, closeDay)
 				});
 			}
 

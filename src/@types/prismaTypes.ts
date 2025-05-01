@@ -9,3 +9,13 @@ export type InvoiceElements = {
     payment_method: string,
     name: string
 };
+
+export interface ValueDetaisls{
+    invoiceId: string,
+    amount: number,
+    totalFixedExpense: number,
+    totalExtraExpense: number,
+    totalInvoice: number,
+    totalCard: number,
+    totalMoney: number,
+}

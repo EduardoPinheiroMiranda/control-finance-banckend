@@ -1,4 +1,4 @@
-import { InvoiceElements } from "@/@types/prismaTypes";
+import { InvoiceElements, ValueDetaisls } from "@/@types/prismaTypes";
 import { Invoice, Prisma } from "@prisma/client";
 
 
@@ -15,4 +15,5 @@ export interface InvoiceDatabaseInterface{
         extraExpense: InvoiceElements[]
     }>
 
+    getValuesTheInvoice(userId: string, dueDate: Date): Promise<ValueDetaisls>
 }

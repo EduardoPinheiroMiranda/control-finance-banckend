@@ -32,7 +32,7 @@ export async function createInvoices(
 		if(!invoice){
 			createNewInvoices.push({
 				due_date: dates.dueDate,
-				closing_date: dates.closeDate,
+				closing_date: dates.closingDate,
 				user_id: userId
 			});
 		}

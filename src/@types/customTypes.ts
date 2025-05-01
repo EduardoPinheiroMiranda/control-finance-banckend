@@ -48,7 +48,7 @@ export interface Installment{
 
 export interface Dates{
 	dueDate: Date,
-	closeDate: Date
+	closingDate: Date
 }
 
 export interface Card{

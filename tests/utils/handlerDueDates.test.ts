@@ -19,19 +19,19 @@ describe("utils/handler due dates", () => {
 		// each object must have a due date and a closing date. Ex:
 		// {
 		//     dueDate: "2025-04-10T23:59:59.000Z",
-		//     closeDate: "2025-04-02T23:59:59.000Z"
+		//     closingDate: "2025-04-02T23:59:59.000Z"
 		// }
 		// 
 
 
 		const dueDay = 10;
-		const closeDay = 2;
+		const closingDay = 2;
 		const amount = 3;
 
 
 		const dueDates = new HandlerDueDate().generateDueDates(
 			dueDay,
-			closeDay,
+			closingDay,
 			amount,
 			false
 		);
@@ -42,22 +42,22 @@ describe("utils/handler due dates", () => {
 		// check if the dates are being created correctly.
 		expect(dueDates[0]).toEqual({
 			dueDate: new Date("2025-04-10T23:59:59.000Z"),
-			closeDate: new Date("2025-04-02T23:59:59.000Z")
+			closingDate: new Date("2025-04-02T23:59:59.000Z")
 		});
 
 		// // check whether the dates from one object to another follow a chronological flow.
 		expect(dueDates).toEqual([
 			{
 				dueDate: new Date("2025-04-10T23:59:59.000Z"),
-				closeDate: new Date("2025-04-02T23:59:59.000Z")
+				closingDate: new Date("2025-04-02T23:59:59.000Z")
 		  	},
 		  	{
 				dueDate: new Date("2025-05-10T23:59:59.000Z"),
-				closeDate: new Date("2025-05-02T23:59:59.000Z")
+				closingDate: new Date("2025-05-02T23:59:59.000Z")
 			},
 			{
 				dueDate: new Date("2025-06-10T23:59:59.000Z"),
-				closeDate: new Date("2025-06-02T23:59:59.000Z")
+				closingDate: new Date("2025-06-02T23:59:59.000Z")
 		  	}
 		]);
 	});
@@ -69,18 +69,18 @@ describe("utils/handler due dates", () => {
 
 		// {
 		//     dueDate: "2025-04-10T23:59:59.000Z",
-		//     closeDate: "2025-03-28T23:59:59.000Z"
+		//     closingDate: "2025-03-28T23:59:59.000Z"
 		// }
 
 
 		const dueDay = 10;
-		const closeDay = 28;
+		const closingDay = 28;
 		const amount = 3;
 
 
 		const dueDates = new HandlerDueDate().generateDueDates(
 			dueDay,
-			closeDay,
+			closingDay,
 			amount,
 			false
 		);
@@ -91,22 +91,22 @@ describe("utils/handler due dates", () => {
 		// check if the dates are being created correctly.
 		expect(dueDates[0]).toEqual({
 			dueDate: new Date("2025-04-10T23:59:59.000Z"),
-			closeDate: new Date("2025-03-28T23:59:59.000Z")
+			closingDate: new Date("2025-03-28T23:59:59.000Z")
 		});
 
 		// // check whether the dates from one object to another follow a chronological flow.
 		expect(dueDates).toEqual([
 			{
 				dueDate: new Date("2025-04-10T23:59:59.000Z"),
-				closeDate: new Date("2025-03-28T23:59:59.000Z")
+				closingDate: new Date("2025-03-28T23:59:59.000Z")
 		  	},
 		  	{
 				dueDate: new Date("2025-05-10T23:59:59.000Z"),
-				closeDate: new Date("2025-04-28T23:59:59.000Z")
+				closingDate: new Date("2025-04-28T23:59:59.000Z")
 			},
 			{
 				dueDate: new Date("2025-06-10T23:59:59.000Z"),
-				closeDate: new Date("2025-05-28T23:59:59.000Z")
+				closingDate: new Date("2025-05-28T23:59:59.000Z")
 		  	}
 		]);
 
@@ -115,28 +115,28 @@ describe("utils/handler due dates", () => {
 	it("check if the first invoice is for the following month based on the month of purchase if startOnTheInvoice is true.", async () => {
 		
 		const dueDay = 10;
-		const closeDay = 3;
+		const closingDay = 3;
 		const amount = 3;
 		const startOnTheInvoice = true;
 
 
 		const dueDates = new HandlerDueDate().generateDueDates(
 			dueDay,
-			closeDay,
+			closingDay,
 			amount,
 			startOnTheInvoice
 		);
 
 
 		expect(
-			dueDates[0].closeDate.getTime() > new Date().getTime()
+			dueDates[0].closingDate.getTime() > new Date().getTime()
 		).toBe(true);
 	});
 
 	it("Check if you can create invoices from a specific date", async () => {
 
 		const dueDay = 10;
-		const closeDay = 5;
+		const closingDay = 5;
 		const amount = 3;
 		const startOnTheInvoice = false;
 		const purchaseDate = "2025-02-03";
@@ -145,19 +145,19 @@ describe("utils/handler due dates", () => {
 		const handlerDueDate = new HandlerDueDate(purchaseDate);
 		const dueDates = handlerDueDate.generateDueDates(
 			dueDay,
-			closeDay,
+			closingDay,
 			amount,
 			startOnTheInvoice
 		);
 
 		
-		expect(dueDates[0].closeDate.getMonth() == 1).toBe(true);
+		expect(dueDates[0].closingDate.getMonth() == 1).toBe(true);
 	});
 
 	it("check if invoice list starts next month by startOnTheInvoice property.", async () => {
 
 		const dueDay = 10;
-		const closeDay = 7;
+		const closingDay = 7;
 		const amount = 12;
 		const startOnTheInvoice = true;
 		const purchaseDate = null;
@@ -166,7 +166,7 @@ describe("utils/handler due dates", () => {
 		const handlerDueDate = new HandlerDueDate(purchaseDate);
 		const dueDates = handlerDueDate.generateDueDates(
 			dueDay,
-			closeDay,
+			closingDay,
 			amount,
 			startOnTheInvoice
 		);

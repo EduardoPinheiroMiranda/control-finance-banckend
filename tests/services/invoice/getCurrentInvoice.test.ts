@@ -23,7 +23,7 @@ describe("service/invoice", () => {
 		});
 
 
-		it("", async () => {
+		it("will trigger an error if the user is not found.", async () => {
             
             await serviceGetCurrentInvoice.execute("6aa05c6e-c267-49a6-b8a4-ac00732b6c7e");
 		});

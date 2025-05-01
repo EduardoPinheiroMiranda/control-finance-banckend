@@ -26,8 +26,37 @@ export class GetCurrentInvoice{
 		const handlerDueDates = new HandlerDueDate();
 		const date = handlerDueDates.generateDueDates(dueDay, closingDay, 1, false);
 
-		
-		const invoice = await this.invoiceRepository.getCurrentInvoice(userId, date[0].dueDate);
-		
+
+		const [ invoice, valueDetails ] = await Promise.all([
+			this.invoiceRepository.getCurrentInvoice(userId, date[0].dueDate),
+			this.invoiceRepository.getValuesTheInvoice(userId, date[0].dueDate)
+		]);
+
+
+		if(invoice.extraExpense.length === 0 && invoice.fixedExpense.length ===0){
+			throw new DataValidationError("Sua fatura nào foi encontrada.");
+		}
+
+
+		const userLimit = Number(user.limit);
+		const percentegeSpent = ((valueDetails.amount / userLimit) * 100).toFixed(0);
+		const available = userLimit - valueDetails.amount;
+
+
+		return {
+			invoiceId: valueDetails.invoiceId,
+			dueDay: date[0].dueDate,
+			closingDay: date[0].closingDate,
+			percentegeSpent,
+			limit: userLimit,
+			amount: valueDetails.amount,
+			available,
+			totalCard: valueDetails.totalCard,
+			totalInvoice: valueDetails.totalInvoice,
+			totalMoney: valueDetails.totalMoney,
+			totalFixedExpense: valueDetails.totalFixedExpense,
+			totalExtraExpense: valueDetails.totalExtraExpense,
+			invoice
+		};
 	}
 }

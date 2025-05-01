@@ -49,7 +49,6 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 			installments: string
 		}[]>`
 			select
-
 				shopping.type_invoice,
 				json_agg(
 					json_build_object(
@@ -65,7 +64,6 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 					)
 					order by installments.created_at desc
 				) as installments
-
 			from
 
 				invoices
@@ -103,5 +101,54 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 			fixedExpense,
 			extraExpense
 		};
+	}
+
+	async getValuesTheInvoice(userId: string, dueDate: Date){
+		
+		const valueDetails = await prisma.$queryRaw<{
+			invoice_id: string,
+			amount: number,
+			total_fixed_expense: number,
+			total_extra_expense: number,
+			total_invoice: number,
+			total_card: number,
+			total_money: number,
+		}>`
+			select
+				invoices.id as invoice_id,
+				sum(installments.installment_value) as amount,
+				sum(case when shopping.type_invoice = 'fixedExpense' then installments.installment_value else 0 end) as total_fixed_expense,
+				sum(case when shopping.type_invoice = 'extraExpense' then installments.installment_value else 0 end) as total_extra_expense,
+				sum(case when shopping.payment_method = 'invoice' then installments.installment_value else 0 end) as total_invoice,
+				sum(case when shopping.payment_method = 'card' then installments.installment_value else 0 end) as total_card,
+				sum(case when shopping.payment_method = 'money' then installments.installment_value else 0 end) as total_money
+			from
+
+				invoices
+				
+				INNER JOIN installments ON
+				installments.invoice_id = invoices.id
+				
+				INNER JOIN shopping ON
+				shopping.id = installments.shopping_id
+			
+			where 
+				invoices.due_date = ${dueDate} AND
+				invoices.user_id = ${userId}
+			
+			group by invoices.id;
+		`;
+
+
+		return {
+			invoiceId: valueDetails.invoice_id,
+			amount: valueDetails.amount,
+			totalFixedExpense: valueDetails.total_fixed_expense,
+			totalExtraExpense: valueDetails.total_extra_expense,
+			totalInvoice: valueDetails.total_invoice,
+			totalCard: valueDetails.total_card,
+			totalMoney: valueDetails.total_money
+		};
+
 	}
 }

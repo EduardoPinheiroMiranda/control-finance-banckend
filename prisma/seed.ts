@@ -14,6 +14,7 @@ const seeds = {
 		{ name: "mecânico"},
 		{ name: "viagem"},
 		{ name: "despesas da casa"},
+		{ name: "stremer"},
 	],
 };
 

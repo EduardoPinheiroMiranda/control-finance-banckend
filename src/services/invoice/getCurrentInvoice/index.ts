@@ -27,6 +27,7 @@ export class GetCurrentInvoice{
 		const date = handlerDueDates.generateDueDates(dueDay, closingDay, 1, false);
 
 		
-		const invoice = await this.invoiceRepository.
+		const invoice = await this.invoiceRepository.getCurrentInvoice(userId, date[0].dueDate);
+		
 	}
 }

@@ -1,6 +1,8 @@
-import { Invoice, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { InvoiceDatabaseInterface } from "../interfaces/invoice";
 import { prisma } from "@/libs/primsa";
+import { InvoiceElements } from "@/@types/prismaTypes";
+import { typeInvoices } from "@/utils/globalValues";
 
 
 export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
@@ -42,43 +44,64 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 
 	async getCurrentInvoice(userId: string, dueDate: Date){
 		
-		const resul = await prisma.$executeRaw<{
-			type_invoice: string;
-  			installments: string;
+		const invoice = await prisma.$queryRaw<{
+			type_invoice: string,
+			installments: string
 		}[]>`
-				select
+			select
 
-					shopping.type_invoice,
-					json_group_array(
-						json_object(
-							'id', installments.id,
-							'installment_number', installments.installment_number,
-							'installment_value', installments.installment_value,
-							'due_date', installments.due_date,
-							'shopping_id', installments.shopping_id,
-							'total_installments', shopping.total_installments
-						)
-					) AS installments
+				shopping.type_invoice,
+				json_agg(
+					json_build_object(
+						'installment_id', installments.id,
+						'installment_number', installments.installment_number,
+						'installment_value', installments.installment_value,
+						'due_date', installments.due_date,
+						'shopping_id', installments.shopping_id,
+						'total_installments', shopping.total_installments,
+						'type_invoice', shopping.type_invoice,
+						'payment_method', shopping.payment_method,
+						'name', shopping.name
+					)
+					order by installments.created_at desc
+				) as installments
 
-				from
+			from
 
-					invoices
+				invoices
 
-					INNER JOIN installments ON
-					installments.invoice_id = invoices.id
+				INNER JOIN installments ON
+				installments.invoice_id = invoices.id
 
-					INNER JOIN shopping ON
-					shopping.id = installments.shopping_id
+				INNER JOIN shopping ON
+				shopping.id = installments.shopping_id
 
-				where 
+			where 
+				invoices.due_date=${dueDate} AND
+				invoices.user_id = ${userId}
 
-					invoices.due_date='1746921599000' AND
-					invoices.user_id = 'b79ef2c4-4284-412b-b248-d3be3ff6bb4a'
-
-				group by
-					shopping.type_invoice
-				;
+			group by shopping.type_invoice
+			;
 		`;
+		
 
+		let fixedExpense: InvoiceElements[] = [];
+		let extraExpense: InvoiceElements[] = [];
+
+		invoice.forEach((element) => {
+			if(element.type_invoice === typeInvoices[0]){
+				fixedExpense = JSON.parse(JSON.stringify(element.installments));
+			}
+
+			if(element.type_invoice === typeInvoices[1]){
+				extraExpense = JSON.parse(JSON.stringify(element.installments));
+			}
+		});
+
+		
+		return {
+			fixedExpense,
+			extraExpense
+		};
 	}
 }

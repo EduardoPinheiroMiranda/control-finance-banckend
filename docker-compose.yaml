@@ -1,0 +1,16 @@
+version: "3.8"
+
+services: 
+  control_finance_db:
+    image: bitnami/postgresql:latest
+    ports: 
+      - 5432:5432
+    environment:
+      - POSTGRESQL_USERNAME=${USER_DB}
+      - POSTGRESQL_PASSWORD=${PASSWORD_DB}
+      - POSTGRESQL_DATABASE=${DATABASE}
+    volumes:
+      - control_finance_db_data:/bitnami/postgresql
+
+volumes:
+  control_finance_db_data:

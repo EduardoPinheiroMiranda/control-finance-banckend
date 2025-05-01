@@ -34,19 +34,19 @@ export class GetCurrentInvoice{
 
 
 		if(invoice.extraExpense.length === 0 && invoice.fixedExpense.length ===0){
-			throw new DataValidationError("Sua fatura nào foi encontrada.");
+			throw new DataValidationError("Sua fatura não foi encontrada.");
 		}
 
 
 		const userLimit = Number(user.limit);
-		const percentegeSpent = ((valueDetails.amount / userLimit) * 100).toFixed(0);
+		const percentegeSpent = Math.ceil((valueDetails.amount / userLimit) * 100);
 		const available = userLimit - valueDetails.amount;
 
 
 		return {
 			invoiceId: valueDetails.invoiceId,
-			dueDay: date[0].dueDate,
-			closingDay: date[0].closingDate,
+			dueDate: date[0].dueDate,
+			closingDate: date[0].closingDate,
 			percentegeSpent,
 			limit: userLimit,
 			amount: valueDetails.amount,

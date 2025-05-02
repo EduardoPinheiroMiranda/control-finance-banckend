@@ -1,8 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { InvoiceDatabaseInterface } from "../interfaces/invoice";
 import { prisma } from "@/libs/primsa";
-import { InvoiceElements } from "@/@types/prismaTypes";
-import { typeInvoices } from "@/utils/globalValues";
+import { Invoice } from "@/@types/prismaTypes";
 
 
 export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
@@ -42,113 +41,89 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 		return invoices;
 	}
 
-	async getCurrentInvoice(userId: string, dueDate: Date){
+	async getAllInvoices(userId: string, currentInvoiceDueDate: Date){
 		
-		const invoice = await prisma.$queryRaw<{
-			type_invoice: string,
-			installments: string
-		}[]>`
-			select
-				shopping.type_invoice,
-				json_agg(
-					json_build_object(
-						'installment_id', installments.id,
-						'installment_number', installments.installment_number,
-						'installment_value', installments.installment_value,
-						'due_date', installments.due_date,
-						'shopping_id', installments.shopping_id,
-						'total_installments', shopping.total_installments,
-						'type_invoice', shopping.type_invoice,
-						'payment_method', shopping.payment_method,
-						'name', shopping.name
-					)
-					order by installments.created_at desc
-				) as installments
-			from
-
-				invoices
-
-				INNER JOIN installments ON
-				installments.invoice_id = invoices.id
-
-				INNER JOIN shopping ON
-				shopping.id = installments.shopping_id
-
-			where 
-				invoices.due_date=${dueDate} AND
-				invoices.user_id = ${userId}
-
-			group by shopping.type_invoice
-			;
-		`;
+		const where = `where invoices.user_id = ${userId}`;
+		const invoices = await this.invoiceSearch(currentInvoiceDueDate, where);
 		
-
-		let fixedExpense: InvoiceElements[] = [];
-		let extraExpense: InvoiceElements[] = [];
-
-		invoice.forEach((element) => {
-			if(element.type_invoice === typeInvoices[0]){
-				fixedExpense = JSON.parse(JSON.stringify(element.installments));
-			}
-
-			if(element.type_invoice === typeInvoices[1]){
-				extraExpense = JSON.parse(JSON.stringify(element.installments));
-			}
-		});
-
-		
-		return {
-			fixedExpense,
-			extraExpense
-		};
+		return invoices;
 	}
 
-	async getValuesTheInvoice(userId: string, dueDate: Date){
+	async getCurrentInvoice(userId: string, dueDate: Date){
+
+		const where = `where invoices.due_date=${dueDate} AND invoices.user_id = ${userId}`;
+		const invoice = await this.invoiceSearch(dueDate, where);
 		
-		const valueDetails = await prisma.$queryRaw<{
-			invoice_id: string,
-			amount: number,
-			total_fixed_expense: number,
-			total_extra_expense: number,
-			total_invoice: number,
-			total_card: number,
-			total_money: number,
-		}>`
+		return invoice;		
+	}
+
+	async invoiceSearch(currentInvoiceDueDate: Date, where: string){
+
+		const invoices = await prisma.$queryRaw<Invoice[]>`
+
 			select
 				invoices.id as invoice_id,
+				invoices.pay,
+				invoices.due_date,
+				invoices.closing_date,
+				case when invoices.due_date = ${currentInvoiceDueDate} then true else false end as "current",
 				sum(installments.installment_value) as amount,
 				sum(case when shopping.type_invoice = 'fixedExpense' then installments.installment_value else 0 end) as total_fixed_expense,
 				sum(case when shopping.type_invoice = 'extraExpense' then installments.installment_value else 0 end) as total_extra_expense,
 				sum(case when shopping.payment_method = 'invoice' then installments.installment_value else 0 end) as total_invoice,
 				sum(case when shopping.payment_method = 'card' then installments.installment_value else 0 end) as total_card,
-				sum(case when shopping.payment_method = 'money' then installments.installment_value else 0 end) as total_money
-			from
+				sum(case when shopping.payment_method = 'money' then installments.installment_value else 0 end) as total_money,
+				json_build_object(
+					'fixedExpense', coalesce(
+						json_agg(
+							json_build_object(
+								'installment_id', installments.id,
+								'installment_number', installments.installment_number,
+								'installment_value', installments.installment_value,
+								'due_date', installments.due_date,
+								'shopping_id', installments.shopping_id,
+								'total_installments', shopping.total_installments,
+								'type_invoice', shopping.type_invoice,
+								'payment_method', shopping.payment_method,
+								'name', shopping.name
+							)
+							order by installments.created_at desc
+						)filter (where shopping.type_invoice = 'fixedExpense'),
+					'[]'::json
+					),
+					
+					'extraExpense', coalesce(
+						json_agg(
+							json_build_object(
+								'installment_id', installments.id,
+								'installment_number', installments.installment_number,
+								'installment_value', installments.installment_value,
+								'due_date', installments.due_date,
+								'shopping_id', installments.shopping_id,
+								'total_installments', shopping.total_installments,
+								'type_invoice', shopping.type_invoice,
+								'payment_method', shopping.payment_method,
+								'name', shopping.name
+							)
+							order by installments.created_at desc
+						)filter (where shopping.type_invoice = 'extraExpense'),
+					'[]'::json
+					)
+					
+				) as installments
 
+			from
 				invoices
-				
-				INNER JOIN installments ON
-				installments.invoice_id = invoices.id
-				
-				INNER JOIN shopping ON
-				shopping.id = installments.shopping_id
+				INNER JOIN installments ON installments.invoice_id = invoices.id
+				INNER JOIN shopping ON shopping.id = installments.shopping_id
 			
-			where 
-				invoices.due_date = ${dueDate} AND
-				invoices.user_id = ${userId}
+			${where}
 			
-			group by invoices.id;
+			group by invoices.id, invoices.due_date
+			order by invoices.due_date;
 		`;
 
 
-		return {
-			invoiceId: valueDetails.invoice_id,
-			amount: valueDetails.amount,
-			totalFixedExpense: valueDetails.total_fixed_expense,
-			totalExtraExpense: valueDetails.total_extra_expense,
-			totalInvoice: valueDetails.total_invoice,
-			totalCard: valueDetails.total_card,
-			totalMoney: valueDetails.total_money
-		};
-
+		return invoices;
 	}
 }

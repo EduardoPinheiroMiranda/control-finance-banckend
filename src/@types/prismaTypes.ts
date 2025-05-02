@@ -1,21 +1,29 @@
-export type InvoiceElements = {
+interface Installment{
     installment_id: string,
     installment_number: number,
     installment_value: number,
     due_date: Date,
     shopping_id: string,
-    total_installment: number,
-    type_invoice: string
+    total_installments: number,
+    type_invoice: string,
     payment_method: string,
     name: string
-};
+}
 
-export interface ValueDetaisls{
-    invoiceId: string,
+export interface Invoice{
+    invoice_id: string,
+    pay: boolean,
+    due_date: Date,
+    closing_date: Date,
+    current: boolean,
     amount: number,
-    totalFixedExpense: number,
-    totalExtraExpense: number,
-    totalInvoice: number,
-    totalCard: number,
-    totalMoney: number,
+    total_fixed_expense: number,
+    total_extra_expense: number,
+    total_invoice: number,
+    total_card: number,
+    total_money: number,
+    installments: {
+        fixedExpense: Installment[],
+        extraExpense: Installment[]
+    }
 }

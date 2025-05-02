@@ -1,5 +1,5 @@
-import { InvoiceElements, ValueDetaisls } from "@/@types/prismaTypes";
 import { Invoice, Prisma } from "@prisma/client";
+import { Invoice as CustomTypeInvoice} from "@/@types/prismaTypes";
 
 
 export interface InvoiceDatabaseInterface{
@@ -10,10 +10,9 @@ export interface InvoiceDatabaseInterface{
 
     findOpenInvoices(userId: string): Promise<Invoice[]>
 
-    getCurrentInvoice(userId: string, dueDate: Date): Promise<{
-        fixedExpense: InvoiceElements[],
-        extraExpense: InvoiceElements[]
-    }>
+    getAllInvoices(userId: string, currentInvoiceDueDate: Date ): Promise<CustomTypeInvoice[]>
 
-    getValuesTheInvoice(userId: string, dueDate: Date): Promise<ValueDetaisls>
+    getCurrentInvoice(userId: string, dueDate: Date): Promise<CustomTypeInvoice[]>
+
+    invoiceSearch(currentInvoiceDueDate: Date, where: string): Promise<CustomTypeInvoice[]>
 }

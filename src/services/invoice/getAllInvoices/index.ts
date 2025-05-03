@@ -22,8 +22,10 @@ export class GetAllInvoices{
 		}
 
 
+		const dueDay = user.due_day;
+		const closingDay = user.closing_day;
 		const handlerDueDate = new HandlerDueDate();
-		const dates = handlerDueDate.generateDueDates(user.due_day, user.closing_day, 1, false);
+		const dates = handlerDueDate.generateDueDates(dueDay, closingDay, 1, false);
 
 
 		const invoices = await this.invoiceRepository.getAllInvoices(userId, dates[0].dueDate);
@@ -31,7 +33,7 @@ export class GetAllInvoices{
 		if(invoices.length === 0){
 			throw new ResourceNotFoud("Nenhuma fatura encontrada.");
 		}
-		
+
 
 		return invoices;
 	}

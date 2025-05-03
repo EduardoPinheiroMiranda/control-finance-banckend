@@ -43,7 +43,7 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 
 	async getAllInvoices(userId: string, currentInvoiceDueDate: Date){
 		
-		const where = `where invoices.user_id = ${userId}`;
+		const where = Prisma.sql`invoices.user_id = ${userId}`;
 		const invoices = await this.invoiceSearch(currentInvoiceDueDate, where);
 		
 		return invoices;
@@ -51,16 +51,15 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 
 	async getCurrentInvoice(userId: string, dueDate: Date){
 
-		const where = `where invoices.due_date=${dueDate} AND invoices.user_id = ${userId}`;
+		const where = Prisma.sql`invoices.due_date=${dueDate} AND invoices.user_id = ${userId}`;
 		const invoice = await this.invoiceSearch(dueDate, where);
 		
 		return invoice;		
 	}
 
-	async invoiceSearch(currentInvoiceDueDate: Date, where: string){
+	async invoiceSearch(currentInvoiceDueDate: Date, where: Prisma.Sql){
 
 		const invoices = await prisma.$queryRaw<Invoice[]>`
-
 			select
 				invoices.id as invoice_id,
 				invoices.pay,
@@ -117,7 +116,8 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 				INNER JOIN installments ON installments.invoice_id = invoices.id
 				INNER JOIN shopping ON shopping.id = installments.shopping_id
 			
-			${where}
+			where
+				${where}
 			
 			group by invoices.id, invoices.due_date
 			order by invoices.due_date;

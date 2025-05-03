@@ -14,5 +14,5 @@ export interface InvoiceDatabaseInterface{
 
     getCurrentInvoice(userId: string, dueDate: Date): Promise<CustomTypeInvoice[]>
 
-    invoiceSearch(currentInvoiceDueDate: Date, where: string): Promise<CustomTypeInvoice[]>
+    invoiceSearch(currentInvoiceDueDate: Date, where: Prisma.Sql): Promise<CustomTypeInvoice[]>
 }

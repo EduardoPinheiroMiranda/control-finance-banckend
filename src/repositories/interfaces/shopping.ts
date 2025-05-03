@@ -13,6 +13,8 @@ export interface ShoppingDatabaseInterface{
         }
     }>[]>
 
+    getAllShopping(userId: string, cursor: string | null): Promise<Shopping[]>
+
     getById(shoppingId: string): Promise<Shopping| null>
 
     getFullDataById(shoppingId: string): Promise<Prisma.ShoppingGetPayload<{

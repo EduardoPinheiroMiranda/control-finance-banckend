@@ -40,6 +40,40 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 		return shoppingList;
 	}
 
+	async getAllShopping(userId: string, cursor: string | null){
+
+		if(!cursor){
+			const shoppings = await prisma.shopping.findMany({
+				take: 20,
+				where:{
+					user_id: userId
+				},
+				orderBy: {
+					created_at: "desc"
+				}
+			});
+
+			return shoppings;
+		}
+
+
+		const shoppings = await prisma.shopping.findMany({
+			take: 20,
+			skip: 1,
+			cursor: {
+				id: cursor
+			},
+			where:{
+				user_id: userId
+			},
+			orderBy: {
+				created_at: "desc"
+			}
+		});
+
+		return shoppings;
+	}
+
 	async getById(shoppingId: string){
 
 		const shoping = await prisma.shopping.findUnique({

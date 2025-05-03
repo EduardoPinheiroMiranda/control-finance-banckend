@@ -7,7 +7,6 @@ import { HandlerDueDate } from "@/utils/handlerDueDate";
 export class GetAllInvoices{
 
 	constructor(
-
 		private userRepository: UserDatabaseInterface,
         private invoiceRepository: InvoiceDatabaseInterface
 	){}

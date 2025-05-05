@@ -8,4 +8,6 @@ export interface UserDatabaseInterface{
     findEmail(email: string): Promise<User | null>
 
     getById(userId: string): Promise<User | null>
+
+    updateLimit(userId: string, limit: number | null, dueDay: number | null): Promise<User>
 }

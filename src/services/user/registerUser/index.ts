@@ -42,7 +42,6 @@ export class RegisterUsers {
 			due_day: userData.dueDay,
 			closing_day: userData.closeDay,
 			limit: userData.limit,
-			balance: 0,
 		});
 
 

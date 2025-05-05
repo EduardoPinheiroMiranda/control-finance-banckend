@@ -1,3 +1,4 @@
+import { env } from "@/env";
 import { DataValidationError } from "@/errors/custonErros";
 import { UserDatabaseInterface } from "@/repositories/interfaces/user";
 
@@ -25,7 +26,11 @@ export class ControlLimit{
 			return user;
 
 		}catch(err){
-			console.log(err);
+            
+			if(env.NODE_ENV !== "test"){
+				console.log(err);
+			}
+
 			throw new DataValidationError("Houve um problema para realizar a tarefa, tente novamente.");
 		}
 	}

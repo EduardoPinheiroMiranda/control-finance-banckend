@@ -47,7 +47,6 @@ describe("service/user", () => {
 				due_day: 10,
 				closing_day: 5,
 				avatar: null,
-				balance: Decimal(500),
 				created_at: date,
 				updated_at: date,
 			};
@@ -74,7 +73,6 @@ describe("service/user", () => {
 				due_day: 10,
 				closing_day: 5,
 				avatar: null,
-				balance: Decimal(500),
 				created_at: date,
 				updated_at: date,
 			};

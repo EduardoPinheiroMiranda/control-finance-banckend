@@ -39,7 +39,6 @@ describe("service/invoice", () => {
 				due_day: 10,
 				closing_day: 5,
 				avatar: null,
-				balance: Decimal(10000),
 				created_at: date,
 				updated_at: date,
 			});

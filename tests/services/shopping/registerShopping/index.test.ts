@@ -77,7 +77,6 @@ describe("service/shopping", () => {
 				id: "123",
 				name: "Eduardo",
 				avatar: null,
-				balance: Decimal(1000),
 				closing_day: 5,
 				due_day: 10,
 				email: "email@test.com",

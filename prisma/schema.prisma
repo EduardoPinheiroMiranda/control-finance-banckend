@@ -16,7 +16,6 @@ model User {
   due_day     Int
   closing_day   Int
   avatar      String?
-  balance     Decimal
   created_at  DateTime      @default(now())
   updated_at  DateTime      @updatedAt
   card        Card[]

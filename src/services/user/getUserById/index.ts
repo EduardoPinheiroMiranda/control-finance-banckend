@@ -26,7 +26,6 @@ export class GetUserById{
 			dueDay: user.due_day,
 			closeDay: user.closing_day,
 			avatar: user.avatar,
-			balance: user.balance,
 		};
 	}
 }

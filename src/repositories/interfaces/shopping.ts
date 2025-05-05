@@ -13,7 +13,7 @@ export interface ShoppingDatabaseInterface{
         }
     }>[]>
 
-    getAllShopping(userId: string, cursor: string | null): Promise<Shopping[]>
+    getAllShopping(userId: string, name: string | null, cursor: string | null): Promise<Shopping[]>
 
     getById(shoppingId: string): Promise<Shopping| null>
 

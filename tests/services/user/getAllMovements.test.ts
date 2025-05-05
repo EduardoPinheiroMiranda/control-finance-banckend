@@ -26,7 +26,7 @@ describe("service/user", () => {
 			jest.spyOn(shoppingRepository, "getAllShopping").mockResolvedValue([]);
 
 			await expect(
-				serviceGetAllMovements.execute("user-123", null)
+				serviceGetAllMovements.execute("user-123", "name", null)
 			).rejects.toBeInstanceOf(ResourceNotFoud);
 		});
 
@@ -55,7 +55,7 @@ describe("service/user", () => {
 			jest.spyOn(shoppingRepository, "getAllShopping").mockResolvedValue(mockShopping);
 
 
-			const result = await serviceGetAllMovements.execute("user-123", null);
+			const result = await serviceGetAllMovements.execute("user-123", "name", null);
 			
 			expect(shoppingRepository.getAllShopping).toBeCalledTimes(1);
 			expect(result).toEqual(mockShopping);

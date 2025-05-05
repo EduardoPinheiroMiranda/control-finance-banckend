@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/libs/primsa";
 import { ShoppingDatabaseInterface } from "../interfaces/shopping";
 import { typeInvoices } from "@/utils/globalValues";
+import { ShoppingListByType } from "@/@types/prismaTypes";
 
 
 export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
@@ -90,6 +91,34 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 		});
 
 		return shoping;
+	}
+
+	async listAllOpenPurchases(userId: string){
+		
+		const shoppings = await prisma.$queryRaw<ShoppingListByType>`
+			select
+				json_build_object(
+					'fixedExpense', coalesce(
+						json_agg( 
+							shopping.* order by shopping.created_at desc
+						)filter (where shopping.type_invoice = 'fixedExpense'),
+					'[]'::json
+					),
+				
+					'extraExpense', coalesce(
+						json_agg(
+							shopping.* order by shopping.created_at desc
+						)filter (where shopping.type_invoice = 'extraExpense'),
+						'[]'::json
+					)
+			) as shopping
+			from
+				shopping
+			where
+				shopping.user_id = ${userId} and shopping.pay = false
+		`;
+
+		return shoppings;
 	}
 
 	async updateShopping(shoppingId: string, data: Prisma.ShoppingUncheckedUpdateInput){

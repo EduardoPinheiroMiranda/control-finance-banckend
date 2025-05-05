@@ -1,3 +1,6 @@
+import { Shopping } from "@prisma/client";
+
+
 interface Installment{
     installment_id: string,
     installment_number: number,
@@ -26,4 +29,9 @@ export interface Invoice{
         fixedExpense: Installment[],
         extraExpense: Installment[]
     }
+}
+
+export interface ShoppingListByType{
+    fixedExpense: Shopping[],
+    extraExpense: Shopping[]
 }

@@ -1,3 +1,4 @@
+import { ShoppingListByType } from "@/@types/prismaTypes";
 import { Prisma, Shopping } from "@prisma/client";
 
 
@@ -22,6 +23,8 @@ export interface ShoppingDatabaseInterface{
             installment: true
         }
     }> | null>
+
+    listAllOpenPurchases(userId: string): Promise<ShoppingListByType>
 
     updateShopping(shoppingId: string, data: Prisma.ShoppingUncheckedUpdateInput): Promise<Shopping>
 

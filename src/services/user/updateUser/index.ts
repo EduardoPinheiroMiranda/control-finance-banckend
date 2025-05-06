@@ -3,26 +3,25 @@ import { DataValidationError } from "@/errors/custonErros";
 import { UserDatabaseInterface } from "@/repositories/interfaces/user";
 
 
-export class ControlLimit{
+export class UpdateUser{
 
 	constructor(
         private userRepository: UserDatabaseInterface
 	){}
 
 
-	async execute(userId: string, limit: number, dueDay: number){
+	async execute(userId: string, name: string, email: string){
 
-		if(limit < 100){
-			throw new DataValidationError("Verifique o valor do limite, ele não pode ser inferior a 100.");
+		const emailAlreadyExist = await this.userRepository.findEmail(email);
+
+		if(emailAlreadyExist){
+			throw new DataValidationError("Este email já existe.");
 		}
 
-		if(dueDay < 1 || dueDay > 31){
-			throw new DataValidationError("Data informada invalida.");
-		}
-        
+
 		try{
 
-			const user = await this.userRepository.updateLimit(userId, limit, dueDay);
+			const user = await this.userRepository.update(userId, name, email);
 			return user;
 
 		}catch(err){

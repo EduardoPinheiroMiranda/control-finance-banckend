@@ -33,15 +33,30 @@ export class UserPrismaRepository implements UserDatabaseInterface{
 		return user;
 	}
 
-	async updateLimit(userId: string, limit: number | null, dueDay: number | null){
+	async update(userId: string, name: string, email: string){
+
+		const user = await prisma.user.update({
+			where: { 
+				id: userId
+			},
+			data: {
+				name,
+				email
+			}
+		});
+
+		return user;
+	}
+
+	async updateLimit(userId: string, limit: number, dueDay: number){
 		
 		const user = await prisma.user.update({
 			where: {
 				id: userId
 			},
 			data: {
-				...(limit && {limit}),
-				...(dueDay && {due_day: dueDay}),
+				limit,
+				due_day: dueDay,
 			}
 		});
 

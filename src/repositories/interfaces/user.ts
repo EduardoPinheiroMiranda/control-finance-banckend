@@ -9,5 +9,8 @@ export interface UserDatabaseInterface{
 
     getById(userId: string): Promise<User | null>
 
-    updateLimit(userId: string, limit: number | null, dueDay: number | null): Promise<User>
+    update(userId: string, name: string, email: string): Promise<User>
+
+    updateLimit(userId: string, limit: number, dueDay: number): Promise<User>
+
 }

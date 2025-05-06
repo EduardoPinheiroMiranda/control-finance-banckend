@@ -11,6 +11,7 @@ export interface UserDatabaseInterface{
 
     update(userId: string, name: string, email: string): Promise<User>
 
-    updateLimit(userId: string, limit: number, dueDay: number): Promise<User>
+    updateLimit(userId: string, limit: number, dueDay: number, closingDay: number): Promise<User>
 
+    updatePassword(userId: string, password: string): Promise<User>
 }

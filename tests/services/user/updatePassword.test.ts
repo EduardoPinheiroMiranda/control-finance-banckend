@@ -1,15 +1,15 @@
 import { UserPrismaRepository } from "@/repositories/prisma/user";
-import { UpdateUser } from "@/services/user/updateUser";
+import { UpdatePassword } from "@/services/user/updatePassword";
 import { describe, expect, jest, it, beforeEach } from "@jest/globals";
 import { Decimal } from "@prisma/client/runtime/library";
 
 
 describe("service/user", () => {
 
-	describe("#Update user", () => {
+	describe("#Update password", () => {
 
 		let userRepository: UserPrismaRepository;
-		let serviceUpdateUser: UpdateUser;
+		let serviceUpdatePassword: UpdatePassword;
 		const date = new Date();
 		const mockUser = {
 			id: "user-123",
@@ -28,33 +28,31 @@ describe("service/user", () => {
 		beforeEach(() => {
             
 			userRepository = new UserPrismaRepository();
-			serviceUpdateUser = new UpdateUser(
+			serviceUpdatePassword = new UpdatePassword(
 				userRepository
 			);
 		});
 
         
-		it("will trigger an arror if the limit is less than 100.", async () => {
+		it("will trigger an arror if the password is less than 8 characters.", async () => {
 
-			jest.spyOn(userRepository, "findEmail").mockResolvedValue(mockUser);
 			await expect(
-				serviceUpdateUser.execute("user-123", "eduardo", "teste@gmail.com")
-			).rejects.toThrowError("Este email já existe.");
+				serviceUpdatePassword.execute("user-123", "1234")
+			).rejects.toThrowError("A senha tem que possuir 8 ou mais caracteres.");
 		});
 
 		it("will trigger an arror if there is a problem in the database.", async () => {
 			await expect(
-				serviceUpdateUser.execute("invalid_id", "eduardo", "teste@gmail.com")
+				serviceUpdatePassword.execute("invalid_id", "12345678")
 			).rejects.toThrowError("Houve um problema para realizar a tarefa, tente novamente.");
 		});
 
 		it("check if the service is working.", async () => {
 
-			jest.spyOn(userRepository, "findEmail").mockResolvedValue(null);
-			jest.spyOn(userRepository, "update").mockResolvedValue(mockUser);
-		
+			jest.spyOn(userRepository, "updatePassword").mockResolvedValue(mockUser);
+        
 
-			const result = await serviceUpdateUser.execute("user-123", "eduardo", "test@test.com");
+			const result = await serviceUpdatePassword.execute("user-123", "12345678");
         
 			expect(result).toEqual({
 				id: mockUser.id,

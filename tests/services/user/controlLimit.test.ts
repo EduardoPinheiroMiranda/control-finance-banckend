@@ -23,19 +23,25 @@ describe("service/user", () => {
         
 		it("will trigger an arror if the limit is less than 100.", async () => {
 			await expect(
-				serviceControlLimit.execute("user-123", 50, 10)
+				serviceControlLimit.execute("user-123", 50, 10, 5)
 			).rejects.toThrowError("Verifique o valor do limite, ele não pode ser inferior a 100.");
 		});
 
 		it("will trigger an arror if the dueDate is invalid.", async () => {
 			await expect(
-				serviceControlLimit.execute("user-123", 150, 40)
-			).rejects.toThrowError("Data informada invalida.");
+				serviceControlLimit.execute("user-123", 150, 40, 5)
+			).rejects.toThrowError("Dia de vencimento informado invalido.");
+		});
+
+		it("will trigger an arror if the closingDay is invalid.", async () => {
+			await expect(
+				serviceControlLimit.execute("user-123", 150, 10, 52)
+			).rejects.toThrowError("Dia de fechamento informado invalido.");
 		});
 
 		it("will trigger an arror if there is a problem in the database.", async () => {
 			await expect(
-				serviceControlLimit.execute("user-123", 850, 10)
+				serviceControlLimit.execute("user-123", 850, 10, 5)
 			).rejects.toThrowError("Houve um problema para realizar a tarefa, tente novamente.");
 		});
 
@@ -58,9 +64,16 @@ describe("service/user", () => {
 			jest.spyOn(userRepository, "updateLimit").mockResolvedValue(mockUser);
 		
 
-			const result = await serviceControlLimit.execute("user-123", 1000, 10);
+			const result = await serviceControlLimit.execute("user-123", 1000, 10, 5);
         
-			expect(result).toEqual(mockUser);
+			expect(result).toEqual({
+				id: mockUser.id,
+				name: mockUser.name,
+				email: mockUser.email,
+				dueDay: mockUser.due_day,
+				closingDay: mockUser.closing_day,
+				limit: mockUser.limit
+			});
 		});
 	});
 });

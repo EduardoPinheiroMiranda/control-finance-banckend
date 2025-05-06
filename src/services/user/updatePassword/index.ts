@@ -1,27 +1,29 @@
 import { env } from "@/env";
 import { DataValidationError } from "@/errors/custonErros";
 import { UserDatabaseInterface } from "@/repositories/interfaces/user";
+import { hash } from "bcrypt";
 
 
-export class UpdateUser{
+export class UpdatePassword{
 
 	constructor(
         private userRepository: UserDatabaseInterface
 	){}
 
 
-	async execute(userId: string, name: string, email: string){
+	async execute(userId: string, password: string){
 
-		const emailAlreadyExist = await this.userRepository.findEmail(email);
-
-		if(emailAlreadyExist){
-			throw new DataValidationError("Este email já existe.");
+		if(password.length < 8){
+			throw new DataValidationError("A senha tem que possuir 8 ou mais caracteres.");
 		}
 
 
+		const encryptedPassword = await hash(password, 12);
+
+        
 		try{
 
-			const user = await this.userRepository.update(userId, name, email);
+			const user = await this.userRepository.updatePassword(userId, encryptedPassword);
 			
 			return {
 				id: user.id,

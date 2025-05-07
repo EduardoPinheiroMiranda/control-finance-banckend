@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { InvoiceDatabaseInterface } from "../interfaces/invoice";
 import { prisma } from "@/libs/primsa";
-import { Invoice } from "@/@types/prismaTypes";
+import { CardInvoice, Invoice } from "@/@types/prismaTypes";
 
 
 export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
@@ -37,6 +37,48 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 				due_date: "asc"
 			}
 		});
+
+		return invoices;
+	}
+
+	async getAllCardInvoices(userId: string, cardId: string, dueDate: Date){
+		
+		const invoices = await prisma.$queryRaw<CardInvoice[]>`
+			select
+				invoices.id as invoice_id,
+				invoices.pay,
+				invoices.due_date,
+				case when invoices.due_date = ${dueDate} then true else false end as "current",
+				sum(installments.installment_value) as amount,
+				json_agg(
+					json_build_object(
+						'installment_id', installments.id,
+						'installment_number', installments.installment_number,
+						'installment_value', installments.installment_value,
+						'due_date', installments.due_date,
+						'shopping_id', installments.shopping_id,
+						'total_installments', shopping.total_installments,
+						'type_invoice', shopping.type_invoice,
+						'payment_method', shopping.payment_method,
+						'name', shopping.name
+					)
+					order by installments.created_at desc
+				) as installments
+			from
+				invoices
+				
+				INNER JOIN installments ON
+				installments.invoice_id = invoices.id
+				
+				INNER JOIN shopping ON
+				shopping.id = installments.shopping_id
+			where 
+				invoices.user_id = ${userId} and
+				shopping.card_id = ${cardId}
+			
+			group by invoices.id, invoices.due_date
+			order by invoices.due_date;
+		`;
 
 		return invoices;
 	}

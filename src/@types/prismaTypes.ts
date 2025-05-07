@@ -35,3 +35,12 @@ export interface ShoppingListByType{
     fixedExpense: Shopping[],
     extraExpense: Shopping[]
 }
+
+export interface CardInvoice{
+    invoice_id: string,
+    pay: string,
+    due_date: Date,
+    current: boolean,
+    amount: number,
+    installments: Installment[]
+}

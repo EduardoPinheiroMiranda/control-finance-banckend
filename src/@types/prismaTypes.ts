@@ -38,7 +38,7 @@ export interface ShoppingListByType{
 
 export interface CardInvoice{
     invoice_id: string,
-    pay: string,
+    pay: boolean,
     due_date: Date,
     current: boolean,
     amount: number,

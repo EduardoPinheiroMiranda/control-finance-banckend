@@ -1,29 +1,29 @@
 import { DataValidationError } from "@/errors/custonErros";
-import { CardDatabaseInterface } from "@/repositories/interfaces/card";
 import { InvoiceDatabaseInterface } from "@/repositories/interfaces/invoice";
+import { UserDatabaseInterface } from "@/repositories/interfaces/user";
 import { HandlerDueDate } from "@/utils/handlerDueDate";
 
 
-export class GelAllCardInvoices{
+export class GetAllCardInvoices{
 
 	constructor(
         private invoiceRepository: InvoiceDatabaseInterface,
-        private cardRepository: CardDatabaseInterface
+		private userRepository: UserDatabaseInterface
 	){}
 
 
 	async execute(userId: string, cardId: string){
 
-		const card = await this.cardRepository.getById(cardId);
+		const user = await this.userRepository.getById(userId);
 
-		if(!card){
-			throw new DataValidationError("Houve um problema para consultar as informações do cartão.");
+		if(!user){
+			throw new DataValidationError("Houve um problema para consultar as informações do usuário.");
 		}
 
 
 		const handlerDueDate = new HandlerDueDate();
-		const dueDay = card.due_day;
-		const closingDay = card.closing_day;
+		const dueDay = user.due_day;
+		const closingDay = user.closing_day;
 		const date = handlerDueDate.generateDueDates(dueDay, closingDay, 1, false);
 
 

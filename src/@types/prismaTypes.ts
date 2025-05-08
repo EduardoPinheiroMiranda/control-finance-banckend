@@ -6,6 +6,7 @@ interface Installment{
     installment_number: number,
     installment_value: number,
     due_date: Date,
+    pay: boolean,
     shopping_id: string,
     total_installments: number,
     type_invoice: string,

@@ -78,6 +78,7 @@ describe("service/invoice", () => {
 							installment_number: 1,
 							installment_value: 1000,
 							due_date: date,
+							pay: false,
 							shopping_id: "shopping-123",
 							total_installments: 1,
 							type_invoice: "extraexpense",

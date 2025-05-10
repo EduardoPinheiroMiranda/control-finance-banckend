@@ -92,6 +92,21 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 		return invoices;
 	}
 
+	async getById(invoiceId: string){
+		
+		const invoice = await prisma.invoice.findUnique({
+			where: {
+				id: invoiceId
+			},
+			include: {
+				installment: true
+			}
+		});
+
+
+		return invoice;
+	}
+
 	async getCurrentInvoice(userId: string, dueDate: Date){
 
 		const where = Prisma.sql`invoices.due_date=${dueDate} AND invoices.user_id = ${userId}`;
@@ -171,4 +186,20 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 
 		return invoices;
 	}
+
+	async payInvoice(invoiceId: string){
+		
+		const invoicePaid = await prisma.invoice.update({
+			where: {
+				id: invoiceId
+			},
+			data: {
+				pay: true
+			}
+		});
+
+
+		 return invoicePaid;
+	}
+
 }

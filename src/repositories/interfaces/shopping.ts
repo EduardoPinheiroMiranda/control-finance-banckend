@@ -26,6 +26,8 @@ export interface ShoppingDatabaseInterface{
 
     listAllOpenPurchases(userId: string): Promise<ShoppingListByType>
 
+    payShopping(shoppingId: string[]): Promise<number>
+
     updateShopping(shoppingId: string, data: Prisma.ShoppingUncheckedUpdateInput): Promise<Shopping>
 
     updateTotalInstallments(shoppingIds: string[], addedInstallments: number): Promise<number>

@@ -38,6 +38,27 @@ export class InstallmentPrismaRepository implements InstallmentDatabaseInterface
 		return installments;
 	}
 
+	async payInstallments(installmentsToPay: string[]){
+		
+		const installmentsPaid = await prisma.installment.updateManyAndReturn({
+			where: {
+				id: { in: installmentsToPay}
+			},
+			data: {
+				pay: true
+			},
+			include: {
+				shoppingId: {
+					select: {
+						total_installments: true
+					}
+				}
+			}
+		});
+
+		return installmentsPaid;
+	}
+
 	async updateInstallment(InstallmentId: string, data: Prisma.InstallmentUncheckedUpdateInput){
 
 		const installment = await prisma.installment.update({
@@ -48,6 +69,19 @@ export class InstallmentPrismaRepository implements InstallmentDatabaseInterface
 		});
 
 		return installment;
+	}
+
+	async totalInstallmentsPaid(invoiceId: string){
+		
+		const installmentsPaid = await prisma.installment.count({
+			where: {
+				invoice_id: invoiceId,
+				pay: true
+			}
+		});
+
+
+		return installmentsPaid;
 	}
 
 }

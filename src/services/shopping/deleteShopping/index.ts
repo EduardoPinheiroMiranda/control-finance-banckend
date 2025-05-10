@@ -1,7 +1,6 @@
 import { ResourceNotFoud } from "@/errors/custonErros";
 import { InstallmentDatabaseInterface } from "@/repositories/interfaces/installment";
 import { ShoppingDatabaseInterface } from "@/repositories/interfaces/shopping";
-import { typeInvoices } from "@/utils/globalValues";
 import { Installment } from "@prisma/client";
 
 
@@ -63,7 +62,7 @@ export class DeleteShopping{
 		const installmentsHaveBeenPaid = installmentPaid? true : false;
 
 
-		if(shopping.type_invoice === typeInvoices[1]){
+		if(shopping.type_invoice === "extraExpense"){
 			const {shopping, msg} = await this.delete(shoppingId, installmentsHaveBeenPaid);
 			return {
 				shopping,
@@ -72,7 +71,7 @@ export class DeleteShopping{
 		}
 
 
-		if(shopping.type_invoice === typeInvoices[0] && installmentsHaveBeenPaid){
+		if(shopping.type_invoice === "fixedExpense" && installmentsHaveBeenPaid){
 			const {updateShopping, msg} = await this.desableShopping(shoppingId, shopping.installment);
 			return {
 				shopping: updateShopping,

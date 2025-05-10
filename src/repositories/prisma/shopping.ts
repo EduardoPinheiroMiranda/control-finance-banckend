@@ -121,6 +121,21 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 		return shoppings;
 	}
 
+	async payShopping(shoppingId: string[]){
+		
+		const shopingPaid = await prisma.shopping.updateMany({
+			where: {
+				id: { in: shoppingId }
+			},
+			data: {
+				pay: true
+			}
+		});
+
+
+		return shopingPaid.count;
+	}
+
 	async updateShopping(shoppingId: string, data: Prisma.ShoppingUncheckedUpdateInput){
 		
 		const shopping = await prisma.shopping.update({

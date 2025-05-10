@@ -1,4 +1,4 @@
-import { Shopping } from "@prisma/client";
+import { Prisma, Shopping } from "@prisma/client";
 
 
 interface Installment{
@@ -45,3 +45,13 @@ export interface CardInvoice{
     amount: number,
     installments: Installment[]
 }
+
+export type InstallmentWithTotalInstallments = Prisma.InstallmentGetPayload<{
+    include: {
+        shoppingId: {
+            select: {
+                total_installments: true
+            }
+        }
+    }
+}>

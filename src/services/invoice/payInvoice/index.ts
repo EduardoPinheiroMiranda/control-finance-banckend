@@ -1,5 +1,5 @@
 import { InstallmentWithTotalInstallments } from "@/@types/prismaTypes";
-import { DataValidationError } from "@/errors/custonErros";
+import { env } from "@/env";
 import { InstallmentDatabaseInterface } from "@/repositories/interfaces/installment";
 import { InvoiceDatabaseInterface } from "@/repositories/interfaces/invoice";
 import { ShoppingDatabaseInterface } from "@/repositories/interfaces/shopping";
@@ -36,38 +36,49 @@ export class PayInvoice{
 
 	async execute(invoiceId: string, installmentsToPay: string[]){
 
-		const currentInvoice = await this.invoiceRepository.getById(invoiceId);
+		try{
 
-		if(!currentInvoice){
-			throw new DataValidationError("Houve um problema para encontrar os dados da fatura, tente novamente.");
-		}
-
-
-		const totalInstallments = currentInvoice.installment.length;
-		const installmentsPaid = await this.installmentRepository.payInstallments(installmentsToPay);
-		const totalInstallmentsPaid = await this.installmentRepository.totalInstallmentsPaid(invoiceId);
+			const installmentsPaid = await this.installmentRepository.payInstallments(
+				invoiceId,
+				installmentsToPay
+			);
 
 
-		await this.confirmFullPaymentForAPurchase(installmentsPaid);
-        
+			await this.confirmFullPaymentForAPurchase(installmentsPaid);
 
-		if(totalInstallments === totalInstallmentsPaid){
 
-			await this.invoiceRepository.payInvoice(invoiceId);
+			const invoiceDetails = await this.installmentRepository.invoiceDetails(invoiceId);
+			const totalInstallmentsPending = invoiceDetails[0].installments_pending;
+			const totalInstallmentsPaid = invoiceDetails[0].installments_paid;
+			const totalInstallmentsOnInvoice = invoiceDetails[0].total_installments_on_invoice;
+			
+			if(totalInstallmentsOnInvoice === totalInstallmentsPaid){
+				
+				const invoice = await this.invoiceRepository.payInvoice(invoiceId);
+	
+				return {
+					invoicePaid: invoice.pay,
+					totalInstallmentsOnInvoice,
+					totalInstallmentsPaid,
+					totalInstallmentsPending
+				};
+			}
+
 
 			return {
-				invoicePaid: true,
-				totalInstallments,
-				totalInstallmentsPaid
+				invoicePaid: false,
+				totalInstallmentsOnInvoice,
+				totalInstallmentsPaid,
+				totalInstallmentsPending
 			};
+	
+		}catch(err){
+
+			if(env.NODE_ENV == "test"){
+				console.log(err);
+			}
+
+			throw new Error("Houve um problema para encontrar os dados da fatura, tente novamente.");
 		}
-
-
-		return {
-			invoicePaid: false,
-			totalInstallments,
-			totalInstallmentsPaid
-		};
-
 	}
 }

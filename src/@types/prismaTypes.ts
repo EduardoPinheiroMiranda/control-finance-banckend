@@ -55,3 +55,9 @@ export type InstallmentWithTotalInstallments = Prisma.InstallmentGetPayload<{
         }
     }
 }>
+
+export interface InvoiceDetails{
+    total_installments_on_invoice: number,
+    installments_paid: number,
+    installments_pending: number
+}

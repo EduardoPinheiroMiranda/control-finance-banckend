@@ -1,4 +1,4 @@
-import { InstallmentWithTotalInstallments } from "@/@types/prismaTypes";
+import { InstallmentWithTotalInstallments, InvoiceDetails } from "@/@types/prismaTypes";
 import { Installment, Prisma } from "@prisma/client";
 
 
@@ -10,9 +10,9 @@ export interface InstallmentDatabaseInterface{
 
     getInstallmentsInOpen(shoppingId: string): Promise<Installment[]>
 
-    payInstallments(installmentsToPay: string[]): Promise<InstallmentWithTotalInstallments[]>
+    payInstallments(invoiceId: string, installmentsToPay: string[]): Promise<InstallmentWithTotalInstallments[]>
 
     updateInstallment(InstallmentId: string, data: Prisma.InstallmentUncheckedUpdateInput): Promise<Installment>
     
-    totalInstallmentsPaid(invoiceId: string): Promise<number>
+    invoiceDetails(invoiceId: string): Promise<InvoiceDetails[]>
 }

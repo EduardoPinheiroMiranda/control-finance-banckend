@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply} from "fastify";
 import { handleErrorsInControlles } from "../../../utils/handleErrorsInControllers";
 import { z } from "zod";
-import { makeGetCurrentInvoice } from "@/factories/invoice/make-listInvoices";
+import { makeGetCurrentInvoice } from "@/factories/invoice/make-getCurrentInvoice";
 
 
 export async function getCurrentInvoice(request: FastifyRequest, reply: FastifyReply){

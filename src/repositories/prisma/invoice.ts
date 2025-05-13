@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { InvoiceDatabaseInterface } from "../interfaces/invoice";
 import { prisma } from "@/libs/primsa";
-import { CardInvoice, Invoice } from "@/@types/prismaTypes";
+import { CardInvoice, Invoice, InvoiceDetails } from "@/@types/prismaTypes";
 
 
 export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
@@ -109,10 +109,47 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 
 	async getCurrentInvoice(userId: string, dueDate: Date){
 
-		const where = Prisma.sql`invoices.due_date=${dueDate} AND invoices.user_id = ${userId}`;
+		const where = Prisma.sql`
+			(
+				invoices.due_date = ${dueDate} and
+				invoices.pay = false and
+				invoices.user_id = ${userId}
+			)
+			OR
+			(
+				invoices.due_date > ${dueDate} and
+				invoices.pay = false and
+				invoices.user_id = ${userId}
+			)
+		`;
 		const invoice = await this.invoiceSearch(dueDate, where);
 		
 		return invoice;		
+	}
+
+	async invoiceDetails(invoiceId: string){
+		
+		const details = await prisma.$queryRaw<InvoiceDetails[]>`
+			select
+				invoices.id,
+				invoices.due_date,
+				invoices.closing_date,
+				count(installments.pay) as total_installments_on_invoice,
+				sum(case when installments.pay = true then 1 else 0 end) as installments_paid,
+				sum(case when installments.pay = false then 1 else 0 end) as installments_pending
+			from
+				installments inner join invoices on installments.invoice_id = invoices.id
+			where
+				invoices.id = ${invoiceId}
+			group by 
+				invoices.id,
+				invoices.due_date
+			order by 
+				invoices.due_date;
+		`;
+
+
+		return details;
 	}
 
 	async invoiceSearch(currentInvoiceDueDate: Date, where: Prisma.Sql){
@@ -124,7 +161,7 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 				invoices.due_date,
 				invoices.closing_date,
 				case when invoices.due_date = ${currentInvoiceDueDate} then true else false end as "current",
-				sum(installments.installment_value) as amount,
+				sum(case when installments.pay = false then installments.installment_value else 0 end) as amount,
 				sum(case when shopping.type_invoice = 'fixedExpense' then installments.installment_value else 0 end) as total_fixed_expense,
 				sum(case when shopping.type_invoice = 'extraExpense' then installments.installment_value else 0 end) as total_extra_expense,
 				sum(case when shopping.payment_method = 'invoice' then installments.installment_value else 0 end) as total_invoice,
@@ -173,14 +210,15 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 
 			from
 				invoices
-				INNER JOIN installments ON installments.invoice_id = invoices.id
-				INNER JOIN shopping ON shopping.id = installments.shopping_id
+				inner join installments on installments.invoice_id = invoices.id
+				inner join shopping on shopping.id = installments.shopping_id
 			
 			where
 				${where}
 			
 			group by invoices.id, invoices.due_date
-			order by invoices.due_date;
+			order by invoices.due_date
+			limit 1;
 		`;
 
 

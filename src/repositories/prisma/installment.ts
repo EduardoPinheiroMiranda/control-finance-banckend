@@ -1,7 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { InstallmentDatabaseInterface } from "../interfaces/installment";
 import { prisma } from "@/libs/primsa";
-import { InvoiceDetails } from "@/@types/prismaTypes";
 
 
 export class InstallmentPrismaRepository implements InstallmentDatabaseInterface{
@@ -72,22 +71,4 @@ export class InstallmentPrismaRepository implements InstallmentDatabaseInterface
 
 		return installment;
 	}
-
-	async invoiceDetails(invoiceId: string){
-		
-		const details = await prisma.$queryRaw<InvoiceDetails[]>`
-			select
-				count(installments.pay) as total_installments_on_invoice,
-				sum(case when installments.pay = true then 1 else 0 end) as installments_paid,
-				sum(case when installments.pay = false then 1 else 0 end) as installments_pending
-			from
-				installments inner join invoices on installments.invoice_id = invoices.id
-			where
-				invoices.id = ${invoiceId}
-		`;
-
-
-		return details;
-	}
-
 }

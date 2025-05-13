@@ -1,5 +1,6 @@
-import { InstallmentWithTotalInstallments } from "@/@types/prismaTypes";
-import { env } from "@/env";
+import { InstallmentWithTotalInstallments, InvoiceDetails } from "@/@types/prismaTypes";
+import { DataValidationError } from "@/errors/custonErros";
+import { makeGetCurrentInvoice } from "@/factories/invoice/make-getCurrentInvoice";
 import { InstallmentDatabaseInterface } from "@/repositories/interfaces/installment";
 import { InvoiceDatabaseInterface } from "@/repositories/interfaces/invoice";
 import { ShoppingDatabaseInterface } from "@/repositories/interfaces/shopping";
@@ -14,12 +15,33 @@ export class PayInvoice{
 	){}
 
 
+	async confirmInvoicePayment(userId: string, invoiceDetails: InvoiceDetails[]){
+
+		const totalInstallmentsOnInvoice = invoiceDetails[0].total_installments_on_invoice;
+		const totalInstallmentsPaid = invoiceDetails[0].installments_paid;
+		
+		const currentDate = new Date().getTime();
+		const closingDate = new Date(invoiceDetails[0].closing_date).getTime();
+
+
+		if(totalInstallmentsOnInvoice === totalInstallmentsPaid && currentDate > closingDate){
+			await this.invoiceRepository.payInvoice(invoiceDetails[0].id);
+		}
+
+
+		const serviceGetCurrentInvoice = makeGetCurrentInvoice();
+		const currentInvoice = await serviceGetCurrentInvoice.execute(userId);
+
+		
+		return currentInvoice;
+	}
+
+
 	async confirmFullPaymentForAPurchase(installments: InstallmentWithTotalInstallments[]){
 
 		const shoppingId: string[] = [];
 
 		installments.forEach((installment) => {
-
 			if(installment.installment_number === installment.shoppingId.total_installments){
 				shoppingId.push(installment.shopping_id);
 			}
@@ -34,57 +56,33 @@ export class PayInvoice{
 		return 0;
 	}
 
-	async execute(invoiceId: string, installmentsToPay: string[]){
+	async execute(userId: string, invoiceId: string, installmentsToPay: string[]){
+
+		if(installmentsToPay.length === 0){
+			const currentInvoice = await this.confirmInvoicePayment(userId, []);
+			return currentInvoice;
+		}
+
 
 		const installmentsPaid = await this.installmentRepository.payInstallments(
 			invoiceId,
 			installmentsToPay
 		);
 
-
-		// verificar se aqui deve ser uma tratativa de erro caso o installmentsPaid seja um array vazio
-		if(installmentsPaid.length > 0){
-			await this.confirmFullPaymentForAPurchase(installmentsPaid);
+		if(installmentsPaid.length === 0){
+			throw new DataValidationError("Houve um problema para confirmar os pagamentos, tente novamente.");
 		}
 
 
-		const invoiceDetails = await this.installmentRepository.invoiceDetails(invoiceId);
-		const totalInstallmentsPending = invoiceDetails[0].installments_pending;
-		const totalInstallmentsPaid = invoiceDetails[0].installments_paid;
-		const totalInstallmentsOnInvoice = invoiceDetails[0].total_installments_on_invoice;
+		const [ invoiceDetails ] = await Promise.all([
+			this.invoiceRepository.invoiceDetails(invoiceId),
+			this.confirmFullPaymentForAPurchase(installmentsPaid)
+		]);
+
+
+		const currentInvoice = await this.confirmInvoicePayment(userId, invoiceDetails);
 		
-		if(totalInstallmentsOnInvoice === totalInstallmentsPaid){
-			
-			const invoice = await this.invoiceRepository.payInvoice(invoiceId);
-
-			return {
-				invoicePaid: invoice.pay,
-				totalInstallmentsOnInvoice,
-				totalInstallmentsPaid,
-				totalInstallmentsPending
-			};
-		}
-
-
-		return {
-			invoicePaid: false,
-			totalInstallmentsOnInvoice,
-			totalInstallmentsPaid,
-			totalInstallmentsPending
-		};
-
-
-		// try{
-
-			
-	
-		// }catch(err){
-
-		// 	if(env.NODE_ENV == "test"){
-		// 		console.log(err);
-		// 	}
-
-		// 	throw new Error("Houve um problema para encontrar os dados da fatura, tente novamente.");
-		// }
+		
+		return currentInvoice;
 	}
 }

@@ -82,12 +82,18 @@ describe("service/invoice", () => {
 
 	describe("#Pay invoice", () => {
 
-		it("It will trigger an error if something unexpected happens when requesting the database.", async () => {
-			// inesitent invoice
+		it("Will generate an error if the installment array is empty.", async () => {
 
 			await expect(
 				servicePayInvoice.execute("invoice-invalid", [])
-			).rejects.toThrowError("Houve um problema para encontrar os dados da fatura, tente novamente.");
+			).rejects.toThrowError("Informe quais parcelas você quer pagar.");
 		});
+
+		// it("It will generate an error if the installment is not painful.", async () => {
+
+		// 	await expect(
+		// 		servicePayInvoice.execute("invoice-invalid", [])
+		// 	).rejects.toThrowError("Informe quais parcelas você quer pagar.");
+		// });
 	});
 });

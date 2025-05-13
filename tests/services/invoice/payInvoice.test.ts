@@ -79,4 +79,15 @@ describe("service/invoice", () => {
 			expect(result).toBe(1);
 		});
 	});
+
+	describe("#Pay invoice", () => {
+
+		it("It will trigger an error if something unexpected happens when requesting the database.", async () => {
+			// inesitent invoice
+
+			await expect(
+				servicePayInvoice.execute("invoice-invalid", [])
+			).rejects.toThrowError("Houve um problema para encontrar os dados da fatura, tente novamente.");
+		});
+	});
 });

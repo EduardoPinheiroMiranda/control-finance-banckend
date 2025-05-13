@@ -36,49 +36,55 @@ export class PayInvoice{
 
 	async execute(invoiceId: string, installmentsToPay: string[]){
 
-		try{
-
-			const installmentsPaid = await this.installmentRepository.payInstallments(
-				invoiceId,
-				installmentsToPay
-			);
+		const installmentsPaid = await this.installmentRepository.payInstallments(
+			invoiceId,
+			installmentsToPay
+		);
 
 
+		// verificar se aqui deve ser uma tratativa de erro caso o installmentsPaid seja um array vazio
+		if(installmentsPaid.length > 0){
 			await this.confirmFullPaymentForAPurchase(installmentsPaid);
+		}
 
 
-			const invoiceDetails = await this.installmentRepository.invoiceDetails(invoiceId);
-			const totalInstallmentsPending = invoiceDetails[0].installments_pending;
-			const totalInstallmentsPaid = invoiceDetails[0].installments_paid;
-			const totalInstallmentsOnInvoice = invoiceDetails[0].total_installments_on_invoice;
+		const invoiceDetails = await this.installmentRepository.invoiceDetails(invoiceId);
+		const totalInstallmentsPending = invoiceDetails[0].installments_pending;
+		const totalInstallmentsPaid = invoiceDetails[0].installments_paid;
+		const totalInstallmentsOnInvoice = invoiceDetails[0].total_installments_on_invoice;
+		
+		if(totalInstallmentsOnInvoice === totalInstallmentsPaid){
 			
-			if(totalInstallmentsOnInvoice === totalInstallmentsPaid){
-				
-				const invoice = await this.invoiceRepository.payInvoice(invoiceId);
-	
-				return {
-					invoicePaid: invoice.pay,
-					totalInstallmentsOnInvoice,
-					totalInstallmentsPaid,
-					totalInstallmentsPending
-				};
-			}
-
+			const invoice = await this.invoiceRepository.payInvoice(invoiceId);
 
 			return {
-				invoicePaid: false,
+				invoicePaid: invoice.pay,
 				totalInstallmentsOnInvoice,
 				totalInstallmentsPaid,
 				totalInstallmentsPending
 			};
-	
-		}catch(err){
-
-			if(env.NODE_ENV == "test"){
-				console.log(err);
-			}
-
-			throw new Error("Houve um problema para encontrar os dados da fatura, tente novamente.");
 		}
+
+
+		return {
+			invoicePaid: false,
+			totalInstallmentsOnInvoice,
+			totalInstallmentsPaid,
+			totalInstallmentsPending
+		};
+
+
+		// try{
+
+			
+	
+		// }catch(err){
+
+		// 	if(env.NODE_ENV == "test"){
+		// 		console.log(err);
+		// 	}
+
+		// 	throw new Error("Houve um problema para encontrar os dados da fatura, tente novamente.");
+		// }
 	}
 }

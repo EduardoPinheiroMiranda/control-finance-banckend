@@ -58,8 +58,7 @@ export class PayInvoice{
 	async execute(userId: string, invoiceId: string, installmentsToPay: string[]){
 
 		if(installmentsToPay.length === 0){
-			const currentInvoice = await this.confirmInvoicePayment(userId, []);
-			return currentInvoice;
+			throw new DataValidationError("Informe quais parcelas você quer pagar.");
 		}
 
 

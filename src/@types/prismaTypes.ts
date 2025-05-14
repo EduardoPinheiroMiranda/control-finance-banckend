@@ -58,7 +58,7 @@ export type InstallmentWithTotalInstallments = Prisma.InstallmentGetPayload<{
 
 export interface InvoiceDetails{
     id: string,
-    deu_date: string,
+    due_date: string,
     closing_date: string
     total_installments_on_invoice: number,
     installments_paid: number,

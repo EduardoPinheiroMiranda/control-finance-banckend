@@ -36,7 +36,6 @@ export class PayInvoice{
 		return currentInvoice;
 	}
 
-
 	async confirmFullPaymentForAPurchase(installments: InstallmentWithTotalInstallments[]){
 
 		const shoppingId: string[] = [];

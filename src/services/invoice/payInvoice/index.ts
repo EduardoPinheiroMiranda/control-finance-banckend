@@ -25,7 +25,9 @@ export class PayInvoice{
 
 
 		if(totalInstallmentsOnInvoice === totalInstallmentsPaid && currentDate > closingDate){
-			await this.invoiceRepository.payInvoice(invoiceDetails[0].id);
+			await this.invoiceRepository.payInvoice([
+				invoiceDetails[0].id
+			]);
 		}
 
 

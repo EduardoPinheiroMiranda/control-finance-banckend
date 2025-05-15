@@ -6,6 +6,29 @@ import { CardInvoice, Invoice, InvoiceDetails } from "@/@types/prismaTypes";
 
 export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 
+	async advanceInvoices(){
+
+		const invoices = await prisma.invoice.findMany({
+			where: {
+				pay: false,
+				closing_date: {
+					lte: new Date()
+				}
+			},
+			include: {
+				installment: {
+					select: {
+						pay: true
+					}
+				}
+			},
+			take: 100
+		});
+
+
+		return invoices;
+	}
+
 	async create(data: Prisma.InvoiceUncheckedCreateInput[]){
         
 		const invoices = await prisma.invoice.createManyAndReturn({data});
@@ -225,11 +248,11 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 		return invoices;
 	}
 
-	async payInvoice(invoiceId: string){
+	async payInvoice(invoiceId: string[]){
 		
-		const invoicePaid = await prisma.invoice.update({
+		const invoicePaid = await prisma.invoice.updateManyAndReturn({
 			where: {
-				id: invoiceId
+				id: { in: invoiceId }
 			},
 			data: {
 				pay: true

@@ -4,6 +4,16 @@ import { CardInvoice, Invoice as CustomTypeInvoice, InvoiceDetails } from "@/@ty
 
 export interface InvoiceDatabaseInterface{
 
+    advanceInvoices(): Promise<Prisma.InvoiceGetPayload<{
+        include: {
+            installment: {
+                select: {
+                    pay: true
+                }
+            }
+        }
+    }>[]>
+
     create(data: Prisma.InvoiceUncheckedCreateInput[]): Promise<Invoice[]>
 
     findInvoicesFromDueDate(userId: string, dueDates: string[]): Promise<Invoice[]>
@@ -26,5 +36,5 @@ export interface InvoiceDatabaseInterface{
     
     invoiceSearch(currentInvoiceDueDate: Date, where: Prisma.Sql): Promise<CustomTypeInvoice[]>
 
-    payInvoice(invoiceId: string): Promise<Invoice>
+    payInvoice(invoiceId: string[]): Promise<Invoice[]>
 }

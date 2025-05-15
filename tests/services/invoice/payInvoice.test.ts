@@ -161,7 +161,7 @@ describe("service/invoice", () => {
 				}
 			];
 
-			jest.spyOn(invoiceRepository, "payInvoice").mockResolvedValue(
+			jest.spyOn(invoiceRepository, "payInvoice").mockResolvedValue([
 				{
 					id:  "invoice-123",
 					pay: false,
@@ -171,7 +171,7 @@ describe("service/invoice", () => {
 					updated_at: date,
 					user_id: "user-123",
 				}
-			);
+			]);
 
 
 			jest.spyOn(GetCurrentInvoice.prototype, "execute").mockResolvedValue(mockInvoice);
@@ -186,7 +186,7 @@ describe("service/invoice", () => {
 
 		it("Ccheck if the invoice has been paid", async () => {
 
-			jest.spyOn(invoiceRepository, "payInvoice").mockResolvedValue(
+			jest.spyOn(invoiceRepository, "payInvoice").mockResolvedValue([
 				{
 					id:  "invoice-123",
 					pay: true,
@@ -196,7 +196,7 @@ describe("service/invoice", () => {
 					updated_at: date,
 					user_id: "user-123",
 				}
-			);
+			]);
 
 
 			jest.spyOn(GetCurrentInvoice.prototype, "execute").mockResolvedValue(mockInvoice);

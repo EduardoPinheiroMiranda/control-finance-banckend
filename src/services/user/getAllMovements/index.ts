@@ -9,7 +9,7 @@ export class GetAllMovements{
 	){}
 
 
-	async execute(userId: string, name: string, cursor: string | null){
+	async execute(userId: string, name: string | null, cursor: string | null){
 
 		const shopings = await this.shoppingRepository.getAllShopping(userId, name, cursor);
 

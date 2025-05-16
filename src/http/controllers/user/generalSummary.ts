@@ -8,12 +8,12 @@ export async function generalSummary(request: FastifyRequest, reply: FastifyRepl
 
 	try{
 
-		const scheme = z.object({user_id: z.string()});
-		const { user_id } = scheme.parse(request.params);
+		const userId = z.string().parse(request.headers["user-id"]);
 
 
 		const serviceGeneralSummary = makeGeneralSummary();
-		const data = await serviceGeneralSummary.execute(user_id);
+		const data = await serviceGeneralSummary.execute(userId);
+
 
 		return reply.status(200).send(JSON.stringify(data));
 

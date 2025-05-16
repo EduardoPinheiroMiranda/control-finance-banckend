@@ -1,4 +1,4 @@
-import { makeGetUserById } from "@/factories/user/make-getUSerById";
+import { makeGetUserById } from "@/factories/user/make-getUserById";
 import { handleErrorsInControlles } from "@/utils/handleErrorsInControllers";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";

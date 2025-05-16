@@ -12,7 +12,6 @@ export function makeRegisterShopping(){
 	const invoiceRepository = new InvoicePrismaRepository();
 	const installmentRepository = new InstallmentPrismaRepository();
 	const cardRepository = new CardPrismaRepository();
-
 	const serviceRegisterShopping = new RegisterShopping(
 		userRepository,
 		shoppingRepository,
@@ -20,6 +19,7 @@ export function makeRegisterShopping(){
 		installmentRepository,
 		cardRepository
 	);
+
 
 	return serviceRegisterShopping;
 }

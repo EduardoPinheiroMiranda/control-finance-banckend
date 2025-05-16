@@ -1,17 +1,17 @@
 import { InvoicePrismaRepository } from "@/repositories/prisma/invoice";
 import { UserPrismaRepository } from "@/repositories/prisma/user";
-import { GetCurrentInvoice } from "@/services/invoice/getCurrentInvoice";
+import { GetAllInvoices } from "@/services/invoice/getAllInvoices";
 
 
-export function makeGetCurrentInvoice(){
+export function makeGetAllInvoices(){
 
 	const userRepository = new UserPrismaRepository();
 	const invoiceRepository = new InvoicePrismaRepository();
-	const serviceGetCurrentInvoice = new GetCurrentInvoice(
+	const serviceGetAllInvoice = new GetAllInvoices(
 		userRepository,
 		invoiceRepository
 	);
 
     
-	return serviceGetCurrentInvoice;
+	return serviceGetAllInvoice;
 }

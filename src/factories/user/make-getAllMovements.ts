@@ -9,5 +9,6 @@ export function makeGetAllMovements(){
 		shoppingRepository
 	);
 
+    
 	return serviceGetAllMovements;
 }

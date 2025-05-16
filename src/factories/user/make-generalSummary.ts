@@ -9,12 +9,12 @@ export function makeGeneralSummary(){
 	const applicationRepository = new ApplicationPrismaRepository();
 	const cardRepository = new CardPrismaRepository();
 	const shoppingRepository = new ShoppingPrismaRepository();
-
 	const serviceGeneralSummary = new GeneralSummary(
 		applicationRepository,
 		cardRepository,
 		shoppingRepository
 	);
+
 
 	return serviceGeneralSummary;
 }

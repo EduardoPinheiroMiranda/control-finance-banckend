@@ -7,11 +7,11 @@ export function makeDeleteShopping(){
 
 	const shoppingRepository = new ShoppingPrismaRepository();
 	const installmentRepository = new InstallmentPrismaRepository();
-
 	const serviceDeleteShopping = new DeleteShopping(
 		shoppingRepository,
 		installmentRepository
 	);
 
+    
 	return serviceDeleteShopping;
 }

@@ -7,11 +7,11 @@ export function makeUpdateShopping(){
 
 	const shoppingRepository = new ShoppingPrismaRepository();
 	const installmentRepository = new InstallmentPrismaRepository();
-
 	const serviceUpdateShopping = new UpdateShopping(
 		shoppingRepository,
 		installmentRepository
 	);
 
+	
 	return serviceUpdateShopping;
 }

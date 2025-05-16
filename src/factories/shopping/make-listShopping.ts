@@ -5,10 +5,10 @@ import { ListShopping } from "@/services/shopping/listShopping";
 export function makeListShopping(){
 
 	const shoppingRepository = new ShoppingPrismaRepository();
-
 	const serviceListShopping = new ListShopping(
 		shoppingRepository
 	);
 
+	
 	return serviceListShopping;
 }

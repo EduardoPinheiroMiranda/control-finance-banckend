@@ -3,7 +3,7 @@ import { ResourceNotFoud } from "@/errors/custonErros";
 import { ApplicationDatabaseInterface } from "@/repositories/interfaces/application";
 
 
-export class FilterAllApplications{
+export class FilterApplications{
 
 	constructor(
         private applicationRepository: ApplicationDatabaseInterface

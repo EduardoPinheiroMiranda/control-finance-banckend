@@ -1,6 +1,6 @@
 import { ResourceNotFoud } from "@/errors/custonErros";
 import { ApplicationPrismaRepository } from "@/repositories/prisma/application";
-import { GetAllApplication } from "@/services/application/getAllApplications";
+import { GetAllApplications } from "@/services/application/getAllApplications";
 import { describe, it, expect, beforeEach, jest } from "@jest/globals";
 import { Decimal } from "@prisma/client/runtime/library";
 
@@ -10,12 +10,12 @@ describe("service/application", () => {
 	describe("#Get all applications", () => {
 
 		let applicationRepository: ApplicationPrismaRepository;
-		let serviceGetAllApplications: GetAllApplication;
+		let serviceGetAllApplications: GetAllApplications;
 
 
 		beforeEach(() => {
 			applicationRepository = new ApplicationPrismaRepository();
-			serviceGetAllApplications = new GetAllApplication(
+			serviceGetAllApplications = new GetAllApplications(
 				applicationRepository
 			);
 		});

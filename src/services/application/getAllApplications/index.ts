@@ -2,7 +2,7 @@ import { ResourceNotFoud } from "@/errors/custonErros";
 import { ApplicationDatabaseInterface } from "@/repositories/interfaces/application";
 
 
-export class GetAllApplication{
+export class GetAllApplications{
 
 	constructor(
         private applicationRepository: ApplicationDatabaseInterface

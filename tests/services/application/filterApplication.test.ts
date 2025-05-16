@@ -1,6 +1,6 @@
 import { ResourceNotFoud } from "@/errors/custonErros";
 import { ApplicationPrismaRepository } from "@/repositories/prisma/application";
-import { FilterAllApplications } from "@/services/application/filterApplications";
+import { FilterAllApplications } from "@/services/application/filterAllApplications";
 import { describe, it, expect, jest, beforeEach } from "@jest/globals";
 import { Decimal } from "@prisma/client/runtime/library";
 

@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import { InvoiceDatabaseInterface } from "../interfaces/invoice";
 import { prisma } from "@/libs/primsa";
 import { CardInvoice, Invoice, InvoiceDetails } from "@/@types/prismaTypes";
+import { Decimal } from "@prisma/client/runtime/library";
 
 
 export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
@@ -66,7 +67,7 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 
 	async getAllCardInvoices(userId: string, cardId: string, dueDate: Date){
 		
-		const invoices = await prisma.$queryRaw<CardInvoice[]>`
+		const result = await prisma.$queryRaw<any[]>`
 			select
 				invoices.id as invoice_id,
 				invoices.pay,
@@ -103,6 +104,20 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 			group by invoices.id, invoices.due_date
 			order by invoices.due_date;
 		`;
+
+
+		const invoices: CardInvoice[] = result.map((invoice) => {
+
+			return{
+				invoice_id: invoice.invoice_id,
+				pay: invoice.pay,
+				due_date: invoice.due_date,
+				current: invoice.current,
+				amount: Decimal(invoice.amount),
+				installments: invoice.installments
+			};
+			
+		});
 
 		return invoices;
 	}
@@ -152,7 +167,7 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 
 	async invoiceDetails(invoiceId: string){
 		
-		const details = await prisma.$queryRaw<InvoiceDetails[]>`
+		const result = await prisma.$queryRaw<any[]>`
 			select
 				invoices.id,
 				invoices.due_date,
@@ -172,12 +187,23 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 		`;
 
 
+		const details: InvoiceDetails[] = result.map((invoice) => {
+			return {
+				id: invoice.id,
+				due_date: invoice.due_date,
+				closing_date: invoice.closing_date,
+				total_installments_on_invoice: Number(invoice.total_installments_on_invoice),
+				installments_paid: Number(invoice.installments_paid),
+				installments_pending: Number(invoice.installments_pending)
+			};
+		});
+
 		return details;
 	}
 
 	async invoiceSearch(currentInvoiceDueDate: Date, where: Prisma.Sql){
 
-		const invoices = await prisma.$queryRaw<Invoice[]>`
+		const result = await prisma.$queryRaw<any[]>`
 			select
 				invoices.id as invoice_id,
 				invoices.pay,
@@ -245,7 +271,25 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 		`;
 
 
-		return invoices;
+		const invoice: Invoice[] = result.map((invoice) => {
+			return {
+				invoice_id: invoice.invoice_id,
+				pay: invoice.pay,
+				due_date: invoice.due_date,
+				closing_date: invoice.closing_date,
+				current: invoice.current,
+				amount: Decimal(invoice.amount),
+				total_fixed_expense: Decimal(invoice.total_fixed_expense),
+				total_extra_expense: Decimal(invoice.total_extra_expense),
+				total_invoice: Decimal(invoice.total_invoice),
+				total_card: Decimal(invoice.total_card),
+				total_money: Decimal(invoice.total_money),
+				installments: invoice.installments
+			};
+		});
+
+
+		return invoice;
 	}
 
 	async payInvoice(invoiceId: string[]){

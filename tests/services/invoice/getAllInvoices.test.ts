@@ -82,12 +82,12 @@ describe("service/invoice", () => {
 					due_date: new Date("2025-05-10T23:59:59.000Z"),
 					closing_date: new Date("2025-05-05T23:59:59.000Z"),
 					current: true,
-					amount: 500,
-					total_fixed_expense: 200,
-					total_extra_expense: 300,
-					total_invoice: 200,
-					total_card: 0,
-					total_money: 300,
+					amount: Decimal(500),
+					total_fixed_expense: Decimal(200),
+					total_extra_expense: Decimal(300),
+					total_invoice: Decimal(200),
+					total_card: Decimal(0),
+					total_money: Decimal(300),
 					installments: {
 						fixedExpense: [
 							{

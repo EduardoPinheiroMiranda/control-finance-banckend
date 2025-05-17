@@ -82,12 +82,12 @@ describe("service/invoice", () => {
 					due_date: new Date("2025-05-10T23:59:59.000Z"),
 					closing_date: new Date("2025-05-05T23:59:59.000Z"),
 					current: true,
-					amount: 500,
-					total_fixed_expense: 200,
-					total_extra_expense: 300,
-					total_invoice: 200,
-					total_card: 0,
-					total_money: 300,
+					amount: Decimal(500),
+					total_fixed_expense: Decimal(200),
+					total_extra_expense: Decimal(300),
+					total_invoice: Decimal(200),
+					total_card: Decimal(0),
+					total_money: Decimal(300),
 					installments: {
 						fixedExpense: [
 							{
@@ -132,7 +132,20 @@ describe("service/invoice", () => {
 				percentegeSpent: 42,
 				limit: 1200,
 				available: 700,
-				...mockInvoice[0]
+				
+				invoice_id: mockInvoice[0].invoice_id,
+				pay: mockInvoice[0].pay,
+				due_date: mockInvoice[0].due_date,
+				closing_date: mockInvoice[0].closing_date,
+				current: mockInvoice[0].current,
+			
+				amount: mockInvoice[0].amount.toNumber(),
+				total_fixed_expense: mockInvoice[0].total_fixed_expense.toNumber(),
+				total_extra_expense: mockInvoice[0].total_extra_expense.toNumber(),
+				total_card: mockInvoice[0].total_card.toNumber(),
+				total_money: mockInvoice[0].total_money.toNumber(),
+				total_invoice: mockInvoice[0].total_invoice.toNumber(),
+				installments: mockInvoice[0].installments
 			});
 		});
 	});

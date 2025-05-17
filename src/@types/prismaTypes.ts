@@ -1,4 +1,5 @@
 import { Prisma, Shopping } from "@prisma/client";
+import { Decimal } from "@prisma/client/runtime/library";
 
 
 interface Installment{
@@ -20,12 +21,12 @@ export interface Invoice{
     due_date: Date,
     closing_date: Date,
     current: boolean,
-    amount: number,
-    total_fixed_expense: number,
-    total_extra_expense: number,
-    total_invoice: number,
-    total_card: number,
-    total_money: number,
+    amount: Decimal,
+    total_fixed_expense: Decimal,
+    total_extra_expense: Decimal,
+    total_invoice: Decimal,
+    total_card: Decimal,
+    total_money: Decimal,
     installments: {
         fixedExpense: Installment[],
         extraExpense: Installment[]
@@ -42,7 +43,7 @@ export interface CardInvoice{
     pay: boolean,
     due_date: Date,
     current: boolean,
-    amount: number,
+    amount: Decimal,
     installments: Installment[]
 }
 

@@ -71,7 +71,7 @@ describe("service/invoice", () => {
 					pay: false,
 					due_date: date,
 					current: false,
-					amount: 1000,
+					amount: Decimal(1000),
 					installments: [
 						{
 							installment_id: "installment-123",

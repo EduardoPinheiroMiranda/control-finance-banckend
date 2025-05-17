@@ -7,7 +7,7 @@ export async function invoiceRoutes(app: FastifyInstance){
 
 	app.route({
 		method: "GET",
-		url: "/getCurrentInvoice/",
+		url: "/getCurrentInvoice",
 		preHandler: checkToken,
 		handler: getCurrentInvoice
 	});

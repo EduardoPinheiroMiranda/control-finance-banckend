@@ -19,7 +19,7 @@ export async function userRoutes(app: FastifyInstance){
 	});
 
 	app.route({
-		method: "POST",
+		method: "PUT",
 		url: "/controlLimit",
 		preHandler: checkToken,
 		handler: controlLimit
@@ -47,13 +47,13 @@ export async function userRoutes(app: FastifyInstance){
 	});
 	
 	app.route({
-		method: "post",
+		method: "POST",
 		url: "/userRegister",
 		handler: registerUser
 	});
 
 	app.route({
-		method: "POST",
+		method: "PUT",
 		url: "/updatePassword",
 		preHandler: checkToken,
 		handler: updatePassword

@@ -125,7 +125,8 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 	async getAllInvoices(userId: string, currentInvoiceDueDate: Date){
 		
 		const where = Prisma.sql`invoices.user_id = ${userId}`;
-		const invoices = await this.invoiceSearch(currentInvoiceDueDate, where);
+		const limit = Prisma.sql``;
+		const invoices = await this.invoiceSearch(currentInvoiceDueDate, where, limit);
 		
 		return invoices;
 	}
@@ -160,7 +161,8 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 				invoices.user_id = ${userId}
 			)
 		`;
-		const invoice = await this.invoiceSearch(dueDate, where);
+		const limit = Prisma.sql`limit 1`;
+		const invoice = await this.invoiceSearch(dueDate, where, limit);
 		
 		return invoice;		
 	}
@@ -201,7 +203,7 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 		return details;
 	}
 
-	async invoiceSearch(currentInvoiceDueDate: Date, where: Prisma.Sql){
+	async invoiceSearch(currentInvoiceDueDate: Date, where: Prisma.Sql, limit: Prisma.Sql){
 
 		const result = await prisma.$queryRaw<any[]>`
 			select
@@ -267,7 +269,7 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 			
 			group by invoices.id, invoices.due_date
 			order by invoices.due_date
-			limit 1;
+			${limit};
 		`;
 
 

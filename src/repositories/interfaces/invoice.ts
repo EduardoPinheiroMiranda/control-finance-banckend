@@ -34,7 +34,7 @@ export interface InvoiceDatabaseInterface{
     
     invoiceDetails(invoiceId: string): Promise<InvoiceDetails[]>
     
-    invoiceSearch(currentInvoiceDueDate: Date, where: Prisma.Sql): Promise<CustomTypeInvoice[]>
+    invoiceSearch(currentInvoiceDueDate: Date, where: Prisma.Sql, limit: Prisma.Sql): Promise<CustomTypeInvoice[]>
 
     payInvoice(invoiceId: string[]): Promise<Invoice[]>
 }

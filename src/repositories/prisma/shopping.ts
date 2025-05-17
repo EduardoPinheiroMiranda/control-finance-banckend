@@ -95,7 +95,9 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 
 	async listAllOpenPurchases(userId: string){
 		
-		const shoppings = await prisma.$queryRaw<ShoppingListByType>`
+		const shoppings = await prisma.$queryRaw<{
+			shopping: ShoppingListByType
+		}[]>`
 			select
 				json_build_object(
 					'fixedExpense', coalesce(
@@ -118,7 +120,7 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 				shopping.user_id = ${userId} and shopping.pay = false
 		`;
 
-		return shoppings;
+		return shoppings[0].shopping;
 	}
 
 	async payShopping(shoppingId: string[]){

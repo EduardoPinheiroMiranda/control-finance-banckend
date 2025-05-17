@@ -38,6 +38,7 @@ export async function registerShopping(request: FastifyRequest, reply: FastifyRe
 		}));
 
 	}catch(err: any){
+		
 		const {statusCode, error} = handleErrorsInControlles(err);
 		return reply.status(statusCode).send(JSON.stringify({error}));
 	}

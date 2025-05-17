@@ -1,18 +1,26 @@
 import { FastifyRequest, FastifyReply} from "fastify";
 import { handleErrorsInControlles } from "../../../utils/handleErrorsInControllers";
 import { z } from "zod";
-import { makeGetCurrentInvoice } from "@/factories/invoice/make-getCurrentInvoice";
+import { makePayInvoice } from "@/factories/invoice/make-payInvoice";
 
 
-export async function getCurrentInvoice(request: FastifyRequest, reply: FastifyReply){
+export async function PayInvoice(request: FastifyRequest, reply: FastifyReply){
 
 	try{
 
 		const userId = z.string().parse(request.headers["user-id"]);
+		const body = z.object({
+			invoiceId: z.string(),
+			installmentsToPay: z.array(z.string())
+		}).parse(request.body);
         
 		
-		const serviceGetCurrentInvoice = makeGetCurrentInvoice();
-		const invoice = await serviceGetCurrentInvoice.execute(userId);
+		const servicePayInvoice = makePayInvoice();
+		const invoice = await servicePayInvoice.execute(
+			userId,
+			body.invoiceId,
+			body.installmentsToPay
+		);
 
 		
 		return reply.status(200).send(JSON.stringify(invoice));

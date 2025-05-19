@@ -28,8 +28,8 @@ export class ApplicationPrismaRepository implements ApplicationDatabaseInterface
 
 		const customWhere = {
 			...(filter.type != null && {type: filter.type}),
-			...(filter.date != null && {created_at: {gte: filter.date}}),
-			...(filter.institutionId != null && {application_id: filter.institutionId})
+			...(filter.date != null && {created_at: {gte: new Date(filter.date)}}),
+			...(filter.applicationId != null && {application_id: filter.applicationId})
 		};
 
 

@@ -79,7 +79,7 @@ export interface Application{
 
 
 export interface Filter{
-    date: Date | null,
-    institutionId: string | null,
+    date: string | null,
+    applicationId: string | null,
     type: string | null
 }

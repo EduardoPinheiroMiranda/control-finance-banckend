@@ -1,6 +1,6 @@
 import { DataValidationError } from "@/errors/custonErros";
 import { ApplicationPrismaRepository } from "@/repositories/prisma/application";
-import { Delete } from "@/services/application/delete";
+import { DeleteApplication } from "@/services/application/deleteApplication";
 import { describe, it, expect, beforeEach, jest } from "@jest/globals";
 import { Decimal } from "@prisma/client/runtime/library";
 
@@ -10,12 +10,12 @@ describe("service/application", () => {
 	describe("#Delete", () => {
         
 		let applicationRepository: ApplicationPrismaRepository;
-		let serviceDelete: Delete;
+		let serviceDelete: DeleteApplication;
 
 
 		beforeEach(() => {
 			applicationRepository = new ApplicationPrismaRepository();
-			serviceDelete = new Delete(
+			serviceDelete = new DeleteApplication(
 				applicationRepository
 			);
 		});

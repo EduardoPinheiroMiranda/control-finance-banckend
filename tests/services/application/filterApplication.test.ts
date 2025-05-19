@@ -30,7 +30,7 @@ describe("service/Application", () => {
 			await expect(
 				serviceFilterApplication.execute({
 					date: null,
-					institutionId: null,
+					applicationId: null,
 					type: null
 				})
 			).rejects.toBeInstanceOf(ResourceNotFoud);
@@ -54,7 +54,7 @@ describe("service/Application", () => {
 			
 			const result = await serviceFilterApplication.execute({
 				date: null,
-				institutionId: null,
+				applicationId: null,
 				type: null
 			});
 

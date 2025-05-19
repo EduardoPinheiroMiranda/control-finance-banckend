@@ -1,11 +1,11 @@
 import { ApplicationPrismaRepository } from "@/repositories/prisma/application";
-import { Delete } from "@/services/application/delete";
+import { DeleteApplication } from "@/services/application/deleteApplication";
 
 
-export function makeDelete(){
+export function makeDeleteApplication(){
 
 	const applicationRepository = new ApplicationPrismaRepository();
-	const serviceDelete = new Delete(
+	const serviceDelete = new DeleteApplication(
 		applicationRepository
 	);
 

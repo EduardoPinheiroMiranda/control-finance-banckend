@@ -3,7 +3,7 @@ import { DataValidationError } from "@/errors/custonErros";
 import { ApplicationDatabaseInterface } from "@/repositories/interfaces/application";
 
 
-export class Delete{
+export class DeleteApplication{
 
 	constructor(
         private applicationRepository: ApplicationDatabaseInterface

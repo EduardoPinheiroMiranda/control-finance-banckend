@@ -23,7 +23,7 @@ export class CategoryPrismaRepository implements CategoryDatabaseInterface{
 		return category;
 	}
 
-	async getAllCategories(cursor?: string){
+	async getAllCategories(cursor: string | null){
 
 		if(!cursor){
 			const categories = await prisma.category.findMany({

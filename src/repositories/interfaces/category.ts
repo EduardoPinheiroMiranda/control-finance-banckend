@@ -5,5 +5,5 @@ export interface CategoryDatabaseInterface{
     
     createMany(data: Prisma.CategoryUncheckedCreateInput[]): Promise<Category[]>
 
-    getAllCategories(cursor?: string): Promise<Category[]>
+    getAllCategories(cursor: string | null): Promise<Category[]>
 }

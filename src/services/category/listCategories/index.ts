@@ -9,7 +9,7 @@ export class ListCategories{
 	){}
 
 
-	async execute(categoryId?: string){
+	async execute(categoryId: string | null){
 
 		const categories = await this.categoryRepository.getAllCategories(categoryId);
 

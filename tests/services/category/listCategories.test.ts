@@ -25,7 +25,7 @@ describe("service/categories", () => {
 			jest.spyOn(categoryRepository, "getAllCategories").mockResolvedValue([]);
 
 			await expect(
-				serviceListCategories.execute()
+				serviceListCategories.execute(null)
 			).rejects.toBeInstanceOf(ResourceNotFoud);
 		});
 
@@ -43,7 +43,7 @@ describe("service/categories", () => {
 			]);
 
 
-			const result = await serviceListCategories.execute();
+			const result = await serviceListCategories.execute(null);
 
 
 			expect(result.length).toBe(1);

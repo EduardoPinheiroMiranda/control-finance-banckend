@@ -4,7 +4,7 @@ import { z } from "zod";
 import { makePayInvoice } from "@/factories/invoice/make-payInvoice";
 
 
-export async function PayInvoice(request: FastifyRequest, reply: FastifyReply){
+export async function payInvoice(request: FastifyRequest, reply: FastifyReply){
 
 	try{
 

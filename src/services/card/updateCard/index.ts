@@ -14,15 +14,15 @@ export class UpdateCard{
 
 	async execute(data: CardUpdate){
 
+		const { background, font } = await hexValidator(data.colorFont, data.colorCard);
+
+
+		if(data.dueDay > 31 || data.dueDay < 0 && data.closingDay > 31 || data.closingDay < 0){
+			throw new DataValidationError("Verifique os valores de datas informados, dados invalidos.");
+		}
+
+
 		try{
-
-			const { background, font } = await hexValidator(data.colorFont, data.colorCard);
-
-
-			if(data.dueDay > 31 || data.dueDay < 0 && data.closingDay > 31 || data.closingDay < 0){
-				throw new DataValidationError("Verifique os valores de datas informados, dados invalidos.");
-			}
-
 
 			const card = await this.cardRepository.updateCartd(
 				data.id,

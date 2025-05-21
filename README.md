@@ -39,6 +39,14 @@ Essa API busca minimizar esse tipo de frustração, registrando cada compra real
 <br>
 
 <p>
+  Faça a instalação das depêndencias do projeto: 
+</p>
+
+  ```
+    npm install
+  ```
+
+<p>
   Para poder trabalhar com este projeto, é necessário ter o docker em sua máquina para poder criar a imagem do postgreSql no docker-compose. Já com o docker instalado, execute o seguinte comando no diretorio do projeto para criar a image do banco:
 </p>
 

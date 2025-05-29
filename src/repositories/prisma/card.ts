@@ -33,6 +33,9 @@ export class CardPrismaRepository implements CardDatabaseInterface{
 			where: {
 				user_id: userId,
 				active: true
+			},
+			orderBy: {
+				created_at: "asc"
 			}
 		});
 

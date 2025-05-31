@@ -18,7 +18,9 @@ export function checkToken(
 
 	if(!authToken){
 		return reply.status(401).send(JSON.stringify({
-			msg: "Acesso negado."
+			error: {
+				msg: "Acesso negado."
+			}
 		}));
 	}
 
@@ -34,7 +36,9 @@ export function checkToken(
 
 		if (decoded.exp && Date.now() >= (decoded.exp * 1000) ) {
 			return reply.status(401).send(JSON.stringify({
-				msg: "Acesso negado."
+				error: {
+					msg: "Acesso negado."
+				}
 			}));
 		}
 
@@ -48,7 +52,9 @@ export function checkToken(
 	}catch(err: any){
 
 		return reply.status(401).send(JSON.stringify({
-			msg: "Acesso negado."
+			error: {
+				msg: "Acesso negado."
+			}
 		}));
 	}
 }

@@ -83,7 +83,8 @@ describe("service/invoice", () => {
 							total_installments: 1,
 							type_invoice: "extraexpense",
 							payment_method: "card",
-							name: "roupa"
+							name: "roupa",
+							purchase_date: date
 						}
 					]
 				}

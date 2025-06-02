@@ -12,7 +12,8 @@ interface Installment{
     total_installments: number,
     type_invoice: string,
     payment_method: string,
-    name: string
+    name: string,
+    purchase_date: Date
 }
 
 export interface Invoice{
@@ -28,14 +29,14 @@ export interface Invoice{
     total_card: Decimal,
     total_money: Decimal,
     installments: {
-        fixedExpense: Installment[],
-        extraExpense: Installment[]
+        fixed_expense: Installment[],
+        extra_expense: Installment[]
     }
 }
 
 export interface ShoppingListByType{
-    fixedExpense: Shopping[],
-    extraExpense: Shopping[]
+    fixed_expense: Shopping[],
+    extra_expense: Shopping[]
 }
 
 export interface CardInvoice{

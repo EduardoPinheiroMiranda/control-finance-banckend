@@ -57,7 +57,7 @@ describe("service/invoice", () => {
 		total_card: 0,
 		total_money: 300,
 		installments: {
-			fixedExpense: [
+			fixed_expense: [
 				{
 					installment_id: "installment-123",
 					installment_number: 1,
@@ -68,10 +68,11 @@ describe("service/invoice", () => {
 					total_installments: 1,
 					type_invoice: "fixedExpense",
 					payment_method: "invoice",
-					name: "Freio hidraulico"
+					name: "Freio hidraulico",
+					purchase_date: new Date,
 				}
 			],
-			extraExpense: [
+			extra_expense: [
 				{
 					installment_id: "installment-124",
 					installment_number: 1,
@@ -82,7 +83,8 @@ describe("service/invoice", () => {
 					total_installments: 3,
 					type_invoice: "fixedExpense",
 					payment_method: "money",
-					name: "Quadro absolute nero 5 verde oliva"
+					name: "Quadro absolute nero 5 verde oliva",
+					purchase_date: new Date,
 				}
 			]
 		}

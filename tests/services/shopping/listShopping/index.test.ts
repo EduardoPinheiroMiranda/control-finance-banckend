@@ -23,8 +23,8 @@ describe("service/shopping", () => {
 
 		it("will triggre an error if the purchases is not found.", async () => {
 			jest.spyOn(shoppingRepository, "listAllOpenPurchases").mockResolvedValue({
-				fixedExpense: [],
-				extraExpense: []
+				fixed_expense: [],
+				extra_expense: []
 			});
 
 			expect(
@@ -36,7 +36,7 @@ describe("service/shopping", () => {
 
 			const date = new Date();
 			const mockShopping = {
-				fixedExpense: [
+				fixed_expense: [
 					{
 						id: "shopping-123",
 						name: "spotefy",
@@ -53,7 +53,7 @@ describe("service/shopping", () => {
 						user_id: "user-123"
 					}
 				],
-				extraExpense: [
+				extra_expense: [
 					{
 						id: "shopping-124",
 						name: "S24 ultra",

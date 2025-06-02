@@ -13,7 +13,7 @@ export class ListShopping{
 
 		const shoppingList = await this.shoppingRepository.listAllOpenPurchases(userId);
 
-		if(shoppingList.extraExpense.length === 0 && shoppingList.fixedExpense.length === 0){
+		if(shoppingList.extra_expense.length === 0 && shoppingList.fixed_expense.length === 0){
 			throw new ResourceNotFoud("Compras não encontradas.");
 		}
 

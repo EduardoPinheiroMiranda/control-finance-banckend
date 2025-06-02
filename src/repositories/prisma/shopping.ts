@@ -100,14 +100,14 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 		}[]>`
 			select
 				json_build_object(
-					'fixedExpense', coalesce(
+					'fixed_expense', coalesce(
 						json_agg( 
 							shopping.* order by shopping.created_at desc
 						)filter (where shopping.type_invoice = 'fixedExpense'),
 					'[]'::json
 					),
 				
-					'extraExpense', coalesce(
+					'extra_expense', coalesce(
 						json_agg(
 							shopping.* order by shopping.created_at desc
 						)filter (where shopping.type_invoice = 'extraExpense'),

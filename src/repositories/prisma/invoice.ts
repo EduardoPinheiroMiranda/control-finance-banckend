@@ -219,7 +219,7 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 				sum(case when shopping.payment_method = 'card' then installments.installment_value else 0 end) as total_card,
 				sum(case when shopping.payment_method = 'money' then installments.installment_value else 0 end) as total_money,
 				json_build_object(
-					'fixedExpense', coalesce(
+					'fixed_expense', coalesce(
 						json_agg(
 							json_build_object(
 								'installment_id', installments.id,
@@ -231,14 +231,15 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 								'total_installments', shopping.total_installments,
 								'type_invoice', shopping.type_invoice,
 								'payment_method', shopping.payment_method,
-								'name', shopping.name
+								'name', shopping.name,
+          						'purchase_date', shopping.created_at
 							)
 							order by installments.created_at desc
 						)filter (where shopping.type_invoice = 'fixedExpense'),
 					'[]'::json
 					),
 					
-					'extraExpense', coalesce(
+					'extra_expense', coalesce(
 						json_agg(
 							json_build_object(
 								'installment_id', installments.id,
@@ -250,7 +251,8 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 								'total_installments', shopping.total_installments,
 								'type_invoice', shopping.type_invoice,
 								'payment_method', shopping.payment_method,
-								'name', shopping.name
+								'name', shopping.name,
+          						'purchase_date', shopping.created_at
 							)
 							order by installments.created_at desc
 						)filter (where shopping.type_invoice = 'extraExpense'),

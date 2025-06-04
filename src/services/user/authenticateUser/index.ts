@@ -39,7 +39,8 @@ export class AuthenticateUser{
 			id: user.id,
 			name: user.name,
 			email: user.email,
-			token
+			token,
+			avatar: user.avatar
 		};
 	}
 }

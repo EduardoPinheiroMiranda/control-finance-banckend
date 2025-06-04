@@ -87,7 +87,8 @@ describe("service/user", () => {
 				id: mockUser.id,
 				name: mockUser.name,
 				email: mockUser.email,
-				token: "token valid"
+				token: "token valid",
+				avatar: mockUser.avatar
 			};
 
 			const response = await serviceAuthenticateUser.execute(

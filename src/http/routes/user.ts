@@ -7,6 +7,8 @@ import { checkToken } from "@/middlewares/checkToken";
 import { controlLimit } from "../controllers/user/controlLimit";
 import { getAllMovements } from "../controllers/user/getAllMovements";
 import { updatePassword } from "../controllers/user/updatePassword";
+import { updateAvatar } from "../controllers/user/updateAvatar";
+import { updateUser } from "../controllers/user/updateUser";
 
 
 
@@ -57,5 +59,19 @@ export async function userRoutes(app: FastifyInstance){
 		url: "/updatePassword",
 		preHandler: checkToken,
 		handler: updatePassword
+	});
+
+	app.route({
+		method: "PUT",
+		url: "/updateAvatar",
+		preHandler: checkToken,
+		handler: updateAvatar
+	});
+
+	app.route({
+		method: "PUT",
+		url: "/updateUser",
+		preHandler: checkToken,
+		handler: updateUser
 	});
 }

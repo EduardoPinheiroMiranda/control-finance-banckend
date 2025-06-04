@@ -9,7 +9,7 @@ export interface UserDatabaseInterface{
 
     getById(userId: string): Promise<User | null>
 
-    update(userId: string, name: string, email: string): Promise<User>
+    update(userId: string, data: Prisma.UserUncheckedUpdateInput): Promise<User>
 
     updateLimit(userId: string, limit: number, dueDay: number, closingDay: number): Promise<User>
 

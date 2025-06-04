@@ -59,7 +59,8 @@ describe("service/user", () => {
 			expect(result).toEqual({
 				id: mockUser.id,
 				name: mockUser.name,
-				email: mockUser.email
+				email: mockUser.email,
+				avatar: mockUser.avatar
 			});
 		});
 	});

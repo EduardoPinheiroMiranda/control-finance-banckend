@@ -33,16 +33,13 @@ export class UserPrismaRepository implements UserDatabaseInterface{
 		return user;
 	}
 
-	async update(userId: string, name: string, email: string){
+	async update(userId: string, data: Prisma.UserUncheckedUpdateInput){
 
 		const user = await prisma.user.update({
 			where: { 
 				id: userId
 			},
-			data: {
-				name,
-				email,
-			}
+			data
 		});
 
 		return user;

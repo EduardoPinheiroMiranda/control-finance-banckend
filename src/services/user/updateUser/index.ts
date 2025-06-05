@@ -14,7 +14,7 @@ export class UpdateUser{
 
 		const emailAlreadyExist = await this.userRepository.findEmail(email);
 
-		if(emailAlreadyExist){
+		if(emailAlreadyExist && emailAlreadyExist.id !== userId){
 			throw new DataValidationError("Este email já existe.");
 		}
 

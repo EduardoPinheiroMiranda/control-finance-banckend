@@ -12,6 +12,7 @@ export async function updatePassword(request: FastifyRequest, reply: FastifyRepl
 
 		const scheme = z.object({
 			password: z.string(),
+			newPassword: z.string()
 		});
 
 
@@ -22,6 +23,7 @@ export async function updatePassword(request: FastifyRequest, reply: FastifyRepl
 		const user = await serviceUpdatePassword.execute(
 			userId,
 			body.password,
+			body.newPassword
 		);
 
         

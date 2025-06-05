@@ -1,7 +1,6 @@
-import { env } from "@/env";
-import { DataValidationError } from "@/errors/custonErros";
+import { DataValidationError, ResourceNotFoud } from "@/errors/custonErros";
 import { UserDatabaseInterface } from "@/repositories/interfaces/user";
-import { hash } from "bcrypt";
+import { hash, compare } from "bcrypt";
 
 
 export class UpdatePassword{
@@ -11,33 +10,36 @@ export class UpdatePassword{
 	){}
 
 
-	async execute(userId: string, password: string){
+	async execute(userId: string, password: string, newPassword: string){
 
-		if(password.length < 8){
-			throw new DataValidationError("A senha tem que possuir 8 ou mais caracteres.");
+		if(newPassword.length < 8){
+			throw new DataValidationError("A nova senha tem que possuir 8 ou mais caracteres.");
 		}
 
 
-		const encryptedPassword = await hash(password, 12);
+		const user = await this.userRepository.getById(userId);
+
+		if(!user){
+			throw new ResourceNotFoud("Usuário não encontrado.");
+		}
+
+
+		const passwordIsValid = await compare(password, user.password);
+
+		if(!passwordIsValid){
+			throw new DataValidationError("Senha atual invalida");
+		}
+
+
+		const encryptedPassword = await hash(newPassword, 12);
 
         
-		try{
-
-			const user = await this.userRepository.updatePassword(userId, encryptedPassword);
+		const { id, name, email } = await this.userRepository.updatePassword(userId, encryptedPassword);
 			
-			return {
-				id: user.id,
-				name: user.name,
-				email: user.email
-			};
-
-		}catch(err){
-            
-			if(env.NODE_ENV !== "test"){
-				console.log(err);
-			}
-
-			throw new DataValidationError("Houve um problema para realizar a tarefa, tente novamente.");
-		}
+		return {
+			id,
+			name,
+			email
+		};
 	}
 }

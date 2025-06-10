@@ -18,7 +18,7 @@ export async function registerShopping(request: FastifyRequest, reply: FastifyRe
 			value: z.number(),
 			totalInstallments: z.number(),
 			description: z.string().nullable(),
-			dueDay: z.number(),
+			dueDay: z.number().nullable(),
 			categoryId: z.string(),
 			cardId: z.string().nullable(),
 			purchaseDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {

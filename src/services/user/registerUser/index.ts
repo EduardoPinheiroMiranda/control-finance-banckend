@@ -16,19 +16,19 @@ export class RegisterUsers {
 		const emailAlreadExist = await this.userRepository.findEmail(userData.email);
 
 		if(emailAlreadExist){
-			throw new DataValidationError("This email already exist.");
+			throw new DataValidationError("Este e-mail já está em uso.");
 		}
 
 		if(userData.dueDay > 31 || userData.dueDay < 1){
-			throw new DataValidationError("The expiration day is invalid. Choose a period between days 1 to 31.");
+			throw new DataValidationError("O dia de vencimento é inválido. Escolha um dia entre os dias 1 a 31.");
 		}
 
 		if(userData.limit < 100){
-			throw new DataValidationError("The limit is less than 100.");
+			throw new DataValidationError("O Limite tem que ser maior que 100.");
 		}
 
 		if(userData.password.length < 8){
-			throw new DataValidationError("Password is less than 8 characters long.");
+			throw new DataValidationError("A senha tem menos de 8 caracteres.");
 		}
 
 		

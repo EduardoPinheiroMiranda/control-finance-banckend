@@ -46,7 +46,7 @@ describe("service/user", () => {
 					dueDay: 10,
 					closeDay: 5,
 				})
-			).rejects.toBeInstanceOf(DataValidationError);
+			).rejects.toThrowError("Este e-mail já está em uso.");
 		});
 
 		it("will trigger an error if the due day is invalid.", async () => {
@@ -62,7 +62,7 @@ describe("service/user", () => {
 					dueDay: 32,
 					closeDay: 5,
 				})
-			).rejects.toBeInstanceOf(DataValidationError);
+			).rejects.toThrowError("O dia de vencimento é inválido. Escolha um dia entre os dias 1 a 31.");
 
 			await expect(
 				serviceRegisterUser.execute({
@@ -73,7 +73,7 @@ describe("service/user", () => {
 					dueDay: 0,
 					closeDay: 5
 				})
-			).rejects.toBeInstanceOf(DataValidationError);
+			).rejects.toThrowError("O dia de vencimento é inválido. Escolha um dia entre os dias 1 a 31.");
 		});
 
 		it("will trigger an error if the limit is less than 100.", async () => {
@@ -89,8 +89,9 @@ describe("service/user", () => {
 					dueDay: 10,
 					closeDay: 5,
 				})
-			).rejects.toBeInstanceOf(DataValidationError);
+			).rejects.toThrowError("O Limite tem que ser maior que 100.");
 		});
+
 
 		it("will trigger an error if the password is less than 8 characters.", async () => {
 
@@ -105,7 +106,7 @@ describe("service/user", () => {
 					dueDay: 10,
 					closeDay: 5,
 				})
-			).rejects.toBeInstanceOf(DataValidationError);
+			).rejects.toThrowError("A senha tem menos de 8 caracteres.");
 		});
 
 		it("check if the user is registered.", async () => {

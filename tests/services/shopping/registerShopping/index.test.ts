@@ -1,5 +1,4 @@
 import { Shopping } from "@/@types/customTypes";
-import { DataValidationError, ResourceNotFoud } from "@/errors/custonErros";
 import { CardPrismaRepository } from "@/repositories/prisma/card";
 import { InstallmentPrismaRepository } from "@/repositories/prisma/installment";
 import { InvoicePrismaRepository } from "@/repositories/prisma/invoice";
@@ -20,6 +19,7 @@ describe("service/shopping", () => {
 		let installmentRepository: InstallmentPrismaRepository;
 		let cardRepository: CardPrismaRepository;
 		let serviceRegisterShopping: RegisterShopping;
+		const currentDate = new Date();
 
 
 		beforeEach(() => {
@@ -66,12 +66,10 @@ describe("service/shopping", () => {
 
 			await expect(
 				serviceRegisterShopping.execute("userInvalid", shopping)
-			).rejects.toBeInstanceOf(ResourceNotFoud);
+			).rejects.toThrowError("Usuário não foi encontrado.");
 		});
 
-		it("will generate an error if the value or total of installments is less than 0.", async () => {
-
-			const currentDate = new Date(); 
+		it("will generate an error if the value or total of installments is less than 0.", async () => { 
 
 			jest.spyOn(userRepository, "getById").mockResolvedValue({
 				id: "123",
@@ -101,7 +99,27 @@ describe("service/shopping", () => {
 
 			await expect(
 				serviceRegisterShopping.execute("userInvalid", shopping)
-			).rejects.toBeInstanceOf(DataValidationError);
+			).rejects.toThrowError("Valor ou quantidade de parcelas da compra não pode ser menor, ou igual a 0.");
+		});
+
+		it("trigger an error if the dueDay is null", async () => {
+
+			const shopping: Shopping = {
+				name: "wifi",
+				categoryId: "1234",
+				description: "",
+				cardId: "123",
+				dueDay: null,
+				paymentMethod: "card",
+				totalInstallments: 10,
+				typeInvoice: "fixedExpense",
+				value: 1000,
+				purchaseDate: "2025-03-02"
+			};
+
+			await expect(
+				serviceRegisterShopping.registerShopping("userInvalid", shopping, [])
+			).rejects.toThrowError("O dia do venciamento da compra deve ser informado.")
 		});
 	});
 });

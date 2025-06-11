@@ -150,15 +150,16 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 		return shopping;
 	}
 
-	async updateTotalInstallments(shoppingIds: string[], addedInstallments: number){
+	async updateTotalInstallments(shoppingIds: string[]){
 
 		const update = await prisma.shopping.updateMany({
 			where: {
-				id: { in: shoppingIds }
+				id: { in: shoppingIds },
+				type_invoice: typeInvoices[0]
 			},
 			data: {
 				total_installments: {
-					increment: addedInstallments
+					increment: 1
 				}
 			}
 		});

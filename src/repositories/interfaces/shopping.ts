@@ -30,6 +30,6 @@ export interface ShoppingDatabaseInterface{
 
     updateShopping(shoppingId: string, data: Prisma.ShoppingUncheckedUpdateInput): Promise<Shopping>
 
-    updateTotalInstallments(shoppingIds: string[], addedInstallments: number): Promise<number>
+    updateTotalInstallments(shoppingIds: string[]): Promise<number>
 
 }

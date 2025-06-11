@@ -64,16 +64,14 @@ export async function insertFixedPurchasesIntoNewInvoices(
 	});
 
 
-	const [installments, updateShopping] = await Promise.all([
-	    installmentRepository.create(newInstallments),
-		shoppingRepository.updateTotalInstallments(shoppingFroUpdate, invoices.length)
+	const [installments] = await Promise.all([
+	    installmentRepository.create(newInstallments)
 	]);
 
     
 	return {
 		installments,
 		newInstallments,
-		updateShopping,
 		shoppingFroUpdate
 	};
 }

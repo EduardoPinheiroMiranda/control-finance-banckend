@@ -82,6 +82,10 @@ export class PayInvoice{
 
 		const currentInvoice = await this.confirmInvoicePayment(userId, invoiceDetails);
 		
+
+		const updateShoppings = installmentsPaid.map((installment) => installment.shopping_id);
+		await this.shoppingRepository.updateTotalInstallments(updateShoppings);
+		
 		
 		return currentInvoice;
 	}

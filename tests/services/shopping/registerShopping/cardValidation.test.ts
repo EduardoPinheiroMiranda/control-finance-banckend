@@ -29,7 +29,7 @@ describe("service/shopping", () => {
 				"invalidId",
 				cardRepository
 			);
-			expect(startOnTheInvoice).toBe(false);
+			expect(startOnTheInvoice.startOnTheInvoice).toBe(false);
 
 		});
 
@@ -84,7 +84,7 @@ describe("service/shopping", () => {
 			);
 
 
-			expect(startOnTheInvoice).toBe(true);
+			expect(startOnTheInvoice.startOnTheInvoice).toBe(true);
 		});
 
 		it("check if false is returned if purchase is made before card closing.", async () => {
@@ -112,7 +112,7 @@ describe("service/shopping", () => {
 			);
 
 
-			expect(startOnTheInvoice).toBe(false);
+			expect(startOnTheInvoice.startOnTheInvoice).toBe(false);
 		});
 	});
 });

@@ -17,7 +17,7 @@ export interface Shopping{
     value: number,
     totalInstallments: number,
     description: string | null,
-    dueDay: number,
+    dueDay: number | null,
     categoryId: string,
     cardId: string | null,
     purchaseDate: string | null

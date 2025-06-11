@@ -46,9 +46,15 @@ export async function cardValidation(
 		}
 
 
-		return startOnTheInvoice;
+		return {
+			startOnTheInvoice,
+			dueDay: card.due_day
+		};
 	}
 
 
-	return startOnTheInvoice;
+	return {
+		startOnTheInvoice,
+		dueDay: null
+	};
 }

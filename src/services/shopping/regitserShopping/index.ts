@@ -9,7 +9,7 @@ import { createInvoices } from "./createInvoices";
 import { createInstallments } from "./createInstallments";
 import { cardValidation } from "./cardValidation";
 import { checkPurchaseDate } from "./checkPurchaseDate";
-import { typeInvoices } from "@/utils/globalValues";
+import { paymentMethods, typeInvoices } from "@/utils/globalValues";
 import { Invoice } from "@prisma/client";
 import { insertFixedPurchasesIntoNewInvoices } from "./insertFixedPurchasesIntoNewInvoices";
 
@@ -26,6 +26,11 @@ export class RegisterShopping{
 
 
 	async registerShopping(userId: string, data: Shopping, invoices: Invoice[]){
+
+		if(!data.dueDay){
+			throw new DataValidationError("O dia do venciamento da compra deve ser informado.");
+		}
+		
 
 		const shopping = await this.shoppingRepository.create({
 			name: data.name,
@@ -105,7 +110,7 @@ export class RegisterShopping{
 		}
 		
 
-		const startOnTheInvoice = await cardValidation(
+		const { startOnTheInvoice, dueDay} = await cardValidation(
 			data.paymentMethod,
 			data.cardId,
 			this.cardRepository
@@ -119,6 +124,11 @@ export class RegisterShopping{
 			data.totalInstallments,
 			startOnTheInvoice
 		);
+
+		
+		if(data.paymentMethod === paymentMethods[1]){
+			data.dueDay = dueDay
+		}
 
 
 		if(data.typeInvoice === typeInvoices[0]){

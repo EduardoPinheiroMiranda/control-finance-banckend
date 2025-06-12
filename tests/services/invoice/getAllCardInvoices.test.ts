@@ -101,7 +101,7 @@ describe("service/invoice", () => {
 
 			expect(HandlerDueDate.prototype.generateDueDates).toBeCalledTimes(1);
 			expect(invoiceRepository.getAllCardInvoices).toBeCalledTimes(1);
-			expect(result).toEqual(mockInvoices);
+			expect(result.invoices).toEqual(mockInvoices);
 		});
 	});
 });

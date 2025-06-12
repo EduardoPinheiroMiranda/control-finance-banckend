@@ -130,7 +130,7 @@ describe("service/invoice", () => {
 
 
 			expect(invoiceRepository.getAllInvoices).toBeCalledTimes(1);
-			expect(result).toEqual(mockInvoice);
+			expect(result.invoices).toEqual(mockInvoice);
 		});
 	});
 });

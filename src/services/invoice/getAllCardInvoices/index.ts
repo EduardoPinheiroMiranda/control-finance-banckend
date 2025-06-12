@@ -1,6 +1,7 @@
 import { DataValidationError } from "@/errors/custonErros";
 import { InvoiceDatabaseInterface } from "@/repositories/interfaces/invoice";
 import { UserDatabaseInterface } from "@/repositories/interfaces/user";
+import { createSubtitleToInvoices } from "@/utils/createSubtitleToInvoices";
 import { HandlerDueDate } from "@/utils/handlerDueDate";
 
 
@@ -34,6 +35,12 @@ export class GetAllCardInvoices{
 		}
 
 
-		return invoices;
+		const subtitle = createSubtitleToInvoices(invoices);
+
+
+		return {
+			invoices,
+			subtitle
+		};
 	}
 }

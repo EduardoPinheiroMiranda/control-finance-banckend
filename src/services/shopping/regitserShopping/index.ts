@@ -108,6 +108,10 @@ export class RegisterShopping{
 		if(data.value <= 0 || data.totalInstallments <= 0){
 			throw new DataValidationError("Valor ou quantidade de parcelas da compra não pode ser menor, ou igual a 0.");
 		}
+
+		if(data.totalInstallments > 72){
+			throw new DataValidationError("Não é possível adicionar uma compra com mais de 72 parcelas, neste cenário recomendamos alterar o tipo da compra para fixa.");
+		}
 		
 
 		const { startOnTheInvoice, dueDay} = await cardValidation(

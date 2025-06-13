@@ -102,6 +102,39 @@ describe("service/shopping", () => {
 			).rejects.toThrowError("Valor ou quantidade de parcelas da compra não pode ser menor, ou igual a 0.");
 		});
 
+		it("will generate an error if the total of installments is greater than 72.", async () => { 
+
+			jest.spyOn(userRepository, "getById").mockResolvedValue({
+				id: "123",
+				name: "Eduardo",
+				avatar: null,
+				closing_day: 5,
+				due_day: 10,
+				email: "email@test.com",
+				limit: Decimal(100),
+				password: "senha",
+				created_at: currentDate,
+				updated_at: currentDate
+			});
+
+			const shopping: Shopping = {
+				name: "wifi",
+				categoryId: "1234",
+				description: "",
+				cardId: "123",
+				dueDay: 10,
+				paymentMethod: "card",
+				totalInstallments: 100,
+				typeInvoice: "fixedExpense",
+				value: 1000,
+				purchaseDate: "2025-03-02"
+			};
+
+			await expect(
+				serviceRegisterShopping.execute("userId", shopping)
+			).rejects.toThrowError("Não é possível adicionar uma compra com mais de 72 parcelas, neste cenário recomendamos alterar o tipo da compra para fixa.");
+		});
+
 		it("trigger an error if the dueDay is null", async () => {
 
 			const shopping: Shopping = {

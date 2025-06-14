@@ -83,6 +83,8 @@ describe("service/invoice", () => {
 					closing_date: new Date("2025-05-05T23:59:59.000Z"),
 					current: true,
 					amount: Decimal(500),
+					limit: Decimal(1000),
+					available: Decimal(500),
 					total_fixed_expense: Decimal(200),
 					total_extra_expense: Decimal(300),
 					total_invoice: Decimal(200),

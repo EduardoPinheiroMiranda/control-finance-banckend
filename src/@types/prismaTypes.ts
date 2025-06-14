@@ -23,6 +23,8 @@ export interface Invoice{
     closing_date: Date,
     current: boolean,
     amount: Decimal,
+    limit: Decimal,
+    available: Decimal,
     total_fixed_expense: Decimal,
     total_extra_expense: Decimal,
     total_invoice: Decimal,

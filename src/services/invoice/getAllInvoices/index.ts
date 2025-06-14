@@ -35,12 +35,12 @@ export class GetAllInvoices{
 		}
 
 
-		const subtitle = createSubtitleToInvoices(invoices);
+		const subtitles = createSubtitleToInvoices(invoices);
 
 
 		return {
 			invoices,
-			subtitle
+			subtitles
 		};
 	}
 }

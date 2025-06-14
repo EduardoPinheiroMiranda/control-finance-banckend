@@ -83,6 +83,8 @@ describe("service/invoice", () => {
 					closing_date: new Date("2025-05-05T23:59:59.000Z"),
 					current: true,
 					amount: Decimal(500),
+					limit: Decimal(1000),
+					available: Decimal(500),
 					total_fixed_expense: Decimal(200),
 					total_extra_expense: Decimal(300),
 					total_invoice: Decimal(200),
@@ -127,28 +129,11 @@ describe("service/invoice", () => {
 
 
 			const result = await serviceGetCurrentInvoice.execute("user-123");
-
+			const expected: any = mockInvoice[0];
+			expected["percentageSpent"] = 50
 
 			expect(invoiceRepository.getCurrentInvoice).toBeCalledTimes(1);
-			expect(result).toEqual({
-				percentegeSpent: 42,
-				limit: 1200,
-				available: 700,
-				
-				invoice_id: mockInvoice[0].invoice_id,
-				pay: mockInvoice[0].pay,
-				due_date: mockInvoice[0].due_date,
-				closing_date: mockInvoice[0].closing_date,
-				current: mockInvoice[0].current,
-			
-				amount: mockInvoice[0].amount.toNumber(),
-				total_fixed_expense: mockInvoice[0].total_fixed_expense.toNumber(),
-				total_extra_expense: mockInvoice[0].total_extra_expense.toNumber(),
-				total_card: mockInvoice[0].total_card.toNumber(),
-				total_money: mockInvoice[0].total_money.toNumber(),
-				total_invoice: mockInvoice[0].total_invoice.toNumber(),
-				installments: mockInvoice[0].installments
-			});
+			expect(result).toEqual(expected);
 		});
 	});
 });

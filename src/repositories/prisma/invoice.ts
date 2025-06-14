@@ -211,8 +211,9 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 				invoices.pay,
 				invoices.due_date,
 				invoices.closing_date,
+				users.limit,
 				case when invoices.due_date = ${currentInvoiceDueDate} then true else false end as "current",
-				sum(case when installments.pay = false then installments.installment_value else 0 end) as amount,
+				sum(installments.installment_value) as amount,
 				sum(case when shopping.type_invoice = 'fixedExpense' then installments.installment_value else 0 end) as total_fixed_expense,
 				sum(case when shopping.type_invoice = 'extraExpense' then installments.installment_value else 0 end) as total_extra_expense,
 				sum(case when shopping.payment_method = 'invoice' then installments.installment_value else 0 end) as total_invoice,
@@ -265,11 +266,12 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 				invoices
 				inner join installments on installments.invoice_id = invoices.id
 				inner join shopping on shopping.id = installments.shopping_id
+				inner join users on users.id = invoices.user_id
 			
 			where
 				${where}
 			
-			group by invoices.id, invoices.due_date
+			group by invoices.id, invoices.due_date, users.limit
 			order by invoices.due_date
 			${limit};
 		`;
@@ -283,6 +285,8 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 				closing_date: invoice.closing_date,
 				current: invoice.current,
 				amount: Decimal(invoice.amount),
+				limit: Decimal(invoice.limit),
+				available: Decimal(invoice.limit - invoice.amount),
 				total_fixed_expense: Decimal(invoice.total_fixed_expense),
 				total_extra_expense: Decimal(invoice.total_extra_expense),
 				total_invoice: Decimal(invoice.total_invoice),

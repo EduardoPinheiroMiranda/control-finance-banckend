@@ -16,7 +16,7 @@ export function createSubtitleToInvoices(invoices: {
         const getYear = invoice.due_date.getFullYear();
 
         return {
-            invoiceId: invoice.invoice_id,
+            invoice_id: invoice.invoice_id,
             current: invoice.current,
             pay: invoice.pay,
             label: `${month[getMonth]}/${getYear}`

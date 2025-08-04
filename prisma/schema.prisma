@@ -8,19 +8,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 model User {
   id          String        @id @default(uuid())
   name        String
   email       String        @unique
   password    String
   limit       Decimal
-  due_day     Int
-  closing_day   Int
+  dueDay      Int           @map("due_day")
+  closingDay  Int           @map("closing_day")
   avatar      String?
-  created_at  DateTime      @default(now())
-  updated_at  DateTime      @updatedAt
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
   card        Card[]
   invoice     Invoice[]
   application Application[]
@@ -30,118 +28,134 @@ model User {
 }
 
 model Card {
-  id           String     @id @default(uuid())
-  name         String
-  due_day      Int
-  closing_day  Int
-  color_font   String
-  color_card   String
-  active       Boolean    @default(true)
-  created_at   DateTime   @default(now())
-  updated_at   DateTime   @updatedAt
-  shopping     Shopping[]
+  id         String     @id @default(uuid())
+  name       String
+  dueDay     Int        @map("due_day")
+  closingDay Int        @map("closing_day")
+  colorFont  String     @map("color_font")
+  colorCard  String     @map("color_card")
+  active     Boolean    @default(true)
+  createdAt  DateTime   @default(now()) @map("created_at")
+  updatedAt  DateTime   @updatedAt @map("updated_at")
+  shopping   Shopping[]
 
-  userId User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id  String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
 
   @@map("cards")
 }
 
+enum TypeInvoice {
+  FIXED_EXPENSE
+  EXTRA_EXPENSE
+}
+
+enum PaymentMethod {
+  INVOICE
+  CARD
+  MONEY
+}
+
 model Shopping {
-  id                 String        @id @default(uuid())
-  name               String
-  type_invoice       String
-  payment_method     String
-  value              Decimal
-  total_installments Int
-  pay                Boolean       @default(false)
-  description        String?
-  created_at         DateTime      @default(now())
-  updated_at         DateTime      @updatedAt
-  installment        Installment[]
+  id                String        @id @default(uuid())
+  name              String
+  typeInvoice       TypeInvoice   @map("type_invoice")
+  paymentMethod     PaymentMethod @map("payment_method")
+  value             Decimal
+  totalInstallments Int           @map("total_installments")
+  pay               Boolean       @default(false)
+  description       String?
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @updatedAt @map("updated_at")
+  installment       Installment[]
 
-  cardId Card?   @relation(fields: [card_id], references: [id], onDelete: Cascade)
-  card_id  String?
+  card   Card?   @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  cardId String? @map("card_id")
 
-  categoriesId Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
-  category_id    String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String   @map("category_id")
 
-  userId User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id  String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
 
   @@map("shopping")
 }
 
 model Installment {
-  id                 String   @id @default(uuid())
-  installment_number Int
-  installment_value  Decimal
-  due_date           DateTime
-  pay                Boolean  @default(false)
-  created_at         DateTime @default(now())
-  updated_at         DateTime @updatedAt
+  id                String   @id @default(uuid())
+  installmentNumber Int      @map("installment_number")
+  installmentValue  Decimal  @map("installment_value")
+  dueDate           DateTime @map("due_date")
+  pay               Boolean  @default(false)
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
 
-  shoppingId Shopping @relation(fields: [shopping_id], references: [id], onDelete: Cascade)
-  shopping_id  String
+  shopping   Shopping @relation(fields: [shoppingId], references: [id], onDelete: Cascade)
+  shoppingId String   @map("shopping_id")
 
-  invoiceId Invoice @relation(fields: [invoice_id], references: [id], onDelete: Cascade)
-  invoice_id  String
+  invoice   Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  invoiceId String  @map("invoice_id")
 
   @@map("installments")
 }
 
 model Category {
-  id         String     @id @default(uuid())
-  name       String     @unique
-  created_at DateTime   @default(now())
-  updated_at DateTime   @updatedAt
-  shopping   Shopping[]
+  id        String     @id @default(uuid())
+  name      String     @unique
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  shopping  Shopping[]
 
   @@map("categories")
 }
 
 model Invoice {
-  id            String        @id @default(uuid())
-  pay           Boolean       @default(false)
-  due_date      DateTime      @unique
-  closing_date  DateTime      @unique
-  created_at    DateTime      @default(now())
-  updated_at    DateTime      @updatedAt
-  installment   Installment[]
+  id          String        @id @default(uuid())
+  pay         Boolean       @default(false)
+  dueDate     DateTime      @unique @map("due_date")
+  closingDate DateTime      @unique @map("closing_date")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  installment Installment[]
 
-  userId User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
 
   @@map("invoices")
 }
 
 model Application {
-  id                String    @id @default(uuid())
-  name              String
-  target_value      Decimal
-  value             Decimal
-  institution       String
-  color_font        String
-  color_application String
-  icon              String
-  created_at        DateTime  @default(now())
-  updated_at        DateTime  @updatedAt
-  extract           Extract[]
+  id               String    @id @default(uuid())
+  name             String
+  targetValue      Decimal   @map("target_value")
+  value            Decimal
+  institution      String
+  colorFont        String    @map("color_font")
+  colorApplication String    @map("color_application")
+  icon             String
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+  extract          Extract[]
 
-  userId User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
 
   @@map("applications")
 }
 
-model Extract {
-  id         String   @id @default(uuid())
-  type       String
-  value      Decimal
-  created_at DateTime @default(now())
+enum TypeExtract {
+  DEPOSIT
+  WITHDRAW
+}
 
-  applicationId Application @relation(fields: [application_id], references: [id], onDelete: Cascade)
-  application_id  String
+model Extract {
+  id        String      @id @default(uuid())
+  type      TypeExtract
+  value     Decimal
+  createdAt DateTime    @default(now()) @map("created_at")
+
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationId String      @map("application_id")
 
   @@map("extracts")
 }

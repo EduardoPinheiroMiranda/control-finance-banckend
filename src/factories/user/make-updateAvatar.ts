@@ -1,5 +1,5 @@
-import { UserPrismaRepository } from "oldCode/src/repositories/prisma/user";
-import { UpdateAvatar } from "oldCode/src/services/user/updateAvatar";
+import { UserPrismaRepository } from "@/repositories/prisma/user";
+import { UpdateAvatar } from "@/services/user/updateAvatar";
 
 
 export function makeUpdateAvatar(){

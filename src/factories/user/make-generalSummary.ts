@@ -1,7 +1,7 @@
-import { ApplicationPrismaRepository } from "oldCode/src/repositories/prisma/application";
-import { CardPrismaRepository } from "oldCode/src/repositories/prisma/card";
-import { ShoppingPrismaRepository } from "oldCode/src/repositories/prisma/shopping";
-import { GeneralSummary } from "oldCode/src/services/user/generalSummary";
+import { ApplicationPrismaRepository } from "@/repositories/prisma/application";
+import { CardPrismaRepository } from "@/repositories/prisma/card";
+import { ShoppingPrismaRepository } from "@/repositories/prisma/shopping";
+import { GeneralSummary } from "@/services/user/generalSummary";
 
 
 export function makeGeneralSummary(){

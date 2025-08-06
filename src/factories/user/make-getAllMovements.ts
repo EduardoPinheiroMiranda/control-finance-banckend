@@ -1,5 +1,5 @@
-import { ShoppingPrismaRepository } from "oldCode/src/repositories/prisma/shopping";
-import { GetAllMovements } from "oldCode/src/services/user/getAllMovements";
+import { ShoppingPrismaRepository } from "@/repositories/prisma/shopping";
+import { GetAllMovements } from "@/services/user/getAllMovements";
 
 
 export function makeGetAllMovements(){

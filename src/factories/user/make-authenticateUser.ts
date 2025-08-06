@@ -1,5 +1,5 @@
-import { UserPrismaRepository } from "oldCode/src/repositories/prisma/user";
-import { AuthenticateUser } from "oldCode/src/services/user/authenticateUser";
+import { UserPrismaRepository } from "@/repositories/prisma/user";
+import { AuthenticateUser } from "@/services/user/authenticateUser";
 
 
 export function makeAuthenticateUser(){

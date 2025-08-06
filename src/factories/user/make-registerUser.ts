@@ -1,5 +1,5 @@
-import { UserPrismaRepository } from "oldCode/src/repositories/prisma/user";
-import { RegisterUsers } from "oldCode/src/services/user/registerUser";
+import { UserPrismaRepository } from "@/repositories/prisma/user";
+import { RegisterUsers } from "@/services/user/registerUser";
 
 
 export function makeRegisterUser(){

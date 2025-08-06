@@ -1,5 +1,5 @@
-import { UserPrismaRepository } from "oldCode/src/repositories/prisma/user";
-import { UpdatePassword } from "oldCode/src/services/user/updatePassword";
+import { UserPrismaRepository } from "@/repositories/prisma/user";
+import { UpdatePassword } from "@/services/user/updatePassword";
 
 
 export function makeUpdatePassword(){

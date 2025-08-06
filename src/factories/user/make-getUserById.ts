@@ -1,5 +1,5 @@
-import { UserPrismaRepository } from "oldCode/src/repositories/prisma/user";
-import { GetUserById } from "oldCode/src/services/user/getUserById";
+import { UserPrismaRepository } from "@/repositories/prisma/user";
+import { GetUserById } from "@/services/user/getUserById";
 
 
 export function makeGetUserById(){

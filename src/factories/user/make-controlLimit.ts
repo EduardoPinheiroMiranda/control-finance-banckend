@@ -1,5 +1,5 @@
-import { UserPrismaRepository } from "oldCode/src/repositories/prisma/user";
-import { ControlLimit } from "oldCode/src/services/user/controlLimit";
+import { UserPrismaRepository } from "@/repositories/prisma/user";
+import { ControlLimit } from "@/services/user/controlLimit";
 
 
 export function makeControlLimit(){

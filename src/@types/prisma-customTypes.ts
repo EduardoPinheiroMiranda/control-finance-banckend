@@ -42,7 +42,7 @@ export interface ShoppingListByType{
 }
 
 export interface CardInvoice{
-    invoice_id: string,
+    invoiceId: string,
     pay: boolean,
     dueDate: Date,
     current: boolean,

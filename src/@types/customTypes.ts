@@ -1,3 +1,4 @@
+import { TypeExtract } from "@/generated/prisma"
 import { Decimal } from "@/generated/prisma/runtime/library"
 
 
@@ -81,5 +82,5 @@ export interface Application{
 export interface Filter{
     date: string | null,
     applicationId: string | null,
-    type: string | null
+    type: TypeExtract
 }

@@ -3,7 +3,7 @@ import { jsonSchemaTransform, serializerCompiler, validatorCompiler, ZodTypeProv
 import { fastifyCors } from "@fastify/cors";
 import { fastifySwagger } from "@fastify/swagger";
 import { fastifySwaggerUi } from "@fastify/swagger-ui";
-import { userRoutes } from "./http/routes/user";
+import { registerAllRoutes } from "./routes";
 
 
 export const app = Fastify().withTypeProvider<ZodTypeProvider>();
@@ -34,8 +34,8 @@ app.register(fastifySwaggerUi, {routePrefix: "/docs"})
 
 
 
-// register routes 
-app.register(userRoutes, {prefix: "user"})
+// register all routes 
+registerAllRoutes();
 
 
 

@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/generated/prisma/client";
 import { CategoryDatabaseInterface } from "../interfaces/category";
 import { prisma } from "@/libs/primsa";
 
@@ -29,7 +29,7 @@ export class CategoryPrismaRepository implements CategoryDatabaseInterface{
 			const categories = await prisma.category.findMany({
 				take: 20,
 				orderBy: {
-					created_at: "asc"
+					createdAt: "asc"
 				}
 			});
 	
@@ -43,7 +43,7 @@ export class CategoryPrismaRepository implements CategoryDatabaseInterface{
 				id: cursor
 			},
 			orderBy: {
-				created_at: "asc"
+				createdAt: "asc"
 			}
 		});
 

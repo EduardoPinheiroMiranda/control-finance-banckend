@@ -1,7 +1,6 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/libs/primsa";
 import { ShoppingDatabaseInterface } from "../interfaces/shopping";
-import { typeInvoices } from "@/utils/globalValues";
 import { ShoppingListByType } from "@/@types/prisma-customTypes";
 
 
@@ -29,9 +28,9 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 		
 		const shoppingList = await prisma.shopping.findMany({
 			where: {
-				user_id: userId,
+				userId: userId,
 				pay: false,
-				type_invoice: typeInvoices[0] // fixed
+				typeInvoice: "FIXED_EXPENSE"
 			},
 			include: {
 				installment: true
@@ -52,7 +51,7 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 				}
 			}),
 			where:{
-				user_id: userId,
+				userId: userId,
 				...(name && {
 					name: {
 						contains: name,
@@ -61,7 +60,7 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 				})
 			},
 			orderBy: {
-				created_at: "desc"
+				createdAt: "desc"
 			}
 		});
 
@@ -155,10 +154,10 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 		const update = await prisma.shopping.updateMany({
 			where: {
 				id: { in: shoppingIds },
-				type_invoice: typeInvoices[0]
+				typeInvoice: "FIXED_EXPENSE"
 			},
 			data: {
-				total_installments: {
+				totalInstallments: {
 					increment: 1
 				}
 			}

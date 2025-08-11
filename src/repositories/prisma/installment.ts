@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/generated/prisma/client";
 import { InstallmentDatabaseInterface } from "../interfaces/installment";
 import { prisma } from "@/libs/primsa";
 
@@ -27,11 +27,11 @@ export class InstallmentPrismaRepository implements InstallmentDatabaseInterface
 		
 		const installments = await prisma.installment.findMany({
 			where: {
-				shopping_id: shoppingId,
+				shoppingId: shoppingId,
 				pay: false
 			},
 			orderBy: {
-				due_date: "asc"
+				dueDate: "asc"
 			}
 		});
 
@@ -43,15 +43,15 @@ export class InstallmentPrismaRepository implements InstallmentDatabaseInterface
 		const installmentsPaid = await prisma.installment.updateManyAndReturn({
 			where: {
 				id: { in: installmentsToPay},
-				invoice_id: invoiceId
+				invoiceId: invoiceId
 			},
 			data: {
 				pay: true
 			},
 			include: {
-				shoppingId: {
+				shopping: {
 					select: {
-						total_installments: true
+						totalInstallments: true
 					}
 				}
 			}

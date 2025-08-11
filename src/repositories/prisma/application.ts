@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/generated/prisma/client";
 import { ApplicationDatabaseInterface } from "../interfaces/application";
 import { prisma } from "@/libs/primsa";
 import { Decimal } from "@prisma/client/runtime/library";
@@ -28,15 +28,15 @@ export class ApplicationPrismaRepository implements ApplicationDatabaseInterface
 
 		const customWhere = {
 			...(filter.type != null && {type: filter.type}),
-			...(filter.date != null && {created_at: {gte: new Date(filter.date)}}),
-			...(filter.applicationId != null && {application_id: filter.applicationId})
+			...(filter.date != null && {createdAt: {gte: new Date(filter.date)}}),
+			...(filter.applicationId != null && {applicationId: filter.applicationId})
 		};
 
 
 		const [ extracts, amount] = await Promise.all([
 			prisma.extract.findMany({
 				where: customWhere,
-				orderBy: { created_at: "desc" }
+				orderBy: { createdAt: "desc" }
 			}),
 			prisma.extract.aggregate({
 				_sum: { value: true },
@@ -70,7 +70,7 @@ export class ApplicationPrismaRepository implements ApplicationDatabaseInterface
 		const [ applications, sumOfValues ] = await Promise.all([
 			await prisma.application.findMany({
 				where:{
-					user_id: userId
+					userId: userId
 				},
 			}),
 			await prisma.application.aggregate({
@@ -78,7 +78,7 @@ export class ApplicationPrismaRepository implements ApplicationDatabaseInterface
 					value: true
 				},
 				where: {
-					user_id: userId
+					userId: userId
 				}
 			})
 		]);

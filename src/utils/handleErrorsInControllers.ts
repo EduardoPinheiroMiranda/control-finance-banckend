@@ -15,7 +15,7 @@ export function handleErrorsInControlles(err: any){
 
 	if(err instanceof ResourceNotFoud){
 		return {
-			statusCode: 204,
+			statusCode: 400,
 			error: {
 				msg: err.message,
 			}

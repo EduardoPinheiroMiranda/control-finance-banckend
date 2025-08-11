@@ -239,11 +239,11 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 		const details: InvoiceDetails[] = result.map((invoice) => {
 			return {
 				id: invoice.id,
-				due_date: invoice.due_date,
-				closing_date: invoice.closing_date,
-				total_installments_on_invoice: Number(invoice.total_installments_on_invoice),
-				installments_paid: Number(invoice.installments_paid),
-				installments_pending: Number(invoice.installments_pending)
+				dueDate: invoice.due_date,
+				closingDate: invoice.closing_date,
+				totalInstallmentsOnInvoice: Number(invoice.total_installments_on_invoice),
+				installmentsPaid: Number(invoice.installments_paid),
+				installmentsPending: Number(invoice.installments_pending)
 			};
 		});
 
@@ -261,11 +261,11 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 				users.limit,
 				case when invoices.due_date = ${currentInvoiceDueDate} then true else false end as "current",
 				sum(installments.installment_value) as amount,
-				sum(case when shopping.type_invoice = 'fixedExpense' then installments.installment_value else 0 end) as total_fixed_expense,
-				sum(case when shopping.type_invoice = 'extraExpense' then installments.installment_value else 0 end) as total_extra_expense,
-				sum(case when shopping.payment_method = 'invoice' then installments.installment_value else 0 end) as total_invoice,
-				sum(case when shopping.payment_method = 'card' then installments.installment_value else 0 end) as total_card,
-				sum(case when shopping.payment_method = 'money' then installments.installment_value else 0 end) as total_money,
+				sum(case when shopping.type_invoice = 'FIXED_EXPENSE' then installments.installment_value else 0 end) as total_fixed_expense,
+				sum(case when shopping.type_invoice = 'EXTRA_EXPENSE' then installments.installment_value else 0 end) as total_extra_expense,
+				sum(case when shopping.payment_method = 'INVOICE' then installments.installment_value else 0 end) as total_invoice,
+				sum(case when shopping.payment_method = 'CARD' then installments.installment_value else 0 end) as total_card,
+				sum(case when shopping.payment_method = 'MONEY' then installments.installment_value else 0 end) as total_money,
 				json_build_object(
 					'fixed_expense', coalesce(
 						json_agg(
@@ -283,7 +283,7 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
           						'purchase_date', shopping.created_at
 							)
 							order by installments.created_at desc
-						)filter (where shopping.type_invoice = 'fixedExpense'),
+						)filter (where shopping.type_invoice = 'FIXED_EXPENSE'),
 					'[]'::json
 					),
 					
@@ -303,7 +303,7 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
           						'purchase_date', shopping.created_at
 							)
 							order by installments.created_at desc
-						)filter (where shopping.type_invoice = 'extraExpense'),
+						)filter (where shopping.type_invoice = 'EXTRA_EXPENSE'),
 					'[]'::json
 					)
 					
@@ -326,19 +326,19 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 
 		const invoice: Invoice[] = result.map((invoice) => {
 			return {
-				invoice_id: invoice.invoice_id,
+				invoiceId: invoice.invoice_id,
 				pay: invoice.pay,
-				due_date: invoice.due_date,
-				closing_date: invoice.closing_date,
+				dueDate: invoice.due_date,
+				closingDate: invoice.closing_date,
 				current: invoice.current,
 				amount: Decimal(invoice.amount),
 				limit: Decimal(invoice.limit),
 				available: Decimal(invoice.limit - invoice.amount),
-				total_fixed_expense: Decimal(invoice.total_fixed_expense),
-				total_extra_expense: Decimal(invoice.total_extra_expense),
-				total_invoice: Decimal(invoice.total_invoice),
-				total_card: Decimal(invoice.total_card),
-				total_money: Decimal(invoice.total_money),
+				totalFixedExpense: Decimal(invoice.total_fixed_expense),
+				totalExtraExpense: Decimal(invoice.total_extra_expense),
+				totalInvoice: Decimal(invoice.total_invoice),
+				totalCard: Decimal(invoice.total_card),
+				totalMoney: Decimal(invoice.total_money),
 				installments: invoice.installments
 			};
 		});

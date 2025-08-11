@@ -1,40 +1,52 @@
+import { FastifyTypes } from "@/@types/fastify-customTypes";
 import { makeRegisterUser } from "@/factories/user/make-registerUser";
 import { handleErrorsInControlles } from "@/utils/handleErrorsInControllers";
-import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 
 
-export async function registerUser(request: FastifyRequest, reply: FastifyReply){
+export async function registerUser(app: FastifyTypes	){
 
-	try{
+	app.post(
+		"/userRegister",
+		{
+			schema: {
+				body: z.object({
+					name: z.string(),
+					email: z.string().email(),
+					password: z.string()
+				}),
+				response: {
+					201: z.object({msg: z.string()}),
+					400: z.object({msg: z.string()})
+				},
+				tags: ["user"],
+				description: "This endpoint is responsible for registering a new user.",
+			}
+		},
+		async (request, reply) => {
 
-		const scheme = z.object({
-			name: z.string(),
-			email: z.string(),
-			password: z.string()
-		});
+			try{
 
-		const body = scheme.parse(request.body);
-		
-
-		const serviceRegisterUser = makeRegisterUser();
-		await serviceRegisterUser.execute({
-			name: body.name,
-			email: body.email,
-			password: body.password,
-			limit: 1000,
-			dueDay: 10,
-			closeDay: 5
-		});
+				const serviceRegisterUser = makeRegisterUser();
+				await serviceRegisterUser.execute({
+					name: request.body.name,
+					email: request.body.email,
+					password: request.body.password,
+					limit: 1000,
+					dueDay: 10,
+					closeDay: 5
+				});
 
 
-		return reply.status(201).send(JSON.stringify({
-			msg: "Usuário cadastrado com sucesso."
-		}));
+				return reply.status(201).send({
+					msg: "Usuário cadastrado com sucesso."
+				});
 
-	}catch(err: any){
+			}catch(err: any){
 
-		const {statusCode, error} = handleErrorsInControlles(err);
-		return reply.status(statusCode).send(JSON.stringify({error}));
-	}
+				const {statusCode, error} = handleErrorsInControlles(err);
+				return reply.status(statusCode).send(error);
+			}
+		}
+	);
 }

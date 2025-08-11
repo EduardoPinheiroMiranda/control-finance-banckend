@@ -1,5 +1,5 @@
 import { Installment, Prisma } from "@/generated/prisma/client";
-import { InstallmentWithTotalInstallments } from "src/@types/prismaTypes";
+import { InstallmentWithTotalInstallments } from "@/@types/prisma-customTypes";
 
 
 export interface InstallmentDatabaseInterface{

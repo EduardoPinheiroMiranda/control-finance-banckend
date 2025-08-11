@@ -1,5 +1,5 @@
 import { Prisma } from "@/generated/prisma/client";
-import { Installment, CardInvoice, Invoice as CustomTypeInvoice, InvoiceDetails, ReturnTypeGetInvoiceCards, Invoice } from "src/@types/prismaTypes";
+import { Installment, CardInvoice, Invoice as CustomTypeInvoice, InvoiceDetails, ReturnTypeGetInvoiceCards, Invoice } from "@/@types/prisma-customTypes";
 
 
 export interface InvoiceDatabaseInterface{

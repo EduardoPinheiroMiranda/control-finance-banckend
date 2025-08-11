@@ -2,7 +2,7 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/libs/primsa";
 import { ShoppingDatabaseInterface } from "../interfaces/shopping";
 import { typeInvoices } from "@/utils/globalValues";
-import { ShoppingListByType } from "src/@types/prismaTypes";
+import { ShoppingListByType } from "@/@types/prisma-customTypes";
 
 
 export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{

@@ -8,7 +8,7 @@ export async function controlLimit(request: FastifyRequest, reply: FastifyReply)
 
 	try{
         
-		const userId = z.string().parse(request.headers["user-id"]);
+		const userId = z.string().parse(request.userId);
 
 		const scheme = z.object({
 			limit: z.number(),

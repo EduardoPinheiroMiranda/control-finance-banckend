@@ -8,8 +8,7 @@ export async function getUserByToken(request: FastifyRequest, reply: FastifyRepl
 
 	try{
 
-		const schema = z.string();
-		const userId = schema.parse(request.headers["user-id"]);
+		const userId = z.string().parse(request.userId);
 
 
 		const serviceGetUserById = makeGetUserById();

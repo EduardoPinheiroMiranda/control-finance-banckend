@@ -8,7 +8,7 @@ export async function getAllMovements(request: FastifyRequest, reply: FastifyRep
 
 	try{
         
-		const userId = z.string().parse(request.headers["user-id"]);
+		const userId = z.string().parse(request.userId);
 
 		const scheme = z.object({
 			name: z.string().nullable(),

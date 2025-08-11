@@ -43,12 +43,11 @@ export function checkToken(
 		}
 
 
-		request.headers["user-id"] = decoded.userId;
+		request.userId = decoded.userId;
         
 
 		done();
 
-		// eslint-disable-next-line
 	}catch(err: any){
 
 		return reply.status(401).send(JSON.stringify({

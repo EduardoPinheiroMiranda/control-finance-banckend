@@ -8,7 +8,7 @@ export async function updatePassword(request: FastifyRequest, reply: FastifyRepl
 
 	try{
         
-		const userId = z.string().parse(request.headers["user-id"]);
+		const userId = z.string().parse(request.userId);
 
 		const scheme = z.object({
 			password: z.string(),

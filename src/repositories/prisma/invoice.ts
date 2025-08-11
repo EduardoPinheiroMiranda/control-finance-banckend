@@ -1,6 +1,6 @@
 import { InvoiceDatabaseInterface } from "../interfaces/invoice";
 import { prisma } from "@/libs/primsa";
-import { CardInvoice, Installment, Invoice, InvoiceDetails, ReturnTypeGetInvoiceCards } from "src/@types/prismaTypes";
+import { CardInvoice, Installment, Invoice, InvoiceDetails, ReturnTypeGetInvoiceCards } from "@/@types/prisma-customTypes";
 import { Decimal } from "@prisma/client/runtime/library";
 import { Prisma } from "@/generated/prisma/client";
 

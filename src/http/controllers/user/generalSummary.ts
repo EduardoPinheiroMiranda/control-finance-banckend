@@ -8,7 +8,7 @@ export async function generalSummary(request: FastifyRequest, reply: FastifyRepl
 
 	try{
 		
-		const userId = z.string().parse(request.headers["user-id"]);
+		const userId = z.string().parse(request.userId);
 
 
 		const serviceGeneralSummary = makeGeneralSummary();

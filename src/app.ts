@@ -18,20 +18,15 @@ app.register(fastifySwagger, {
             title: "Control Finance",
             version: "1.0.0"
         },
-        // components: {
-		// 	securitySchemes: {
-		// 		bearerAuth: {
-		// 			type: "http",
-		// 			scheme: "bearer",
-		// 			bearerFormat: "JWT",
-		// 		},
-		// 	},
-		// },
-		// security: [
-		// 	{
-		// 		bearerAuth: [],
-		// 	},
-		// ],
+        components: {
+            securitySchemes: {
+                BearerAuth: {
+                type: "http",
+                scheme: "bearer",
+                bearerFormat: "JWT"
+                }
+            }
+        }
     },
 	transform: jsonSchemaTransform,
 });
@@ -40,14 +35,12 @@ app.register(fastifySwaggerUi, {routePrefix: "/docs"})
 
 
 // register routes 
-app.register(userRoutes, {prefix: "user"});
+app.register(userRoutes, {prefix: "user"})
 
 
 
 app.setErrorHandler((err, _, reply) => {
 
-    // console.log(err.validation[0].params);
-    
     if(Array.isArray(err.validation)){
         reply.status(err.statusCode ?? 400).send(JSON.stringify({
             msg: "Data validation error.",

@@ -1,5 +1,5 @@
 import { Prisma, Shopping } from "@/generated/prisma/client";
-import { ShoppingListByType } from "src/@types/prismaTypes";
+import { ShoppingListByType } from "@/@types/prisma-customTypes";
 
 
 export interface ShoppingDatabaseInterface{

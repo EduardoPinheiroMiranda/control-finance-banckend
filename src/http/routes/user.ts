@@ -8,7 +8,7 @@ import { registerUser } from "../controllers/user/registerUser";
 import { updateAvatar } from "../controllers/user/updateAvatar";
 import { updatePassword } from "../controllers/user/updatePassword";
 import { updateUser } from "../controllers/user/updateUser";
-import { FastifyTypes } from "@/@types/fastifyTypes";
+import { FastifyTypes } from "@/@types/fastify-customTypes";
 import z from "zod";
 
 
@@ -32,9 +32,7 @@ export async function userRoutes(app: FastifyTypes){
 
 	app.put("/controlLimit", {
 		schema: {
-			headers: z.object({
-				authorization: z.string().startsWith("Bearer ")
-			}),
+			security: [{ BearerAuth: [] }],
 			body: z.object({
 				limit: z.number(),
 				dueDay: z.number(),
@@ -52,9 +50,7 @@ export async function userRoutes(app: FastifyTypes){
 
 	app.get("/generalSummary", {
 		schema: {
-			headers: z.object({
-				authorization: z.string().startsWith("Bearer "),
-			}),
+			security: [{ BearerAuth: [] }],
 			response: {
 				200: z.object({msg: z.string()}),
 				400: z.object({msg: z.string()})
@@ -63,13 +59,13 @@ export async function userRoutes(app: FastifyTypes){
 			description: "This route is responsible for fetching all the main data related to the user such as values in applications, cards, transactions and personal data."
 		},
 		preHandler: checkToken,
-	}, generalSummary);
+	}, (request) => {
+		console.log(request.headers)
+	});
 
 	app.post("/getAllMovements", {
 		schema: {
-			headers: z.object({
-				authorization: z.string().startsWith("Bearer "),
-			}),
+			security: [{ BearerAuth: [] }],
 			body: z.object({
 				name: z.string().nullable(),
 				cursor: z.string().nullable()
@@ -85,9 +81,7 @@ export async function userRoutes(app: FastifyTypes){
 
 	app.get("/getUserByToken", {
 		schema: {
-			headers: z.object({
-				authorization: z.string().startsWith("Bearer "),
-			}),
+			security: [{ BearerAuth: [] }],
 			response: {
 				200: z.object({msg: z.string()}),
 				400: z.object({msg: z.string()})
@@ -116,9 +110,7 @@ export async function userRoutes(app: FastifyTypes){
 
 	app.put("/updatePassword", {
 		schema: {
-			headers: z.object({
-				authorization: z.string().startsWith("Bearer "),
-			}),
+			security: [{ BearerAuth: [] }],
 			body: z.object({
 				password: z.string(),
 				newPassword: z.string()
@@ -135,9 +127,7 @@ export async function userRoutes(app: FastifyTypes){
 
 	app.put("/updateAvatar", {
 		schema: {
-			headers: z.object({
-				authorization: z.string().startsWith("Bearer "),
-			}),
+			security: [{ BearerAuth: [] }],
 			body: z.object({
 				avatar: z.string(),
 			}),
@@ -154,9 +144,7 @@ export async function userRoutes(app: FastifyTypes){
 
 	app.put("/updateUser", {
 		schema: {
-			headers: z.object({
-				authorization: z.string().startsWith("Bearer "),
-			}),
+			security: [{ BearerAuth: [] }],
 			body: z.object({
 				name: z.string(),
 				email: z.string()

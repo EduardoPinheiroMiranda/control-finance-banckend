@@ -8,7 +8,7 @@ export async function updateAvatar(request: FastifyRequest, reply: FastifyReply)
 
 	try{
         
-		const userId = z.string().parse(request.headers["user-id"]);
+		const userId = z.string().parse(request.userId);
 
 		const scheme = z.object({
 			avatar: z.string(),

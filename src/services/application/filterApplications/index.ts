@@ -1,0 +1,23 @@
+import { Filter } from "src/@types/customTypes";
+import { ResourceNotFoud } from "@/errors/custonErros";
+import { ApplicationDatabaseInterface } from "oldCode/src/repositories/interfaces/application";
+
+
+export class FilterApplications{
+
+	constructor(
+        private applicationRepository: ApplicationDatabaseInterface
+	){}
+
+
+	async execute(filter: Filter){
+
+		const movements = await this.applicationRepository.filterApplications(filter);
+
+		if(movements.extracts.length === 0){
+			throw new ResourceNotFoud("Ainda não há movimentação de aplicações.");
+		}
+
+		return movements;
+	}
+}

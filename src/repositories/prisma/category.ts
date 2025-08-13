@@ -14,8 +14,8 @@ export class CategoryPrismaRepository implements CategoryDatabaseInterface{
 			const createdAt = new Date(currentDate.setMilliseconds(index));
 			return {
 				name: category.name,
-				created_at: createdAt,
-				updated_at: createdAt
+				createdAt: createdAt,
+				updatedAt: createdAt
 			};
 		});
         

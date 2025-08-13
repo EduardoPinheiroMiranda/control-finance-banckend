@@ -1,7 +1,7 @@
 import { ResourceNotFoud } from "@/errors/custonErros";
-import { InstallmentDatabaseInterface } from "oldCode/src/repositories/interfaces/installment";
-import { ShoppingDatabaseInterface } from "oldCode/src/repositories/interfaces/shopping";
-import { Installment } from "@prisma/client";
+import { InstallmentDatabaseInterface } from "@/repositories/interfaces/installment";
+import { ShoppingDatabaseInterface } from "@/repositories/interfaces/shopping";
+import { Installment } from "@/generated/prisma/client";
 
 
 export class DeleteShopping{
@@ -62,7 +62,7 @@ export class DeleteShopping{
 		const installmentsHaveBeenPaid = installmentPaid? true : false;
 
 
-		if(shopping.type_invoice === "extraExpense"){
+		if(shopping.typeInvoice === "EXTRA_EXPENSE"){
 			const {shopping, msg} = await this.delete(shoppingId, installmentsHaveBeenPaid);
 			return {
 				shopping,
@@ -71,7 +71,7 @@ export class DeleteShopping{
 		}
 
 
-		if(shopping.type_invoice === "fixedExpense" && installmentsHaveBeenPaid){
+		if(shopping.typeInvoice === "FIXED_EXPENSE" && installmentsHaveBeenPaid){
 			const {updateShopping, msg} = await this.desableShopping(shoppingId, shopping.installment);
 			return {
 				shopping: updateShopping,

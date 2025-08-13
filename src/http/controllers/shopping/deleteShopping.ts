@@ -1,27 +1,43 @@
+import { FastifyTypes } from "@/@types/fastify-customTypes";
 import { makeDeleteShopping } from "@/factories/shopping/make-deleteShopping";
 import { handleErrorsInControlles } from "@/utils/handleErrorsInControllers";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 
 
-export async function deleteShopping(request: FastifyRequest, reply: FastifyReply){
+export async function deleteShopping(app: FastifyTypes){
 
-	try{
+	app.delete(
+		"/deleteShopping",
+		{
+			schema: {
+				security: [{ BearerAuth: [] }],
+				params: z.object({
+					shoppingId: z.string()
+				}),
+				response: {
+					200: z.object({msg: z.string().describe("Compra deletada.")}),
+					400: z.object({msg: z.string()})
+				},
+				tags: ["shopping"],
+				description: "This route is responsible for deleting a purchase."
+			}
+		},
+		async (request, reply) => {
 
-		const params = z.object({
-			shoppingId: z.string()
-		}).parse(request.params);
+			try{
 
+				const serviceDeleteShopping = makeDeleteShopping();
+				const shopping = await serviceDeleteShopping.execute(request.params.shoppingId);
 
-		const serviceDeleteShopping = makeDeleteShopping();
-		const shopping = await serviceDeleteShopping.execute(params.shoppingId);
+				
+				return reply.status(200).send(shopping);
 
-        
-		return reply.status(200).send(JSON.stringify(shopping));
-
-	}catch(err: any){
-        
-		const {statusCode, error} = handleErrorsInControlles(err);
-		return reply.status(statusCode).send(JSON.stringify({error}));
-	}
+			}catch(err: any){
+				
+				const {statusCode, error} = handleErrorsInControlles(err);
+				return reply.status(statusCode).send(error);
+			}
+		}
+	);
 }

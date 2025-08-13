@@ -1,8 +1,8 @@
 import { Installment } from "src/@types/customTypes";
-import { InstallmentDatabaseInterface } from "oldCode/src/repositories/interfaces/installment";
-import { ShoppingDatabaseInterface } from "oldCode/src/repositories/interfaces/shopping";
+import { InstallmentDatabaseInterface } from "@/repositories/interfaces/installment";
+import { ShoppingDatabaseInterface } from "@/repositories/interfaces/shopping";
 import { HandlerDueDate } from "@/utils/handlerDueDate";
-import { Invoice } from "@prisma/client";
+import { Invoice } from "@/generated/prisma/client";
 
 
 export async function insertFixedPurchasesIntoNewInvoices(
@@ -31,12 +31,12 @@ export async function insertFixedPurchasesIntoNewInvoices(
 	fixedPurchases.forEach((purchase) => {
 
 		const lastPosition = purchase.installment.length - 1;
-		const installmentValue = purchase.installment[lastPosition].installment_value;
-		let numberOfTheLastInstallmetCreated = purchase.installment[lastPosition].installment_number;
+		const installmentValue = purchase.installment[lastPosition].installmentValue;
+		let numberOfTheLastInstallmetCreated = purchase.installment[lastPosition].installmentNumber;
 
-		const dueDay = purchase.installment[lastPosition].due_date.getDate();
-		let month = purchase.installment[lastPosition].due_date.getMonth();
-		let year = purchase.installment[lastPosition].due_date.getFullYear();
+		const dueDay = purchase.installment[lastPosition].dueDate.getDate();
+		let month = purchase.installment[lastPosition].dueDate.getMonth();
+		let year = purchase.installment[lastPosition].dueDate.getFullYear();
 
 
 		invoices.forEach((invoice) => {
@@ -52,11 +52,11 @@ export async function insertFixedPurchasesIntoNewInvoices(
 			numberOfTheLastInstallmetCreated += 1;
   
 			newInstallments.push({
-				installment_number: numberOfTheLastInstallmetCreated,
-				installment_value: installmentValue,
-				due_date: dueDate,
-				shopping_id: purchase.id,
-				invoice_id: invoice.id,
+				installmentNumber: numberOfTheLastInstallmetCreated,
+				installmentValue: installmentValue,
+				dueDate: dueDate,
+				shoppingId: purchase.id,
+				invoiceId: invoice.id,
 			});
 		});
 

@@ -1,4 +1,8 @@
 import { app } from "./app";
+import { deleteShopping } from "./http/controllers/shopping/deleteShopping";
+import { listShopping } from "./http/controllers/shopping/listShopping";
+import { registerShopping } from "./http/controllers/shopping/registerShopping";
+import { updateShopping } from "./http/controllers/shopping/updateShopping";
 import { authenticateUser } from "./http/controllers/user/authenticateUser";
 import { controlLimit } from "./http/controllers/user/controlLimit";
 import { generalSummary } from "./http/controllers/user/generalSummary";
@@ -23,6 +27,13 @@ export function registerAllRoutes(){
     app.register(updateAvatar, {prefix: userPrefix});
     app.register(updatePassword, {prefix: userPrefix});
     app.register(updateUser, {prefix: userPrefix});
+    
+    // register shoppings routes
+    const shoppingPrefix = "shopping";
+    app.register(registerShopping, {prefix: shoppingPrefix});  
+    app.register(listShopping, {prefix: shoppingPrefix});
+    app.register(updateShopping, {prefix: shoppingPrefix});
+    app.register(deleteShopping, {prefix: shoppingPrefix});
     
 
     return;

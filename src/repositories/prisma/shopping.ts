@@ -1,4 +1,4 @@
-import { Prisma } from "@/generated/prisma/client";
+import { Prisma, Shopping } from "@/generated/prisma/client";
 import { prisma } from "@/libs/primsa";
 import { ShoppingDatabaseInterface } from "../interfaces/shopping";
 import { ShoppingListByType } from "@/@types/prisma-customTypes";
@@ -99,17 +99,45 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 		}[]>`
 			select
 				json_build_object(
-					'fixed_expense', coalesce(
+					'fixedExpense', coalesce(
 						json_agg( 
-							shopping.* order by shopping.created_at desc
-						)filter (where shopping.type_invoice = 'fixedExpense'),
+							json_build_object(
+								'id', shopping.id,
+								'name', shopping.name,
+								'typeInvoice', shopping.type_invoice,
+								'paymentMethod', shopping.payment_method,
+								'value', shopping.value,
+								'totalInstallments', shopping.total_installments,
+								'pay', shopping.pay,
+								'description', shopping.description,
+								'createdAt', shopping.created_at,
+								'updatedAt', shopping.updated_at,
+								'cardId', shopping.card_id,
+								'categoryId', shopping.category_id,
+								'userId', shopping.user_id
+							) order by shopping.created_at desc
+						)filter (where shopping.type_invoice = 'FIXED_EXPENSE'),
 					'[]'::json
 					),
 				
-					'extra_expense', coalesce(
+					'extraExpense', coalesce(
 						json_agg(
-							shopping.* order by shopping.created_at desc
-						)filter (where shopping.type_invoice = 'extraExpense'),
+							json_build_object(
+								'id', shopping.id,
+								'name', shopping.name,
+								'typeInvoice', shopping.type_invoice,
+								'paymentMethod', shopping.payment_method,
+								'value', shopping.value,
+								'totalInstallments', shopping.total_installments,
+								'pay', shopping.pay,
+								'description', shopping.description,
+								'createdAt', shopping.created_at,
+								'updatedAt', shopping.updated_at,
+								'cardId', shopping.card_id,
+								'categoryId', shopping.category_id,
+								'userId', shopping.user_id
+							) order by shopping.created_at desc
+						)filter (where shopping.type_invoice = 'EXTRA_EXPENSE'),
 						'[]'::json
 					)
 			) as shopping

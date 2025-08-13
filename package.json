@@ -9,6 +9,9 @@
   "scripts": {
     "dev": "tsx watch ./src/server.ts"
   },
+  "prisma": {
+    "seed": "tsx ./prisma/seed.ts"
+  },
   "author": "Eduardo Pinheiro Miranda",
   "license": "ISC",
   "devDependencies": {

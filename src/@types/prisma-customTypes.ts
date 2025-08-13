@@ -36,9 +36,38 @@ export interface Invoice{
     }
 }
 
+
 export interface ShoppingListByType{
-    fixedExpense: Shopping[],
-    extraExpense: Shopping[]
+    fixedExpense: {
+        id: string,
+        name: string,
+        typeInvoice: string,
+        paymentMethod: string,
+        value: number,
+        totalInstallments: number,
+        pay: boolean,
+        description: string | null,
+        createdAt: string,
+        updatedAt: string,
+        cardId: string | null,
+        categoryId: string,
+        userId: string
+    }[],
+    extraExpense: {
+        id: string,
+        name: string,
+        typeInvoice: string,
+        paymentMethod: string,
+        value: number,
+        totalInstallments: number,
+        pay: boolean,
+        description: null,
+        createdAt: string,
+        updatedAt: string,
+        cardId: null,
+        categoryId: string,
+        userId: string
+    }[]
 }
 
 export interface CardInvoice{

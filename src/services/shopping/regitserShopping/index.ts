@@ -1,16 +1,15 @@
 import { Dates, Shopping } from "src/@types/customTypes";
 import { DataValidationError, ResourceNotFoud } from "@/errors/custonErros";
-import { CardDatabaseInterface } from "oldCode/src/repositories/interfaces/card";
-import { InstallmentDatabaseInterface } from "oldCode/src/repositories/interfaces/installment";
-import { InvoiceDatabaseInterface } from "oldCode/src/repositories/interfaces/invoice";
-import { ShoppingDatabaseInterface } from "oldCode/src/repositories/interfaces/shopping";
-import { UserDatabaseInterface } from "oldCode/src/repositories/interfaces/user";
+import { CardDatabaseInterface } from "@/repositories/interfaces/card";
+import { InstallmentDatabaseInterface } from "@/repositories/interfaces/installment";
+import { InvoiceDatabaseInterface } from "@/repositories/interfaces/invoice";
+import { ShoppingDatabaseInterface } from "@/repositories/interfaces/shopping";
+import { UserDatabaseInterface } from "@/repositories/interfaces/user";
 import { createInvoices } from "./createInvoices";
 import { createInstallments } from "./createInstallments";
 import { cardValidation } from "./cardValidation";
 import { checkPurchaseDate } from "./checkPurchaseDate";
-import { paymentMethods, typeInvoices } from "@/utils/globalValues";
-import { Invoice } from "@prisma/client";
+import { Invoice, PaymentMethod, Prisma, TypeInvoice } from "@/generated/prisma/client";
 import { insertFixedPurchasesIntoNewInvoices } from "./insertFixedPurchasesIntoNewInvoices";
 
 
@@ -34,14 +33,14 @@ export class RegisterShopping{
 
 		const shopping = await this.shoppingRepository.create({
 			name: data.name,
-			type_invoice: data.typeInvoice,
-			payment_method: data.paymentMethod,
+			typeInvoice: TypeInvoice[data.typeInvoice],
+			paymentMethod: PaymentMethod[data.paymentMethod],
 			value: data.value,
-			total_installments: data.totalInstallments,
+			totalInstallments: data.totalInstallments,
 			description: data.description,
-			category_id: data.categoryId,
-			card_id: data.cardId,
-			user_id: userId
+			categoryId: data.categoryId,
+			cardId: data.cardId,
+			userId: userId
 		});
 
 		const { installments } = await createInstallments(
@@ -123,19 +122,19 @@ export class RegisterShopping{
 		
 		const datesForInvoices = await checkPurchaseDate(
 			data.purchaseDate,
-			user.due_day,
-			user.closing_day,
+			user.dueDay,
+			user.closingDay,
 			data.totalInstallments,
 			startOnTheInvoice
 		);
 
 		
-		if(data.paymentMethod === paymentMethods[1]){
+		if(data.paymentMethod === "CARD"){
 			data.dueDay = dueDay;
 		}
 
 
-		if(data.typeInvoice === typeInvoices[0]){
+		if(data.typeInvoice === "FIXED_EXPENSE"){
 			const { shopping, installments } = await this.registerFixedPurchase(user.id, datesForInvoices, data);
 			return { shopping, installments };
 		}

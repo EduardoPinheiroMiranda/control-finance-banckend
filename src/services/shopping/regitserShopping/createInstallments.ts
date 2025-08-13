@@ -1,8 +1,8 @@
 import { Installment } from "src/@types/customTypes";
-import { InstallmentDatabaseInterface } from "oldCode/src/repositories/interfaces/installment";
+import { InstallmentDatabaseInterface } from "@/repositories/interfaces/installment";
 import { HandlerDueDate } from "@/utils/handlerDueDate";
-import { Invoice } from "@prisma/client";
-import { Decimal } from "@prisma/client/runtime/library";
+import { Invoice } from "@/generated/prisma/client";
+import { Decimal } from "@/generated/prisma/runtime/library";
 
 
 export async function createInstallments(
@@ -32,11 +32,11 @@ export async function createInstallments(
 
 	for(let i = 0; i < totalInstallmentsToCreate; i++){
 		listInstallmentsToCrerate.push({
-			installment_number: installmentNumber + i,
-			installment_value: Decimal(installmentValue),
-			due_date: dueDates[i],
-			shopping_id: shoppingId,
-			invoice_id: invoices[i].id,
+			installmentNumber: installmentNumber + i,
+			installmentValue: Decimal(installmentValue),
+			dueDate: dueDates[i],
+			shoppingId: shoppingId,
+			invoiceId: invoices[i].id,
 		});
 	}
 

@@ -1,32 +1,48 @@
+import { FastifyTypes } from "@/@types/fastify-customTypes";
 import { makeUpdateShopping } from "@/factories/shopping/make-updateShopping";
 import { handleErrorsInControlles } from "@/utils/handleErrorsInControllers";
-import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 
 
-export async function updateShopping(request: FastifyRequest, reply: FastifyReply){
+export async function updateShopping(app: FastifyTypes){
 
-	try{
+	app.put(
+		"/updateShopping",
+		{
+			schema: {
+				security: [{ BearerAuth: [] }],
+				body: z.object({
+					id: z.string(),
+					name: z.string(),
+					value: z.number(),
+					description: z.string().nullable(),
+					dueDay: z.number(),
+					categoryId: z.string(),
+				}),
+				response: {
+					200: z.object({msg: z.string().describe("Dados atualizados.")}),
+					400: z.object({msg: z.string()})
+				},
+				tags: ["shopping"],
+				description: "This route is responsible for updating data related to a purchase."
+			}
+		},
+		async (request, reply) => {
 
-		const body = z.object({
-			id: z.string(),
-			name: z.string(),
-			value: z.number(),
-			description: z.string().nullable(),
-			dueDay: z.number(),
-			categoryId: z.string(),
-		}).parse(request.body);
+			try{
 
+				const serviceupdateShopping = makeUpdateShopping();
+				const shoping = await serviceupdateShopping.execute(request.body);
 
-		const serviceupdateShopping = makeUpdateShopping();
-		const shopping = await serviceupdateShopping.execute(body);
+				console.log(shoping)
+				
+				return reply.status(200).send({msg: "Dados atualizados"});
 
-        
-		return reply.status(200).send(JSON.stringify(shopping));
-
-	}catch(err: any){
-        
-		const {statusCode, error} = handleErrorsInControlles(err);
-		return reply.status(statusCode).send(JSON.stringify({error}));
-	}
+			}catch(err: any){
+				
+				const {statusCode, error} = handleErrorsInControlles(err);
+				return reply.status(statusCode).send(error);
+			}
+		}
+	);
 }

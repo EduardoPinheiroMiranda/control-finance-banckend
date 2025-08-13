@@ -1,10 +1,9 @@
 import { ShoppingUpdate } from "src/@types/customTypes";
 import { DataValidationError, ResourceNotFoud } from "@/errors/custonErros";
-import { InstallmentDatabaseInterface } from "oldCode/src/repositories/interfaces/installment";
-import { ShoppingDatabaseInterface } from "oldCode/src/repositories/interfaces/shopping";
-import { typeInvoices } from "@/utils/globalValues";
+import { InstallmentDatabaseInterface } from "@/repositories/interfaces/installment";
+import { ShoppingDatabaseInterface } from "@/repositories/interfaces/shopping";
 import { HandlerDueDate } from "@/utils/handlerDueDate";
-import { Installment } from "@prisma/client";
+import { Installment } from "@/generated/prisma/client";
 
 
 export class UpdateShopping{
@@ -27,20 +26,20 @@ export class UpdateShopping{
 					name: data.name,
 					value: data.value,
 					description: data.description,
-					category_id: data.categoryId
+					categoryId: data.categoryId
 				}
 			),
 			...installments.map(async (installment) => {
             
-				const month = installment.due_date.getMonth();
-				const year = installment.due_date.getFullYear();
+				const month = installment.dueDate.getMonth();
+				const year = installment.dueDate.getFullYear();
 				const newDueDate = handlerDueDate.formatDate(year, month, data.dueDay);
 
 				await this.installmentRepository.updateInstallment(
 					installment.id,
 					{
-						installment_value: data.value,
-						due_date: newDueDate
+						installmentValue: data.value,
+						dueDate: newDueDate
 					}
 				);
 			})
@@ -67,9 +66,9 @@ export class UpdateShopping{
 		const installmentsInOpen = await this.installmentRepository.getInstallmentsInOpen(data.id);
 		
 
-		if(shopping.type_invoice === typeInvoices[1]){
+		if(shopping.typeInvoice === "EXTRA_EXPENSE"){
 			
-			const installmentsHaveBeenPaid = shopping.total_installments > installmentsInOpen.length;
+			const installmentsHaveBeenPaid = shopping.totalInstallments > installmentsInOpen.length;
 
 			if(!installmentsHaveBeenPaid){
 				const updateShopping = await this.updateCompleteData(data, installmentsInOpen);

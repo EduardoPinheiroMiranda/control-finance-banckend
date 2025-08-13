@@ -1,4 +1,4 @@
-import { TypeExtract } from "@/generated/prisma"
+import { PaymentMethod, TypeExtract, TypeInvoice } from "@/generated/prisma/client"
 import { Decimal } from "@/generated/prisma/runtime/library"
 
 
@@ -13,8 +13,8 @@ export interface User{
 
 export interface Shopping{
     name: string,
-    typeInvoice: string,
-    paymentMethod: string,
+    typeInvoice: keyof typeof TypeInvoice,
+    paymentMethod: keyof typeof PaymentMethod,
     value: number,
     totalInstallments: number,
     description: string | null,

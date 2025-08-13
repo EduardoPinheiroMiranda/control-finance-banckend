@@ -1,5 +1,5 @@
 import { ResourceNotFoud } from "@/errors/custonErros";
-import { ShoppingDatabaseInterface } from "oldCode/src/repositories/interfaces/shopping";
+import { ShoppingDatabaseInterface } from "@/repositories/interfaces/shopping";
 
 
 export class ListShopping{
@@ -12,8 +12,8 @@ export class ListShopping{
 	async execute(userId: string){
 
 		const shoppingList = await this.shoppingRepository.listAllOpenPurchases(userId);
-
-		if(shoppingList.extra_expense.length === 0 && shoppingList.fixed_expense.length === 0){
+		
+		if(shoppingList.extraExpense.length === 0 && shoppingList.fixedExpense.length === 0){
 			throw new ResourceNotFoud("Compras não encontradas.");
 		}
 

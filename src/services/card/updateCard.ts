@@ -1,6 +1,6 @@
 import { CardUpdate } from "src/@types/customTypes";
 import { DataValidationError } from "@/errors/custonErros";
-import { CardDatabaseInterface } from "oldCode/src/repositories/interfaces/card";
+import { CardDatabaseInterface } from "@/repositories/interfaces/card";
 import { env } from "src/env";
 import { hexValidator } from "@/utils/hexValidator";
 
@@ -28,10 +28,10 @@ export class UpdateCard{
 				data.id,
 				{
 					name: data.name,
-					due_day: data.dueDay,
-					closing_day: data.closingDay,
-					color_card: background,
-					color_font: font,
+					dueDay: data.dueDay,
+					closingDay: data.closingDay,
+					colorCard: background,
+					colorFont: font,
 				}
 			);
 

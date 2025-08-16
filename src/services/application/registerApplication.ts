@@ -1,18 +1,18 @@
 import { Application } from "src/@types/customTypes";
 import { env } from "src/env";
 import { DataValidationError } from "@/errors/custonErros";
-import { ApplicationDatabaseInterface } from "oldCode/src/repositories/interfaces/application";
+import { ApplicationDatabaseInterface } from "@/repositories/interfaces/application";
 import { hexValidator } from "@/utils/hexValidator";
 
 
-export class UpdateApplication{
+export class RegisterApplication{
 
 	constructor(
         private applicationRepository: ApplicationDatabaseInterface
 	){}
 
 
-	async execute(applicationId: string, data: Application){
+	async execute(userId: string, data: Application){
         
 		const institution = data.institution ?? env.INSTITUTION;
 
@@ -24,17 +24,16 @@ export class UpdateApplication{
 		}
 
 
-		const application = await this.applicationRepository.update(
-			applicationId,
-			{
-				name: data.name,
-				target_value: data.targetValue,
-				institution: institution,
-				color_application: background,
-				color_font: font,
-				icon: data.icon,
-			}
-		);
+		const application = await this.applicationRepository.create({
+			name: data.name,
+			targetValue: data.targetValue,
+			value: 0,
+			institution: institution,
+			colorFont: font,
+			colorApplication: background,
+			icon: data.icon,
+			userId: userId
+		});
 
 
 		return application;

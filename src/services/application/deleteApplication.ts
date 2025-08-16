@@ -1,6 +1,6 @@
 import { env } from "src/env";
 import { DataValidationError } from "@/errors/custonErros";
-import { ApplicationDatabaseInterface } from "oldCode/src/repositories/interfaces/application";
+import { ApplicationDatabaseInterface } from "@/repositories/interfaces/application";
 
 
 export class DeleteApplication{

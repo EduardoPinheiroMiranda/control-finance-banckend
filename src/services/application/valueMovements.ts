@@ -1,7 +1,7 @@
 import { DataValidationError } from "@/errors/custonErros";
-import { ApplicationDatabaseInterface } from "oldCode/src/repositories/interfaces/application";
-import { ExtractDatabaseInterface } from "oldCode/src/repositories/interfaces/extract";
-import { typeExtract } from "@/utils/globalValues";
+import { TypeExtract, TypeInvoice } from "@/generated/prisma/client";
+import { ApplicationDatabaseInterface } from "@/repositories/interfaces/application";
+import { ExtractDatabaseInterface } from "@/repositories/interfaces/extract";
 
 
 export class ValueMovements{
@@ -26,7 +26,7 @@ export class ValueMovements{
 		}
 
         
-		const newTotalValue = type === typeExtract[0] ? Number(application.value) + value : Number(application.value) - value;
+		const newTotalValue = type === "DEPOSIT" ? Number(application.value) + value : Number(application.value) - value;
 
         
 		const [, registerMovement] = await Promise.all([
@@ -34,9 +34,9 @@ export class ValueMovements{
 				applicationId, { value: newTotalValue }
 			),
 			this.extractRepository.create({
-				type: type,
+				type: type === TypeExtract.DEPOSIT ? TypeExtract.DEPOSIT : TypeExtract.WITHDRAW,
 				value: value,
-				application_id: applicationId
+				applicationId: applicationId
 			})
 		]);
 
@@ -46,7 +46,7 @@ export class ValueMovements{
 			totalValue: newTotalValue,
 			type: registerMovement.type,
 			value: registerMovement.value,
-			createdAt: registerMovement.created_at
+			createdAt: registerMovement.createdAt
 		};
 	}
 }

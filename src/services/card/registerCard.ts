@@ -1,6 +1,6 @@
 import { Card } from "src/@types/customTypes";
 import { DataValidationError } from "@/errors/custonErros";
-import { CardDatabaseInterface } from "oldCode/src/repositories/interfaces/card";
+import { CardDatabaseInterface } from "@/repositories/interfaces/card";
 import { hexValidator } from "@/utils/hexValidator";
 
 
@@ -23,11 +23,11 @@ export class RegisterCard{
 
 		const card = await this.cardRepository.create({
 			name: data.name,
-			due_day: data.dueDay,
-			closing_day: data.closingDay,
-			color_card: background,
-			color_font: font,
-			user_id: userId
+			dueDay: data.dueDay,
+			closingDay: data.closingDay,
+			colorCard: background,
+			colorFont: font,
+			userId: userId
 		});
 
 

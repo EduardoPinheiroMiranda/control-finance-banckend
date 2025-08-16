@@ -1,6 +1,6 @@
 import { Filter } from "src/@types/customTypes";
 import { ResourceNotFoud } from "@/errors/custonErros";
-import { ApplicationDatabaseInterface } from "oldCode/src/repositories/interfaces/application";
+import { ApplicationDatabaseInterface } from "@/repositories/interfaces/application";
 
 
 export class FilterApplications{

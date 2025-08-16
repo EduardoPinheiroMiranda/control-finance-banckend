@@ -1,6 +1,6 @@
 import { env } from "src/env";
 import { DataValidationError } from "@/errors/custonErros";
-import { CardDatabaseInterface } from "oldCode/src/repositories/interfaces/card";
+import { CardDatabaseInterface } from "@/repositories/interfaces/card";
 
 
 export class DisableCard{

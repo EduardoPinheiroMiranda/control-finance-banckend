@@ -1,5 +1,5 @@
 import { ResourceNotFoud } from "@/errors/custonErros";
-import { CategoryDatabaseInterface } from "oldCode/src/repositories/interfaces/category";
+import { CategoryDatabaseInterface } from "@/repositories/interfaces/category";
 
 
 export class ListCategories{

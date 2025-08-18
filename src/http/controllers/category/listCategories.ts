@@ -1,27 +1,51 @@
+import { FastifyTypes } from "@/@types/fastify-customTypes";
 import { makeListCategories } from "@/factories/category/make-listCategories";
+import { checkToken } from "@/http/middlewares/checkToken";
 import { handleErrorsInControlles } from "@/utils/handleErrorsInControllers";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 
 
-export async function listCategories(request: FastifyRequest, reply: FastifyReply){
+export async function listCategories(app: FastifyTypes){
 
-	try{
+	app.get(
+		"/listCategories",
+		{
+			schema: {
+				querystring: z.object({
+					categoryId: z.string().optional()
+				}),
+				response: {
+					200: z.array(z.object({
+						name: z.string(),
+						id: z.string(),
+						createdAt: z.date(),
+						updatedAt: z.date()
+					})),
+					400: z.object({msg: z.string()})
+				},
+				tags: ["category"],
+				description: "This route is responsible for listing the categories that can be associated with a purchase. It is possible to pass the id of a category to perform pagination, in this situation the id must be that of the last category present in the last search performed."
+			},
+		},
+		async (request, reply) => {
 
-		const params = z.object({
-			categoryId: z.string().nullable()
-		}).parse(request.params);
+			try{
+
+				const categoryId = request.query.categoryId ? request.query.categoryId : null;
 
 
-		const serviceListCategories = makeListCategories();
-		const categories = await serviceListCategories.execute(params.categoryId);
+				const serviceListCategories = makeListCategories();
+				const categories = await serviceListCategories.execute(categoryId);
 
 
-		return reply.status(200).send(JSON.stringify(categories));
+				return reply.status(200).send(categories);
 
-	}catch(err: any){
+			}catch(err: any){
 
-		const { error, statusCode } = handleErrorsInControlles(err);
-		return reply.status(statusCode).send(JSON.stringify(error));
-	}
+				const { error, statusCode } = handleErrorsInControlles(err);
+				return reply.status(statusCode).send(error);
+			}
+		}
+	);
 }

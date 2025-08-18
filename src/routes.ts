@@ -1,4 +1,5 @@
 import { app } from "./app";
+import { listCategories } from "./http/controllers/category/listCategories";
 import { getAllCardInvoices } from "./http/controllers/invoice/getAllCardInvoices";
 import { getAllInvoices } from "./http/controllers/invoice/getAllInvoices";
 import { getCurrentInvoice } from "./http/controllers/invoice/getCurrentInvoice";
@@ -45,6 +46,11 @@ export function registerAllRoutes(){
     app.register(getAllInvoices, {prefix: invoicePrefix});
     app.register(getCurrentInvoice, {prefix: invoicePrefix});
     app.register(payInvoice, {prefix: invoicePrefix});
+
+    // register categories routes
+    const categoryPrefix = "category";
+    app.register(listCategories, {prefix: categoryPrefix});
+
 
     return;
 }

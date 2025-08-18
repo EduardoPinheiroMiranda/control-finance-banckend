@@ -28,14 +28,14 @@ export async function getAllCardInvoices(app: FastifyTypes){
 								installmentId: z.string(),
 								installmentNumber: z.number(),
 								installmentValue: z.number(),
-								dueDate: z.date(),
+								dueDate: z.string(),
 								pay: z.boolean(),
 								shoppingId: z.string(),
 								totalInstallments: z.number(),
 								typeInvoice: z.string(),
 								paymentMethod: z.string(),
 								name: z.string(),
-								purchaseDate: z.date()
+								purchaseDate: z.string()
 							}))
 						})),
 						subtitles: z.array(z.object({

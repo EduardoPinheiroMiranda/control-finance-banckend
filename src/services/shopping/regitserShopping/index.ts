@@ -9,7 +9,7 @@ import { createInvoices } from "./createInvoices";
 import { createInstallments } from "./createInstallments";
 import { cardValidation } from "./cardValidation";
 import { checkPurchaseDate } from "./checkPurchaseDate";
-import { Invoice, PaymentMethod, Prisma, TypeInvoice } from "@/generated/prisma/client";
+import { Invoice, PaymentMethod, TypeInvoice } from "@/generated/prisma/client";
 import { insertFixedPurchasesIntoNewInvoices } from "./insertFixedPurchasesIntoNewInvoices";
 
 

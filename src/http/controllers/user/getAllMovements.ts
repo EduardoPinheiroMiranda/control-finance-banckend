@@ -34,7 +34,7 @@ export async function getAllMovements(app: FastifyTypes){
 							categoryId: z.string(),
 							userId: z.string(),
 						}
-					)),
+						)),
 					400: z.object({msg: z.string()})
 				},
 				tags: ["user"],

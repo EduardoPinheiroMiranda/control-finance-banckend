@@ -1,4 +1,8 @@
 import { app } from "./app";
+import { disableCard } from "./http/controllers/card/disableCard";
+import { listCard } from "./http/controllers/card/listCard";
+import { registerCard } from "./http/controllers/card/registerCard";
+import { updateCard } from "./http/controllers/card/updateCard";
 import { listCategories } from "./http/controllers/category/listCategories";
 import { getAllCardInvoices } from "./http/controllers/invoice/getAllCardInvoices";
 import { getAllInvoices } from "./http/controllers/invoice/getAllInvoices";
@@ -21,36 +25,43 @@ import { updateUser } from "./http/controllers/user/updateUser";
 
 export function registerAllRoutes(){
 
-    // register user routes
-    const userPrefix = "user";
-    app.register(authenticateUser, {prefix: userPrefix});
-    app.register(controlLimit, {prefix: userPrefix});
-    app.register(generalSummary, {prefix: userPrefix});
-    app.register(getAllMovements, {prefix: userPrefix});
-    app.register(getUserByToken, {prefix: userPrefix});
-    app.register(registerUser, {prefix: userPrefix});
-    app.register(updateAvatar, {prefix: userPrefix});
-    app.register(updatePassword, {prefix: userPrefix});
-    app.register(updateUser, {prefix: userPrefix});
+	// register user routes
+	const userPrefix = "user";
+	app.register(authenticateUser, {prefix: userPrefix});
+	app.register(controlLimit, {prefix: userPrefix});
+	app.register(generalSummary, {prefix: userPrefix});
+	app.register(getAllMovements, {prefix: userPrefix});
+	app.register(getUserByToken, {prefix: userPrefix});
+	app.register(registerUser, {prefix: userPrefix});
+	app.register(updateAvatar, {prefix: userPrefix});
+	app.register(updatePassword, {prefix: userPrefix});
+	app.register(updateUser, {prefix: userPrefix});
     
-    // register shoppings routes
-    const shoppingPrefix = "shopping";
-    app.register(registerShopping, {prefix: shoppingPrefix});  
-    app.register(listShopping, {prefix: shoppingPrefix});
-    app.register(updateShopping, {prefix: shoppingPrefix});
-    app.register(deleteShopping, {prefix: shoppingPrefix});
+	// register shoppings routes
+	const shoppingPrefix = "shopping";
+	app.register(registerShopping, {prefix: shoppingPrefix});  
+	app.register(listShopping, {prefix: shoppingPrefix});
+	app.register(updateShopping, {prefix: shoppingPrefix});
+	app.register(deleteShopping, {prefix: shoppingPrefix});
     
-    // register invoices routes
-    const invoicePrefix = "invoice";
-    app.register(getAllCardInvoices, {prefix: invoicePrefix});
-    app.register(getAllInvoices, {prefix: invoicePrefix});
-    app.register(getCurrentInvoice, {prefix: invoicePrefix});
-    app.register(payInvoice, {prefix: invoicePrefix});
+	// register invoices routes
+	const invoicePrefix = "invoice";
+	app.register(getAllCardInvoices, {prefix: invoicePrefix});
+	app.register(getAllInvoices, {prefix: invoicePrefix});
+	app.register(getCurrentInvoice, {prefix: invoicePrefix});
+	app.register(payInvoice, {prefix: invoicePrefix});
 
-    // register categories routes
-    const categoryPrefix = "category";
-    app.register(listCategories, {prefix: categoryPrefix});
+	// register categories routes
+	const categoryPrefix = "category";
+	app.register(listCategories, {prefix: categoryPrefix});
 
+	// register cards routes
+	const cardPrefix = "card";
+	app.register(registerCard, {prefix: cardPrefix});
+	app.register(listCard, {prefix: cardPrefix});
+	app.register(disableCard, {prefix: cardPrefix});
+	app.register(updateCard, {prefix: cardPrefix});
+    
 
-    return;
+	return;
 }

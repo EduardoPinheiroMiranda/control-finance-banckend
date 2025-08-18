@@ -1,4 +1,4 @@
-import { Card, Prisma } from "@/generated/prisma/client"
+import { Card, Prisma } from "@/generated/prisma/client";
 
 
 

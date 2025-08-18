@@ -76,7 +76,7 @@ export async function payInvoice(app: FastifyTypes){
 				if(!request.userId){
 					return reply.status(400).send({
 						msg: "O usuário deve ser informado."
-					})
+					});
 				}
 				
 				

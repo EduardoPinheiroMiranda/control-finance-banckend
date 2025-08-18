@@ -13,24 +13,24 @@ app.register(fastifyCors, { origin: "*"});
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 app.register(fastifySwagger, {
-    openapi: {
-        info: {
-            title: "Control Finance",
-            version: "1.0.0"
-        },
-        components: {
-            securitySchemes: {
-                BearerAuth: {
-                    type: "http",
-                    scheme: "bearer",
-                    bearerFormat: "JWT"
-                }
-            }
-        }
-    },
+	openapi: {
+		info: {
+			title: "Control Finance",
+			version: "1.0.0"
+		},
+		components: {
+			securitySchemes: {
+				BearerAuth: {
+					type: "http",
+					scheme: "bearer",
+					bearerFormat: "JWT"
+				}
+			}
+		}
+	},
 	transform: jsonSchemaTransform,
 });
-app.register(fastifySwaggerUi, {routePrefix: "/docs"})
+app.register(fastifySwaggerUi, {routePrefix: "/docs"});
 
 
 
@@ -41,10 +41,10 @@ registerAllRoutes();
 
 app.setErrorHandler((err, _, reply) => {
 
-    if(Array.isArray(err.validation)){
-        reply.status(err.statusCode ?? 400).send(JSON.stringify({
-            msg: "Data validation error.",
-            error: err.validation.map((issue) => issue.params)
-        }));
-    }
+	if(Array.isArray(err.validation)){
+		reply.status(err.statusCode ?? 400).send(JSON.stringify({
+			msg: "Data validation error.",
+			error: err.validation.map((issue) => issue.params)
+		}));
+	}
 });

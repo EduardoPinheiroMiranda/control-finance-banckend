@@ -1,4 +1,4 @@
-import { Prisma, Shopping } from "@/generated/prisma/client";
+import { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/libs/primsa";
 import { ShoppingDatabaseInterface } from "../interfaces/shopping";
 import { ShoppingListByType } from "@/@types/prisma-customTypes";

@@ -1,5 +1,5 @@
 import { DataValidationError } from "@/errors/custonErros";
-import { TypeExtract, TypeInvoice } from "@/generated/prisma/client";
+import { TypeExtract } from "@/generated/prisma/client";
 import { ApplicationDatabaseInterface } from "@/repositories/interfaces/application";
 import { ExtractDatabaseInterface } from "@/repositories/interfaces/extract";
 

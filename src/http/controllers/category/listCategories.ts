@@ -1,8 +1,6 @@
 import { FastifyTypes } from "@/@types/fastify-customTypes";
 import { makeListCategories } from "@/factories/category/make-listCategories";
-import { checkToken } from "@/http/middlewares/checkToken";
 import { handleErrorsInControlles } from "@/utils/handleErrorsInControllers";
-import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 
 

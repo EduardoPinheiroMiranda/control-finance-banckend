@@ -1,4 +1,8 @@
 import { app } from "./app";
+import { getAllCardInvoices } from "./http/controllers/invoice/getAllCardInvoices";
+import { getAllInvoices } from "./http/controllers/invoice/getAllInvoices";
+import { getCurrentInvoice } from "./http/controllers/invoice/getCurrentInvoice";
+import { payInvoice } from "./http/controllers/invoice/payInvoice";
 import { deleteShopping } from "./http/controllers/shopping/deleteShopping";
 import { listShopping } from "./http/controllers/shopping/listShopping";
 import { registerShopping } from "./http/controllers/shopping/registerShopping";
@@ -35,6 +39,12 @@ export function registerAllRoutes(){
     app.register(updateShopping, {prefix: shoppingPrefix});
     app.register(deleteShopping, {prefix: shoppingPrefix});
     
+    // register invoices routes
+    const invoicePrefix = "invoice";
+    app.register(getAllCardInvoices, {prefix: invoicePrefix});
+    app.register(getAllInvoices, {prefix: invoicePrefix});
+    app.register(getCurrentInvoice, {prefix: invoicePrefix});
+    app.register(payInvoice, {prefix: invoicePrefix});
 
     return;
 }

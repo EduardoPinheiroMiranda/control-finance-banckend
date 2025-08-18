@@ -1,5 +1,4 @@
 import { makeValueMovements } from "@/factories/application/make-valueMovements";
-import { typeExtract } from "@/utils/globalValues";
 import { handleErrorsInControlles } from "@/utils/handleErrorsInControllers";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
@@ -12,7 +11,7 @@ export async function valueMovements(request: FastifyRequest, reply: FastifyRepl
 		const body = z.object({
 			applicationId: z.string(),
 			value: z.number(),
-			type: z.enum(typeExtract)
+			type: z.enum(["WITHDRAW", "DEPOSIT"]).default("DEPOSIT")
 		}).parse(request.body);
 
 

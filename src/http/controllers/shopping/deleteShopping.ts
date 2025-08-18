@@ -1,14 +1,13 @@
 import { FastifyTypes } from "@/@types/fastify-customTypes";
 import { makeDeleteShopping } from "@/factories/shopping/make-deleteShopping";
 import { handleErrorsInControlles } from "@/utils/handleErrorsInControllers";
-import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 
 
 export async function deleteShopping(app: FastifyTypes){
 
 	app.delete(
-		"/deleteShopping",
+		"/deleteShopping/:shoppingId",
 		{
 			schema: {
 				security: [{ BearerAuth: [] }],

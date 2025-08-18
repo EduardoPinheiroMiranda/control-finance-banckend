@@ -1,3 +1,4 @@
+import { Invoice } from "@/@types/prisma-customTypes";
 import { DataValidationError } from "@/errors/custonErros";
 import { InvoiceDatabaseInterface } from "@/repositories/interfaces/invoice";
 import { UserDatabaseInterface } from "@/repositories/interfaces/user";
@@ -29,6 +30,7 @@ export class GetCurrentInvoice{
 
 		const invoice = await this.invoiceRepository.getCurrentInvoice(userId, date[0].dueDate);
 
+		
 
 		if(invoice.length === 0 ){
 			throw new DataValidationError("Sua fatura não foi encontrada.");
@@ -37,11 +39,13 @@ export class GetCurrentInvoice{
 
 		const limit = invoice[0].limit;
 		const amountInvoice = invoice[0].amount;
-		const percentegeSpent = amountInvoice.div(limit).times(100).round().toNumber();
+		const percentegeSpent = Math.trunc((amountInvoice/limit)*100);
 		
 
-		const result: any = invoice[0];
-		result["percentageSpent"] = percentegeSpent;
+		const result: Invoice & {percentageSpent: number} = {
+			...invoice[0],
+			percentageSpent: percentegeSpent
+		};
 
 		return result;
 	}

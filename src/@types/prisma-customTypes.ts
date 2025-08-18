@@ -6,14 +6,14 @@ export interface Installment{
     installmentId: string,
     installmentNumber: number,
     installmentValue: number,
-    dueDate: Date,
+    dueDate: string,
     pay: boolean,
     shoppingId: string,
     totalInstallments: number,
     typeInvoice: string,
     paymentMethod: string,
     name: string,
-    purchaseDate: Date
+    purchaseDate: string
 }
 
 export interface Invoice{
@@ -22,14 +22,14 @@ export interface Invoice{
     dueDate: Date,
     closingDate: Date,
     current: boolean,
-    amount: Decimal,
-    limit: Decimal,
-    available: Decimal,
-    totalFixedExpense: Decimal,
-    totalExtraExpense: Decimal,
-    totalInvoice: Decimal,
-    totalCard: Decimal,
-    totalMoney: Decimal,
+    amount: number,
+    limit: number,
+    available: number,
+    totalFixedExpense: number,
+    totalExtraExpense: number,
+    totalInvoice: number,
+    totalCard: number,
+    totalMoney: number,
     installments: {
         fixedExpense: Installment[],
         extraExpense: Installment[]

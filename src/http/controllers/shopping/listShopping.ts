@@ -1,6 +1,5 @@
 import { FastifyTypes } from "@/@types/fastify-customTypes";
 import { makeListShopping } from "@/factories/shopping/make-listShopping";
-import { Prisma } from "@/generated/prisma/client";
 import { checkToken } from "@/http/middlewares/checkToken";
 import { handleErrorsInControlles } from "@/utils/handleErrorsInControllers";
 import { z } from "zod";

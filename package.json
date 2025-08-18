@@ -6,6 +6,9 @@
   "directories": {
     "test": "test"
   },
+  "prisma": {
+    "seed": "tsx ./prisma/seed.ts"
+  },
   "scripts": {
     "dev": "tsx watch ./src/server.ts"
   },

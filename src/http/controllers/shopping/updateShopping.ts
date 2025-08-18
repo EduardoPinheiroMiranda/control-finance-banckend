@@ -32,9 +32,8 @@ export async function updateShopping(app: FastifyTypes){
 			try{
 
 				const serviceupdateShopping = makeUpdateShopping();
-				const shoping = await serviceupdateShopping.execute(request.body);
+				await serviceupdateShopping.execute(request.body);
 
-				console.log(shoping)
 				
 				return reply.status(200).send({msg: "Dados atualizados"});
 

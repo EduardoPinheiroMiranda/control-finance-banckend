@@ -1,5 +1,5 @@
-import { PaymentMethod, TypeExtract, TypeInvoice } from "@/generated/prisma/client"
-import { Decimal } from "@/generated/prisma/runtime/library"
+import { PaymentMethod, TypeExtract, TypeInvoice } from "@/generated/prisma/client";
+import { Decimal } from "@/generated/prisma/runtime/library";
 
 
 export interface User{
@@ -82,5 +82,5 @@ export interface Application{
 export interface Filter{
     date: string | null,
     applicationId: string | null,
-    type: TypeExtract
+    type: TypeExtract | null
 }

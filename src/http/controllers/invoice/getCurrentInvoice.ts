@@ -3,7 +3,6 @@ import { z } from "zod";
 import { makeGetCurrentInvoice } from "@/factories/invoice/make-getCurrentInvoice";
 import { FastifyTypes } from "@/@types/fastify-customTypes";
 import { checkToken } from "@/http/middlewares/checkToken";
-import { Prisma } from "@/generated/prisma/client";
 
 
 export async function getCurrentInvoice(app: FastifyTypes){
@@ -82,7 +81,7 @@ export async function getCurrentInvoice(app: FastifyTypes){
 				
 				return reply.status(200).send(invoice);
 
-			}catch(err: any){
+			}catch(err){
 
 				const { statusCode, error } = handleErrorsInControlles(err);
 				return reply.status(statusCode).send(error);

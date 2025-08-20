@@ -48,7 +48,7 @@ export function checkToken(
 
 		done();
 
-	}catch(err: any){
+	}catch(err){
 
 		return reply.status(401).send(JSON.stringify({
 			error: {

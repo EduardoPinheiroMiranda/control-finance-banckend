@@ -63,7 +63,7 @@ export async function getAllMovements(app: FastifyTypes){
 				
 				return reply.status(200).send(movements);
 
-			}catch(err: any){
+			}catch(err){
 
 				const {statusCode, error} = handleErrorsInControlles(err);
 				return reply.status(statusCode).send(error);

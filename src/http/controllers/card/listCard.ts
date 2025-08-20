@@ -49,7 +49,7 @@ export async function listCard(app: FastifyTypes){
 
 				return reply.status(200).send(card);
 
-			}catch(err: any){
+			}catch(err){
 
 				const { error, statusCode} = handleErrorsInControlles(err);
 				return reply.status(statusCode).send(error);

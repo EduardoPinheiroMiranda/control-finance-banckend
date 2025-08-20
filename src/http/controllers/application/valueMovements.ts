@@ -1,33 +1,57 @@
+import { FastifyTypes } from "@/@types/fastify-customTypes";
 import { makeValueMovements } from "@/factories/application/make-valueMovements";
+import { Prisma } from "@/generated/prisma/client";
+import { checkToken } from "@/http/middlewares/checkToken";
 import { handleErrorsInControlles } from "@/utils/handleErrorsInControllers";
-import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 
 
-export async function valueMovements(request: FastifyRequest, reply: FastifyReply){
+export async function valueMovements(app: FastifyTypes){
 
-	try{
+	app.post(
+		"/valueMovements",
+		{
+			schema: {
+				security: [{ BearerAuth: [] }],
+				body: z.object({
+					applicationId: z.string(),
+					value: z.number(),
+					type: z.enum(["WITHDRAW", "DEPOSIT"]).default("DEPOSIT")
+				}),
+				response: {
+					200: z.object({
+						applicationId: z.string(),
+						totalValue: z.number(),
+						type: z.string(),
+						value: z.instanceof(Prisma.Decimal),
+						createdAt: z.date(),
+					}),
+					400: z.object({msg: z.string()})
+				},
+				tags: ["application"],
+				description: ""
+			},
+			preHandler: checkToken
+		},
+		async (request, reply) => {
 
-		const body = z.object({
-			applicationId: z.string(),
-			value: z.number(),
-			type: z.enum(["WITHDRAW", "DEPOSIT"]).default("DEPOSIT")
-		}).parse(request.body);
+			try{
+
+				const serviceValueMovements = makeValueMovements();
+				const application = await serviceValueMovements.execute(
+					request.body.applicationId,
+					request.body.value,
+					request.body.type
+				);
 
 
-		const serviceValueMovements = makeValueMovements();
-		const application = await serviceValueMovements.execute(
-			body.applicationId,
-			body.value,
-			body.type
-		);
+				return reply.status(200).send(application);
 
+			}catch(err){
 
-		return reply.status(200).send(JSON.stringify(application));
-
-	}catch(err: any){
-
-		const { error, statusCode } = handleErrorsInControlles(err);
-		return reply.status(statusCode).send(JSON.stringify(error));
-	}
+				const { error, statusCode } = handleErrorsInControlles(err);
+				return reply.status(statusCode).send(error);
+			}
+		}
+	);
 }

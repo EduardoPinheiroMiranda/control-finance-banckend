@@ -1,27 +1,46 @@
+import { FastifyTypes } from "@/@types/fastify-customTypes";
 import { makeDeleteApplication } from "@/factories/application/make-deleteApplication";
+import { checkToken } from "@/http/middlewares/checkToken";
 import { handleErrorsInControlles } from "@/utils/handleErrorsInControllers";
-import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 
 
-export async function deleteApplication(request: FastifyRequest, reply: FastifyReply){
+export async function deleteApplication(app: FastifyTypes){
 
-	try{
+	app.delete(
+		"/deleteApplication/:applicationId",
+		{
+			schema: {
+				security: [{ BearerAuth: [] }],
+				params: z.object({
+					applicationId: z.string()
+				}),
+				response: {
+					200: z.object({msg: z.string().describe("Aplicação excluida.")}),
+					400: z.object({msg: z.string()})
+				},
+				tags: ["application"],
+				description: "This route is responsible for deleting an application that the user has."
+			},
+			preHandler: checkToken
+		},
+		async (requets, reply) => {
 
-		const params = z.object({
-			applicationId: z.string()
-		}).parse(request.params);
+			try{
+
+				const serviceDeleteApplication = makeDeleteApplication();
+				await serviceDeleteApplication.execute(
+					requets.params.applicationId
+				);
 
 
-		const serviceDeleteApplication = makeDeleteApplication();
-		const applications = await serviceDeleteApplication.execute(params.applicationId);
+				return reply.status(200).send({msg: "Aplicação excluida."});
 
+			}catch(err){
 
-		return reply.status(200).send(JSON.stringify(applications));
-
-	}catch(err: any){
-
-		const { error, statusCode } = handleErrorsInControlles(err);
-		return reply.status(statusCode).send(JSON.stringify(error));
-	}
+				const { error, statusCode } = handleErrorsInControlles(err);
+				return reply.status(statusCode).send(error);
+			}
+		}
+	);
 }

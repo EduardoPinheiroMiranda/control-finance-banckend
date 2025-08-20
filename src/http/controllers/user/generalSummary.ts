@@ -43,7 +43,7 @@ export async function generalSummary(app: FastifyTypes){
 
 				return reply.status(200).send(data);
 
-			}catch(err: any){
+			}catch(err){
 
 				const {statusCode, error} = handleErrorsInControlles(err);
 				return reply.status(statusCode).send(error);

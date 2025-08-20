@@ -42,7 +42,7 @@ export async function registerUser(app: FastifyTypes	){
 					msg: "Usuário cadastrado com sucesso."
 				});
 
-			}catch(err: any){
+			}catch(err){
 
 				const {statusCode, error} = handleErrorsInControlles(err);
 				return reply.status(statusCode).send(error);

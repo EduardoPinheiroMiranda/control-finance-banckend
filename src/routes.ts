@@ -1,4 +1,11 @@
 import { app } from "./app";
+import { deleteApplication } from "./http/controllers/application/deleteApplication";
+import { filterApplications } from "./http/controllers/application/filterApplications";
+import { getAllApplications } from "./http/controllers/application/getAllApplications";
+import { getApplication } from "./http/controllers/application/getApplication";
+import { registerApplication } from "./http/controllers/application/registerApplication";
+import { updateApplication } from "./http/controllers/application/updateApplication";
+import { valueMovements } from "./http/controllers/application/valueMovements";
 import { disableCard } from "./http/controllers/card/disableCard";
 import { listCard } from "./http/controllers/card/listCard";
 import { registerCard } from "./http/controllers/card/registerCard";
@@ -37,6 +44,7 @@ export function registerAllRoutes(){
 	app.register(updatePassword, {prefix: userPrefix});
 	app.register(updateUser, {prefix: userPrefix});
     
+	
 	// register shoppings routes
 	const shoppingPrefix = "shopping";
 	app.register(registerShopping, {prefix: shoppingPrefix});  
@@ -44,6 +52,7 @@ export function registerAllRoutes(){
 	app.register(updateShopping, {prefix: shoppingPrefix});
 	app.register(deleteShopping, {prefix: shoppingPrefix});
     
+
 	// register invoices routes
 	const invoicePrefix = "invoice";
 	app.register(getAllCardInvoices, {prefix: invoicePrefix});
@@ -51,9 +60,11 @@ export function registerAllRoutes(){
 	app.register(getCurrentInvoice, {prefix: invoicePrefix});
 	app.register(payInvoice, {prefix: invoicePrefix});
 
+
 	// register categories routes
 	const categoryPrefix = "category";
 	app.register(listCategories, {prefix: categoryPrefix});
+
 
 	// register cards routes
 	const cardPrefix = "card";
@@ -62,6 +73,17 @@ export function registerAllRoutes(){
 	app.register(disableCard, {prefix: cardPrefix});
 	app.register(updateCard, {prefix: cardPrefix});
     
+
+	// register application routes
+	const applicationPrefix = "application";
+	app.register(registerApplication, {prefix: applicationPrefix});
+	app.register(deleteApplication, {prefix: applicationPrefix});
+	app.register(filterApplications, {prefix: applicationPrefix});
+	app.register(getAllApplications, {prefix: applicationPrefix});
+	app.register(getApplication, {prefix: applicationPrefix});
+	app.register(updateApplication, {prefix: applicationPrefix});
+	app.register(valueMovements, {prefix: applicationPrefix});
+
 
 	return;
 }

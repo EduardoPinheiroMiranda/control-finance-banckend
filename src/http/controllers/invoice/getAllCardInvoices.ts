@@ -59,7 +59,7 @@ export async function getAllCardInvoices(app: FastifyTypes){
 				if(!request.userId){
 					return reply.status(400).send({
 						msg: "O usuário deve ser informado."
-					})
+					});
 				}
 				
 				
@@ -72,7 +72,7 @@ export async function getAllCardInvoices(app: FastifyTypes){
 				
 				return reply.status(200).send(invoices);
 
-			}catch(err: any){
+			}catch(err){
 
 				const { statusCode, error } = handleErrorsInControlles(err);
 				return reply.status(statusCode).send(error);

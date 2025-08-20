@@ -1,43 +1,73 @@
+import { FastifyTypes } from "@/@types/fastify-customTypes";
 import { makeUpdateApplication } from "@/factories/application/make-updateApplication";
+import { Prisma } from "@/generated/prisma/client";
+import { checkToken } from "@/http/middlewares/checkToken";
 import { handleErrorsInControlles } from "@/utils/handleErrorsInControllers";
-import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 
 
-export async function updateApplication(request: FastifyRequest, reply: FastifyReply){
+export async function updateApplication(app: FastifyTypes){
 
-	try{
+	app.put(
+		"/updateApplication",
+		{
+			schema: {
+				security: [{ BearerAuth: [] }],
+				body: z.object({
+					id: z.string(),
+					name: z.string(),
+					targetValue: z.number(),
+					institution: z.string().nullable(),
+					colorFont: z.string().nullable(),
+					colorApplication: z.string().nullable(),
+					icon: z.string()
+				}),
+				response: {
+					200: z.object({
+						value: z.instanceof(Prisma.Decimal),
+						id: z.string(),
+						name: z.string(),
+						targetValue: z.instanceof(Prisma.Decimal),
+						institution: z.string(),
+						colorFont: z.string(),
+						colorApplication: z.string(),
+						icon: z.string(),
+						createdAt: z.date(),
+						updatedAt: z.date(),
+						userId: z.string(),
+					}),
+					400: z.object({msg: z.string()})
+				},
+				tags: ["application"],
+				description: ""
+			},
+			preHandler: checkToken
+		},
+		async (request, reply) => {
 
-		const body = z.object({
-			id: z.string(),
-			name: z.string(),
-			targetValue: z.number(),
-			institution: z.string().nullable(),
-			colorFont: z.string().nullable(),
-			colorApplication: z.string().nullable(),
-			icon: z.string()
-		}).parse(request.body);
+			try{
+
+				const serviceUpdateApplication = makeUpdateApplication();
+				const application = await serviceUpdateApplication.execute(
+					request.body.id,
+					{
+						name: request.body.name,
+						targetValue: request.body.targetValue,
+						institution: request.body.institution,
+						colorFont: request.body.colorFont,
+						colorApplication: request.body.colorApplication,
+						icon: request.body.icon
+					}
+				);
 
 
-		const serviceUpdateApplication = makeUpdateApplication();
-		const application = await serviceUpdateApplication.execute(
-			body.id,
-			{
-				name: body.name,
-				targetValue: body.targetValue,
-				institution: body.institution,
-				colorFont: body.colorFont,
-				colorApplication: body.colorApplication,
-				icon: body.icon
+				return reply.status(200).send(application);
+
+			}catch(err){
+
+				const { error, statusCode } = handleErrorsInControlles(err);
+				return reply.status(statusCode).send(error);
 			}
-		);
-
-
-		return reply.status(200).send(JSON.stringify(application));
-
-	}catch(err: any){
-
-		const { error, statusCode } = handleErrorsInControlles(err);
-		return reply.status(statusCode).send(JSON.stringify(error));
-	}
+		}
+	);
 }

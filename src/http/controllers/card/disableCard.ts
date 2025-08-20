@@ -26,18 +26,13 @@ export async function disableCard(app: FastifyTypes){
 
 			try{
 
-				const params = z.object({
-					cardId: z.string()
-				}).parse(request.params);
-			
-
 				const serviceDisableCard = makeDisableCard();
-				const card = await serviceDisableCard.execute(params.cardId);
+				await serviceDisableCard.execute(request.params.cardId);
 
 
 				return reply.status(200).send({msg: "Cartão excluido."});
 
-			}catch(err: any){
+			}catch(err){
 
 				const { error, statusCode} = handleErrorsInControlles(err);
 				return reply.status(statusCode).send(error);

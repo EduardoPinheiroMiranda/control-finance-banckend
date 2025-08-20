@@ -39,7 +39,7 @@ export async function listCategories(app: FastifyTypes){
 
 				return reply.status(200).send(categories);
 
-			}catch(err: any){
+			}catch(err){
 
 				const { error, statusCode } = handleErrorsInControlles(err);
 				return reply.status(statusCode).send(error);

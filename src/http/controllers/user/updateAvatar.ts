@@ -49,7 +49,7 @@ export async function updateAvatar(app: FastifyTypes){
 				
 				return reply.status(200).send(user);
 
-			}catch(err: any){
+			}catch(err){
 
 				const {statusCode, error} = handleErrorsInControlles(err);
 				return reply.status(statusCode).send(error);

@@ -69,7 +69,7 @@ export async function listShopping(app: FastifyTypes){
 	
 				return reply.status(200).send(shopping);
 
-			}catch(err: any){
+			}catch(err){
 				
 				const {statusCode, error} = handleErrorsInControlles(err);
 				return reply.status(statusCode).send(error);

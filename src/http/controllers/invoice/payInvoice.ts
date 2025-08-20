@@ -3,7 +3,6 @@ import { z } from "zod";
 import { makePayInvoice } from "@/factories/invoice/make-payInvoice";
 import { FastifyTypes } from "@/@types/fastify-customTypes";
 import { checkToken } from "@/http/middlewares/checkToken";
-import { Prisma } from "@/generated/prisma/client";
 
 
 export async function payInvoice(app: FastifyTypes){
@@ -90,7 +89,7 @@ export async function payInvoice(app: FastifyTypes){
 				
 				return reply.status(200).send(invoice);
 
-			}catch(err: any){
+			}catch(err){
 
 				const { statusCode, error } = handleErrorsInControlles(err);
 				return reply.status(statusCode).send(error);

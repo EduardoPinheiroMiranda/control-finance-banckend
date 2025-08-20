@@ -37,7 +37,7 @@ export async function updateShopping(app: FastifyTypes){
 				
 				return reply.status(200).send({msg: "Dados atualizados"});
 
-			}catch(err: any){
+			}catch(err){
 				
 				const {statusCode, error} = handleErrorsInControlles(err);
 				return reply.status(statusCode).send(error);

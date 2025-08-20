@@ -57,7 +57,7 @@ export async function registerShopping(app: FastifyTypes){
 					msg: "Compra adicionada."
 				});
 
-			}catch(err: any){
+			}catch(err){
 				
 				const {statusCode, error} = handleErrorsInControlles(err);
 				return reply.status(statusCode).send(error);

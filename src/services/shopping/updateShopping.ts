@@ -1,5 +1,5 @@
 import { ShoppingUpdate } from "src/@types/customTypes";
-import { DataValidationError, ResourceNotFoud } from "@/errors/custonErros";
+import { DataValidationError, ResourceNotFound } from "@/errors/custonErros";
 import { InstallmentDatabaseInterface } from "@/repositories/interfaces/installment";
 import { ShoppingDatabaseInterface } from "@/repositories/interfaces/shopping";
 import { HandlerDueDate } from "@/utils/handlerDueDate";
@@ -59,7 +59,7 @@ export class UpdateShopping{
 		const shopping = await this.shoppingRepository.getById(data.id);
 
 		if(!shopping){
-			throw new ResourceNotFoud("Houve um problema para encontrar as informações necessárias.");
+			throw new ResourceNotFound("Houve um problema para encontrar as informações necessárias.");
 		}
 
 

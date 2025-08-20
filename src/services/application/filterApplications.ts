@@ -1,5 +1,5 @@
 import { Filter } from "src/@types/customTypes";
-import { ResourceNotFoud } from "@/errors/custonErros";
+import { ResourceNotFound } from "@/errors/custonErros";
 import { ApplicationDatabaseInterface } from "@/repositories/interfaces/application";
 
 
@@ -15,7 +15,7 @@ export class FilterApplications{
 		const movements = await this.applicationRepository.filterApplications(filter);
 
 		if(movements.extracts.length === 0){
-			throw new ResourceNotFoud("Ainda não há movimentação de aplicações.");
+			throw new ResourceNotFound("Ainda não há movimentação de aplicações.");
 		}
 
 		return movements;

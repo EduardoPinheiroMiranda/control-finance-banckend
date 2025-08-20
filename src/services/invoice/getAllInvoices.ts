@@ -1,4 +1,4 @@
-import { DataValidationError, ResourceNotFoud } from "@/errors/custonErros";
+import { DataValidationError, ResourceNotFound } from "@/errors/custonErros";
 import { InvoiceDatabaseInterface } from "@/repositories/interfaces/invoice";
 import { UserDatabaseInterface } from "@/repositories/interfaces/user";
 import { createSubtitleToInvoices } from "@/utils/createSubtitleToInvoices";
@@ -31,7 +31,7 @@ export class GetAllInvoices{
 		const invoices = await this.invoiceRepository.getAllInvoices(userId, dates[0].dueDate);
 
 		if(invoices.length === 0){
-			throw new ResourceNotFoud("Nenhuma fatura encontrada.");
+			throw new ResourceNotFound("Nenhuma fatura encontrada.");
 		}
 
 

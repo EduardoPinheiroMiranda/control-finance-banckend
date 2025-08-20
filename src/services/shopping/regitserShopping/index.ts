@@ -1,5 +1,5 @@
 import { Dates, Shopping } from "src/@types/customTypes";
-import { DataValidationError, ResourceNotFoud } from "@/errors/custonErros";
+import { DataValidationError, ResourceNotFound } from "@/errors/custonErros";
 import { CardDatabaseInterface } from "@/repositories/interfaces/card";
 import { InstallmentDatabaseInterface } from "@/repositories/interfaces/installment";
 import { InvoiceDatabaseInterface } from "@/repositories/interfaces/invoice";
@@ -100,7 +100,7 @@ export class RegisterShopping{
 		const user = await this.userRepository.getById(userId);
 
 		if(!user){
-			throw new ResourceNotFoud("Usuário não foi encontrado.");
+			throw new ResourceNotFound("Usuário não foi encontrado.");
 		}
 		
 

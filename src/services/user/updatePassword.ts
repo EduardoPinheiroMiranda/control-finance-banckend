@@ -1,4 +1,4 @@
-import { DataValidationError, ResourceNotFoud } from "@/errors/custonErros";
+import { DataValidationError, ResourceNotFound } from "@/errors/custonErros";
 import { UserDatabaseInterface } from "@/repositories/interfaces/user";
 import { hash, compare } from "bcrypt";
 
@@ -20,7 +20,7 @@ export class UpdatePassword{
 		const user = await this.userRepository.getById(userId);
 
 		if(!user){
-			throw new ResourceNotFoud("Usuário não encontrado.");
+			throw new ResourceNotFound("Usuário não encontrado.");
 		}
 
 

@@ -1,4 +1,4 @@
-import { ResourceNotFoud } from "@/errors/custonErros";
+import { ResourceNotFound } from "@/errors/custonErros";
 import { InstallmentDatabaseInterface } from "@/repositories/interfaces/installment";
 import { ShoppingDatabaseInterface } from "@/repositories/interfaces/shopping";
 import { Installment } from "@/generated/prisma/client";
@@ -54,7 +54,7 @@ export class DeleteShopping{
 		const shopping = await this.shoppingRepository.getFullDataById(shoppingId);
       
 		if(!shopping){
-			throw new ResourceNotFoud("Erro ao executar a ação, tente novamente mais tarde.");
+			throw new ResourceNotFound("Erro ao executar a ação, tente novamente mais tarde.");
 		}
 
 

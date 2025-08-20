@@ -89,10 +89,16 @@ export async function payInvoice(app: FastifyTypes){
 				
 				return reply.status(200).send(invoice);
 
-			}catch(err){
+			}catch(err: unknown){
 
-				const { statusCode, error } = handleErrorsInControlles(err);
-				return reply.status(statusCode).send(error);
+				if(err instanceof Error){
+					const { error, statusCode } = handleErrorsInControlles(err);
+					return reply.status(statusCode).send(error);
+				}
+
+
+				console.log(err);
+				return reply.status(500).send({msg: "Error internal server"});	
 			}
 		}
 	);

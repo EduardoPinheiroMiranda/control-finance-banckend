@@ -69,10 +69,16 @@ export async function listShopping(app: FastifyTypes){
 	
 				return reply.status(200).send(shopping);
 
-			}catch(err){
-				
-				const {statusCode, error} = handleErrorsInControlles(err);
-				return reply.status(statusCode).send(error);
+			}catch(err: unknown){
+
+				if(err instanceof Error){
+					const { error, statusCode } = handleErrorsInControlles(err);
+					return reply.status(statusCode).send(error);
+				}
+
+
+				console.log(err);
+				return reply.status(500).send({msg: "Error internal server"});	
 			}
 		}
 	);

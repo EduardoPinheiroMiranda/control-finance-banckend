@@ -57,10 +57,16 @@ export async function registerShopping(app: FastifyTypes){
 					msg: "Compra adicionada."
 				});
 
-			}catch(err){
-				
-				const {statusCode, error} = handleErrorsInControlles(err);
-				return reply.status(statusCode).send(error);
+			}catch(err: unknown){
+
+				if(err instanceof Error){
+					const { error, statusCode } = handleErrorsInControlles(err);
+					return reply.status(statusCode).send(error);
+				}
+
+
+				console.log(err);
+				return reply.status(500).send({msg: "Error internal server"});	
 			}
 		}
 	);

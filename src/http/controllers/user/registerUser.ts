@@ -42,10 +42,16 @@ export async function registerUser(app: FastifyTypes	){
 					msg: "Usuário cadastrado com sucesso."
 				});
 
-			}catch(err){
+			}catch(err: unknown){
 
-				const {statusCode, error} = handleErrorsInControlles(err);
-				return reply.status(statusCode).send(error);
+				if(err instanceof Error){
+					const { error, statusCode } = handleErrorsInControlles(err);
+					return reply.status(statusCode).send(error);
+				}
+
+
+				console.log(err);
+				return reply.status(500).send({msg: "Error internal server"});	
 			}
 		}
 	);

@@ -85,7 +85,7 @@ export class ApplicationPrismaRepository implements ApplicationDatabaseInterface
 
 
 		return {
-			value: sumOfValues._sum.value ?? Decimal(0),
+			value: sumOfValues._sum.value ?? new Prisma.Decimal(0),
 			applications
 		};
 	}

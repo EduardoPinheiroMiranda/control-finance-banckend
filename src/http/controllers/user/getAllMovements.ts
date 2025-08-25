@@ -18,23 +18,21 @@ export async function getAllMovements(app: FastifyTypes){
 					cursor: z.string().nullable()
 				}),
 				response: {
-					200: z.array(
-						z.object({
-							description: z.string().nullable(),
-							value: z.instanceof(Prisma.Decimal),
-							name: z.string(),
-							id: z.string(),
-							typeInvoice: z.enum(["FIXED_EXPENSE", "EXTRA_EXPENSE"]),
-							paymentMethod: z.enum(["CARD", "INVOICE", "MONEY"]),
-							totalInstallments: z.number(),
-							pay: z.boolean(),
-							createdAt: z.date(),
-							updatedAt: z.date(),
-							cardId: z.string().nullable(),
-							categoryId: z.string(),
-							userId: z.string(),
-						}
-						)),
+					200: z.array(z.object({
+						description: z.string().nullable(),
+						value: z.instanceof(Prisma.Decimal),
+						name: z.string(),
+						id: z.string(),
+						typeInvoice: z.enum(["FIXED_EXPENSE", "EXTRA_EXPENSE"]),
+						paymentMethod: z.enum(["CARD", "INVOICE", "MONEY"]),
+						totalInstallments: z.number(),
+						pay: z.boolean(),
+						createdAt: z.date(),
+						updatedAt: z.date(),
+						cardId: z.string().nullable(),
+						categoryId: z.string(),
+						userId: z.string(),
+					})),
 					400: z.object({msg: z.string()})
 				},
 				tags: ["user"],

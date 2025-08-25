@@ -6,9 +6,9 @@ services:
     ports: 
       - 5432:5432
     environment:
-      - POSTGRESQL_USERNAME=${USER_DB}
-      - POSTGRESQL_PASSWORD=${PASSWORD_DB}
-      - POSTGRESQL_DATABASE=${DATABASE}
+      - POSTGRESQL_USERNAME=controlFinanceRoot
+      - POSTGRESQL_PASSWORD=controlFinance
+      - POSTGRESQL_DATABASE=controlFinance
     volumes:
       - control_finance_db_data_development:/bitnami/postgresql
 

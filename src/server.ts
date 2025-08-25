@@ -7,7 +7,7 @@ app.listen({
 	port: env.PORT 
 })
 	.then(() => {
-		console.log("server runnign!!");
+		console.log(`server runnign in https//:localhost:${env.PORT}!!`);
 	})
 	.catch((err) => {
 		console.log("Erro internal server!!", err);

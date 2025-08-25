@@ -1,0 +1,79 @@
+import { UserPrismaRepository } from "@/repositories/prisma/user";
+import { ControlLimit } from "@/services/user/controlLimit";
+import { describe, expect, vi, it, beforeEach } from "vitest";
+import { Decimal } from "@prisma/client/runtime/library";
+
+
+describe("service/user", () => {
+
+	describe("#Control limit", () => {
+
+		let userRepository: UserPrismaRepository;
+		let serviceControlLimit: ControlLimit;
+
+
+		beforeEach(() => {
+            
+			userRepository = new UserPrismaRepository();
+			serviceControlLimit = new ControlLimit(
+				userRepository
+			);
+		});
+
+        
+		it("will trigger an arror if the limit is less than 100.", async () => {
+			await expect(
+				serviceControlLimit.execute("user-123", 50, 10, 5)
+			).rejects.toThrowError("Verifique o valor do limite, ele não pode ser inferior a 100.");
+		});
+
+		it("will trigger an arror if the dueDate is invalid.", async () => {
+			await expect(
+				serviceControlLimit.execute("user-123", 150, 40, 5)
+			).rejects.toThrowError("Dia de vencimento informado invalido.");
+		});
+
+		it("will trigger an arror if the closingDay is invalid.", async () => {
+			await expect(
+				serviceControlLimit.execute("user-123", 150, 10, 52)
+			).rejects.toThrowError("Dia de fechamento informado invalido.");
+		});
+
+		it("will trigger an arror if there is a problem in the database.", async () => {
+			await expect(
+				serviceControlLimit.execute("user-123", 850, 10, 5)
+			).rejects.toThrowError("Houve um problema para realizar a tarefa, tente novamente.");
+		});
+
+		it("check if the service is working.", async () => {
+
+			const date = new Date();
+			const mockUser = {
+				id: "user-123",
+				name: "eduardo",
+				email: "test@gmail.com",
+				password: "passwordHased",
+				dueDay: 10,
+				closingDay: 5,
+				limit: Decimal(1000),
+				avatar: null,
+				createdAt: date,
+				updatedAt: date
+			};
+
+			vi.spyOn(userRepository, "updateLimit").mockResolvedValue(mockUser);
+		
+
+			const result = await serviceControlLimit.execute("user-123", 1000, 10, 5);
+        
+			expect(result).toEqual({
+				id: mockUser.id,
+				name: mockUser.name,
+				email: mockUser.email,
+				dueDay: mockUser.dueDay,
+				closingDay: mockUser.closingDay,
+				limit: mockUser.limit
+			});
+		});
+	});
+});

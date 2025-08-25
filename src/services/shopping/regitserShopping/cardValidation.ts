@@ -1,4 +1,5 @@
 import { DataValidationError } from "@/errors/custonErros";
+import { PaymentMethod } from "@/generated/prisma";
 import { CardDatabaseInterface } from "@/repositories/interfaces/card";
 import { HandlerDueDate } from "@/utils/handlerDueDate";
 
@@ -12,7 +13,7 @@ export async function cardValidation(
 	let startOnTheInvoice = false;
 
     
-	if(paymentMethod === "CARD"){
+	if(paymentMethod === PaymentMethod.CARD){
     
 		if(!cardId){
 			throw new DataValidationError("Cartão informado invalido.");

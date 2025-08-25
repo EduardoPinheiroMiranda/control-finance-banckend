@@ -1,5 +1,5 @@
-import { Prisma, Shopping } from "@/generated/prisma"
-import { Decimal } from "@prisma/client/runtime/library"
+import { Prisma } from "@/generated/prisma";
+import { Decimal } from "@prisma/client/runtime/library";
 
 
 export interface Installment{

@@ -30,7 +30,7 @@ Essa API foi criada justamente para resolver esse tipo de problema. Ela permite 
 - Prisma ORM
 - PostgreSQL
 - Docker e Docker Compose
-- Jest (testes)
+- vit (testes)
 
 <br>
 

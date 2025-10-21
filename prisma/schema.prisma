@@ -23,6 +23,7 @@ model User {
   invoice     Invoice[]
   application Application[]
   shopping    Shopping[]
+  Movements   Movement[]
 
   @@map("users")
 }
@@ -75,8 +76,9 @@ model Shopping {
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId String   @map("category_id")
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @map("user_id")
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String      @map("user_id")
+  Movements Movement[]
 
   @@map("shopping")
 }
@@ -156,6 +158,35 @@ model Extract {
 
   application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
   applicationId String      @map("application_id")
+  Movements     Movement[]
 
   @@map("extracts")
+}
+
+enum TypeMovement {
+  DEPOSIT
+  WITHDRAW
+  INVOICE
+  CARD
+  MONEY
+}
+
+model Movement {
+  id          String       @id @default(uuid())
+  type        TypeMovement
+  value       Decimal
+  deuDate     DateTime     @map("deu_date")
+  installment Int?
+  createdAt   DateTime     @default(now()) @map("created_at")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  extract   Extract? @relation(fields: [extractId], references: [id])
+  extractId String?  @map("extract_id")
+
+  shopping   Shopping? @relation(fields: [shoppingId], references: [id])
+  shoppingId String?   @map("shopping_id")
+
+  @@map("movements")
 }

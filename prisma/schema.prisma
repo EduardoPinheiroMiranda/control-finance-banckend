@@ -178,7 +178,6 @@ model Movement {
   name        String
   type        TypeMovement
   value       Decimal
-  deuDate     DateTime     @map("deu_date")
   installment Int?
   createdAt   DateTime     @default(now()) @map("created_at")
 

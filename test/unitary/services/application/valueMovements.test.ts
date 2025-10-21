@@ -5,6 +5,7 @@ import { ValueMovements } from "@/services/application/valueMovements";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { Decimal } from "@prisma/client/runtime/library";
 import { TypeExtract } from "@/generated/prisma/client";
+import { MovementPrismaRepository } from "@/repositories/prisma/movements";
 
 
 describe("service/application", () => {
@@ -13,15 +14,18 @@ describe("service/application", () => {
 
 		let applicationRepository: ApplicationPrismaRepository;
 		let extractRepository: ExtractPrismaRepository;
+		let movementRepository: MovementPrismaRepository;
 		let serviceValueMovements: ValueMovements;
 
 
 		beforeEach(() => {
 			applicationRepository = new ApplicationPrismaRepository();
 			extractRepository = new ExtractPrismaRepository();
+			movementRepository = new MovementPrismaRepository();
 			serviceValueMovements = new ValueMovements(
 				applicationRepository,
-				extractRepository
+				extractRepository,
+				movementRepository
 			);
 		});
 
@@ -29,7 +33,7 @@ describe("service/application", () => {
 		it("will trigger an error if the valou is less than 0.", async () => {
             
 			await expect(
-				serviceValueMovements.execute("application-123", 0, "deposit")
+				serviceValueMovements.execute("application-123", 0, "DEPOSIT")
 			).rejects.toBeInstanceOf(DataValidationError);
 		});
 
@@ -38,7 +42,7 @@ describe("service/application", () => {
 			vi.spyOn(applicationRepository, "getById").mockResolvedValue(null);
             
 			await expect(
-				serviceValueMovements.execute("invalidId", 10, "deposit")
+				serviceValueMovements.execute("invalidId", 10, "DEPOSIT")
 			).rejects.toBeInstanceOf(DataValidationError);
 		});
 
@@ -84,9 +88,22 @@ describe("service/application", () => {
 				applicationId: "application-123"
 			};
 
+			const mockMovement = {
+				id: "01",
+				name: mockCreateExtract.type,
+				type: mockCreateExtract.type,
+				value: mockCreateExtract.value,
+				installment: null,
+				createdAt: mockCreateExtract.createdAt,
+				userId: "011",
+				extractId: mockCreateExtract.id,
+				shoppingId: null
+			};
+
 			vi.spyOn(applicationRepository, "getById").mockResolvedValue(mockApplication);
 			vi.spyOn(applicationRepository, "update").mockResolvedValue(mockUpadateApplication);
 			vi.spyOn(extractRepository, "create").mockResolvedValue(mockCreateExtract);
+			vi.spyOn(movementRepository, "create").mockResolvedValue(mockMovement);
 
 
 			const result = await serviceValueMovements.execute("application-123", 500, "DEPOSIT");
@@ -143,10 +160,22 @@ describe("service/application", () => {
 				applicationId: "application-123"
 			};
 
+			const mockMovement = {
+				id: "01",
+				name: mockCreateExtract.type,
+				type: mockCreateExtract.type,
+				value: mockCreateExtract.value,
+				installment: null,
+				createdAt: mockCreateExtract.createdAt,
+				userId: "011",
+				extractId: mockCreateExtract.id,
+				shoppingId: null
+			};
+
 			vi.spyOn(applicationRepository, "getById").mockResolvedValue(mockApplication);
 			vi.spyOn(applicationRepository, "update").mockResolvedValue(mockUpadateApplication);
 			vi.spyOn(extractRepository, "create").mockResolvedValue(mockCreateExtract);
-
+			vi.spyOn(movementRepository, "create").mockResolvedValue(mockMovement);
 
 			const result = await serviceValueMovements.execute("application-123", 500, "WITHDRAW");
 			

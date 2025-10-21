@@ -1,9 +1,9 @@
 import { prisma } from "@/libs/primsa";
-import { MovementDatabaseInterfac } from "../interfaces/movement";
+import { MovementDatabaseInterface } from "../interfaces/movement";
 import { Prisma } from "@/generated/prisma/client";
 
 
-export class MovementPrismaRepository implements MovementDatabaseInterfac{
+export class MovementPrismaRepository implements MovementDatabaseInterface{
 
 	async create(data: Prisma.MovementUncheckedCreateInput){
         

@@ -76,8 +76,8 @@ model Shopping {
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId String   @map("category_id")
 
-  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String      @map("user_id")
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String     @map("user_id")
   Movements Movement[]
 
   @@map("shopping")
@@ -148,6 +148,7 @@ model Application {
 enum TypeExtract {
   DEPOSIT
   WITHDRAW
+  INCOME
 }
 
 model Extract {
@@ -169,10 +170,12 @@ enum TypeMovement {
   INVOICE
   CARD
   MONEY
+  INCOME
 }
 
 model Movement {
   id          String       @id @default(uuid())
+  name        String
   type        TypeMovement
   value       Decimal
   deuDate     DateTime     @map("deu_date")

@@ -1,7 +1,7 @@
 import { Movement, Prisma } from "@/generated/prisma/client";
 
 
-export interface MovementDatabaseInterfac {
+export interface MovementDatabaseInterface {
 
     create(data: Prisma.MovementUncheckedCreateInput): Promise<Movement>
 

@@ -13,8 +13,8 @@ export interface User{
 
 export interface Shopping{
     name: string,
-    typeInvoice: keyof typeof TypeInvoice,
-    paymentMethod: keyof typeof PaymentMethod,
+    typeInvoice: TypeInvoice,
+    paymentMethod: PaymentMethod,
     value: number,
     totalInstallments: number,
     description: string | null,

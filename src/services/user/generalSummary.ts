@@ -1,7 +1,7 @@
 import { makeGetCurrentInvoice } from "@/factories/invoice/make-getCurrentInvoice";
 import { ApplicationDatabaseInterface } from "@/repositories/interfaces/application";
 import { CardDatabaseInterface } from "@/repositories/interfaces/card";
-import { ShoppingDatabaseInterface } from "@/repositories/interfaces/shopping";
+import { MovementDatabaseInterface } from "@/repositories/interfaces/movement";
 
 
 export class GeneralSummary{
@@ -9,7 +9,7 @@ export class GeneralSummary{
 	constructor(
 		private applicationRepository:ApplicationDatabaseInterface,
 		private cardRepository: CardDatabaseInterface,
-		private shoppingRepository: ShoppingDatabaseInterface
+		private movementRepository: MovementDatabaseInterface
 	){}
 
 
@@ -22,7 +22,7 @@ export class GeneralSummary{
 			this.applicationRepository.getAllApllications(userId),
 			serviceGetCurrentInvoice.execute(userId),
 			this.cardRepository.getAllCards(userId),
-			this.shoppingRepository.getAllShopping(userId, null, null)
+			this.movementRepository.getMovements(userId, 0)
 		]);
 
 

@@ -8,6 +8,7 @@ import { RegisterShopping } from "@/services/shopping/regitserShopping";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Decimal } from "@prisma/client/runtime/library";
 import { PaymentMethod, TypeInvoice } from "@/generated/prisma/client";
+import { MovementPrismaRepository } from "@/repositories/prisma/movements";
 
 
 describe("service/shopping", () => {
@@ -19,6 +20,7 @@ describe("service/shopping", () => {
 		let invoiceRepository: InvoicePrismaRepository;
 		let installmentRepository: InstallmentPrismaRepository;
 		let cardRepository: CardPrismaRepository;
+		let movementRepository: MovementPrismaRepository;
 		let serviceRegisterShopping: RegisterShopping;
 		const currentDate = new Date();
 
@@ -32,13 +34,15 @@ describe("service/shopping", () => {
 			invoiceRepository = new InvoicePrismaRepository();
 			installmentRepository = new InstallmentPrismaRepository();
 			cardRepository = new CardPrismaRepository();
+			movementRepository = new MovementPrismaRepository();
 
 			serviceRegisterShopping = new RegisterShopping(
 				userRepository,
 				shoppingRepository,
 				invoiceRepository,
 				installmentRepository,
-				cardRepository
+				cardRepository,
+				movementRepository
 			);
 
 		});

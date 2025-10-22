@@ -11,6 +11,7 @@ import { cardValidation } from "./cardValidation";
 import { checkPurchaseDate } from "./checkPurchaseDate";
 import { Invoice, PaymentMethod, TypeInvoice } from "@/generated/prisma/client";
 import { insertFixedPurchasesIntoNewInvoices } from "./insertFixedPurchasesIntoNewInvoices";
+import { MovementDatabaseInterface } from "@/repositories/interfaces/movement";
 
 
 export class RegisterShopping{
@@ -20,7 +21,8 @@ export class RegisterShopping{
         private shoppingRepository: ShoppingDatabaseInterface,
         private invoiceRepository: InvoiceDatabaseInterface,
 		private installmentRepository: InstallmentDatabaseInterface,
-		private cardRepository: CardDatabaseInterface
+		private cardRepository: CardDatabaseInterface,
+		private movementRepository: MovementDatabaseInterface
 	){}
 
 
@@ -94,6 +96,18 @@ export class RegisterShopping{
 		return { shopping, installments };
 	}
 
+	async registerMovement(shopping: Shopping, userId: string, shoppingId: string){
+		await this.movementRepository.create({
+			name: shopping.name,
+			type: shopping.paymentMethod,
+			value: shopping.value,
+			installment: shopping.totalInstallments,
+			userId,
+			shoppingId: shoppingId
+		});
+		return;
+	}
+
 
 	async execute(userId: string, data: Shopping){
 
@@ -136,11 +150,14 @@ export class RegisterShopping{
 
 		if(data.typeInvoice === "FIXED_EXPENSE"){
 			const { shopping, installments } = await this.registerFixedPurchase(user.id, datesForInvoices, data);
+			await this.registerMovement(data, userId, shopping.id);
 			return { shopping, installments };
 		}
 
 
 		const { shopping, installments } = await this.registerExtraPurchase(user.id, datesForInvoices, data);
+		await this.registerMovement(data, userId, shopping.id);
+
 		
 		return { shopping, installments };		
 	}

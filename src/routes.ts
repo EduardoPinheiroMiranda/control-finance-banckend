@@ -22,12 +22,12 @@ import { updateShopping } from "./http/controllers/shopping/updateShopping";
 import { authenticateUser } from "./http/controllers/user/authenticateUser";
 import { controlLimit } from "./http/controllers/user/controlLimit";
 import { generalSummary } from "./http/controllers/user/generalSummary";
-import { getAllMovements } from "./http/controllers/user/getAllMovements";
 import { getUserByToken } from "./http/controllers/user/getUserByToken";
 import { registerUser } from "./http/controllers/user/registerUser";
 import { updateAvatar } from "./http/controllers/user/updateAvatar";
 import { updatePassword } from "./http/controllers/user/updatePassword";
 import { updateUser } from "./http/controllers/user/updateUser";
+import { getAllMovements } from "./http/controllers/movement/getAllMovements";
 
 
 export function registerAllRoutes(){
@@ -37,7 +37,6 @@ export function registerAllRoutes(){
 	app.register(authenticateUser, {prefix: userPrefix});
 	app.register(controlLimit, {prefix: userPrefix});
 	app.register(generalSummary, {prefix: userPrefix});
-	app.register(getAllMovements, {prefix: userPrefix});
 	app.register(getUserByToken, {prefix: userPrefix});
 	app.register(registerUser, {prefix: userPrefix});
 	app.register(updateAvatar, {prefix: userPrefix});
@@ -84,6 +83,10 @@ export function registerAllRoutes(){
 	app.register(updateApplication, {prefix: applicationPrefix});
 	app.register(valueMovements, {prefix: applicationPrefix});
 
+	// register movements routes
+	const movementPrefix = "movement";
+	app.register(getAllMovements, {prefix: movementPrefix});
 
+	
 	return;
 }

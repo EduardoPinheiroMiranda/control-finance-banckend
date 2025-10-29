@@ -2,7 +2,7 @@ import { DataValidationError, ResourceNotFound } from "@/errors/custonErros";
 import { MovementDatabaseInterface } from "@/repositories/interfaces/movement";
 
 
-export class GetMovements{
+export class GetAllMovements{
 
 	constructor(private MovementsRepository: MovementDatabaseInterface){}
 

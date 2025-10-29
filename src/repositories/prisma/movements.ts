@@ -16,7 +16,7 @@ export class MovementPrismaRepository implements MovementDatabaseInterface{
 		if(cursor === 0){
 
 			const movements = await prisma.movement.findMany({
-				take: 10,
+				take: 20,
 				where: {
 					userId
 				},

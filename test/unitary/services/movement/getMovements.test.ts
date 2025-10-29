@@ -1,18 +1,18 @@
 import { Decimal } from "@/generated/prisma/runtime/library";
 import { MovementPrismaRepository } from "@/repositories/prisma/movements";
-import { GetMovements } from "@/services/movement/getMovements";
+import { GetAllMovements } from "@/services/movement/getMovements";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
 
 describe("srvice/movement", () => {
 
 	let movementRepository: MovementPrismaRepository;
-	let serviceGetMovements: GetMovements;
+	let serviceGetMovements: GetAllMovements;
 
 
 	beforeEach(() => {
 		movementRepository = new MovementPrismaRepository();
-		serviceGetMovements = new GetMovements(
+		serviceGetMovements = new GetAllMovements(
 			movementRepository
 		);
 	});

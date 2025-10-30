@@ -26,21 +26,20 @@ export async function createInstallments(
 
 	const installmentValue = (purchaseValue/totalInstalments).toFixed(2);
 	const totalInstallmentsToCreate = invoices.length;
-	const installmentNumber = (totalInstalments - totalInstallmentsToCreate) + 1;
 	const listInstallmentsToCrerate: Installment[] = [];
 
 
 	for(let i = 0; i < totalInstallmentsToCreate; i++){
 		listInstallmentsToCrerate.push({
-			installmentNumber: installmentNumber + i,
+			installmentNumber: i + 1,
 			installmentValue: Decimal(installmentValue),
 			dueDate: dueDates[i],
 			shoppingId: shoppingId,
 			invoiceId: invoices[i].id,
 		});
 	}
-
-
+	
+	
 	const installments = await installmentRepository.create(listInstallmentsToCrerate);
 
 

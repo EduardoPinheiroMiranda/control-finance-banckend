@@ -30,7 +30,6 @@ export class GetCurrentInvoice{
 
 		const invoice = await this.invoiceRepository.getCurrentInvoice(userId, date[0].dueDate);
 
-		
 
 		if(invoice.length === 0 ){
 			throw new DataValidationError("Sua fatura não foi encontrada.");

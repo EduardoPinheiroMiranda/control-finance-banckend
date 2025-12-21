@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/generated/prisma/client";
 import { ExtractDatabaseInterface } from "../interfaces/extract";
 import { prisma } from "@/libs/primsa";
 

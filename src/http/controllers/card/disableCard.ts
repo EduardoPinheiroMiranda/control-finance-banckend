@@ -1,27 +1,48 @@
+import { FastifyTypes } from "@/@types/fastify-customTypes";
 import { makeDisableCard } from "@/factories/card/make-disableCard";
 import { handleErrorsInControlles } from "@/utils/handleErrorsInControllers";
-import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 
 
-export async function disableCard(request: FastifyRequest, reply: FastifyReply){
+export async function disableCard(app: FastifyTypes){
 
-	try{
+	app.put(
+		"/disableCard/:cardId",
+		{
+			schema: {
+				security: [{ BearerAuth: [] }],
+				params: z.object({
+					cardId: z.string()
+				}),
+				response: {
+					200: z.object({msg: z.string().describe("Cartão excluido.")}),
+					400: z.object({msg: z.string()}),
+				},
+				tags: ["card"],
+				description: "This route is responsible for disabling a card, but for the user it will be as if the card had been deleted."
+			}
+		},
+		async (request, reply) => {
 
-		const params = z.object({
-			cardId: z.string()
-		}).parse(request.params);
-    
+			try{
 
-		const serviceDisableCard = makeDisableCard();
-		const card = await serviceDisableCard.execute(params.cardId);
+				const serviceDisableCard = makeDisableCard();
+				await serviceDisableCard.execute(request.params.cardId);
 
 
-		return reply.status(200).send(JSON.stringify(card));
+				return reply.status(200).send({msg: "Cartão excluido."});
 
-	}catch(err: any){
+			}catch(err: unknown){
 
-		const { error, statusCode} = handleErrorsInControlles(err);
-		return reply.status(statusCode).send(JSON.stringify(error));
-	}
+				if(err instanceof Error){
+					const { error, statusCode } = handleErrorsInControlles(err);
+					return reply.status(statusCode).send(error);
+				}
+
+
+				console.log(err);
+				return reply.status(500).send({msg: "Error internal server"});	
+			}
+		}
+	);
 }

@@ -1,4 +1,5 @@
-import { User, Prisma } from "@prisma/client";
+import { Prisma, User } from "@/generated/prisma/client";
+
 
 
 export interface UserDatabaseInterface{

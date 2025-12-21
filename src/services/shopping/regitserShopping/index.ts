@@ -1,5 +1,5 @@
-import { Dates, Shopping } from "@/@types/customTypes";
-import { DataValidationError, ResourceNotFoud } from "@/errors/custonErros";
+import { Dates, Shopping } from "src/@types/customTypes";
+import { DataValidationError, ResourceNotFound } from "@/errors/custonErros";
 import { CardDatabaseInterface } from "@/repositories/interfaces/card";
 import { InstallmentDatabaseInterface } from "@/repositories/interfaces/installment";
 import { InvoiceDatabaseInterface } from "@/repositories/interfaces/invoice";
@@ -9,9 +9,9 @@ import { createInvoices } from "./createInvoices";
 import { createInstallments } from "./createInstallments";
 import { cardValidation } from "./cardValidation";
 import { checkPurchaseDate } from "./checkPurchaseDate";
-import { paymentMethods, typeInvoices } from "@/utils/globalValues";
-import { Invoice } from "@prisma/client";
+import { Invoice, PaymentMethod, TypeInvoice } from "@/generated/prisma/client";
 import { insertFixedPurchasesIntoNewInvoices } from "./insertFixedPurchasesIntoNewInvoices";
+import { MovementDatabaseInterface } from "@/repositories/interfaces/movement";
 
 
 export class RegisterShopping{
@@ -21,7 +21,8 @@ export class RegisterShopping{
         private shoppingRepository: ShoppingDatabaseInterface,
         private invoiceRepository: InvoiceDatabaseInterface,
 		private installmentRepository: InstallmentDatabaseInterface,
-		private cardRepository: CardDatabaseInterface
+		private cardRepository: CardDatabaseInterface,
+		private movementRepository: MovementDatabaseInterface
 	){}
 
 
@@ -34,14 +35,14 @@ export class RegisterShopping{
 
 		const shopping = await this.shoppingRepository.create({
 			name: data.name,
-			type_invoice: data.typeInvoice,
-			payment_method: data.paymentMethod,
+			typeInvoice: TypeInvoice[data.typeInvoice],
+			paymentMethod: PaymentMethod[data.paymentMethod],
 			value: data.value,
-			total_installments: data.totalInstallments,
+			totalInstallments: data.totalInstallments,
 			description: data.description,
-			category_id: data.categoryId,
-			card_id: data.cardId,
-			user_id: userId
+			categoryId: data.categoryId,
+			cardId: data.cardId,
+			userId: userId
 		});
 
 		const { installments } = await createInstallments(
@@ -95,13 +96,25 @@ export class RegisterShopping{
 		return { shopping, installments };
 	}
 
+	async registerMovement(shopping: Shopping, userId: string, shoppingId: string){
+		await this.movementRepository.create({
+			name: shopping.name,
+			type: shopping.paymentMethod,
+			value: shopping.value,
+			installment: shopping.totalInstallments,
+			userId,
+			shoppingId: shoppingId
+		});
+		return;
+	}
+
 
 	async execute(userId: string, data: Shopping){
 
 		const user = await this.userRepository.getById(userId);
 
 		if(!user){
-			throw new ResourceNotFoud("Usuário não foi encontrado.");
+			throw new ResourceNotFound("Usuário não foi encontrado.");
 		}
 		
 
@@ -123,25 +136,28 @@ export class RegisterShopping{
 		
 		const datesForInvoices = await checkPurchaseDate(
 			data.purchaseDate,
-			user.due_day,
-			user.closing_day,
+			user.dueDay,
+			user.closingDay,
 			data.totalInstallments,
 			startOnTheInvoice
 		);
 
 		
-		if(data.paymentMethod === paymentMethods[1]){
-			data.dueDay = dueDay
+		if(data.paymentMethod === "CARD"){
+			data.dueDay = dueDay;
 		}
 
 
-		if(data.typeInvoice === typeInvoices[0]){
+		if(data.typeInvoice === "FIXED_EXPENSE"){
 			const { shopping, installments } = await this.registerFixedPurchase(user.id, datesForInvoices, data);
+			await this.registerMovement(data, userId, shopping.id);
 			return { shopping, installments };
 		}
 
 
 		const { shopping, installments } = await this.registerExtraPurchase(user.id, datesForInvoices, data);
+		await this.registerMovement(data, userId, shopping.id);
+
 		
 		return { shopping, installments };		
 	}

@@ -1,9 +1,9 @@
-import { Invoice, Prisma } from "@prisma/client";
-import { CardInvoice, Invoice as CustomTypeInvoice, InvoiceDetails } from "@/@types/prismaTypes";
+import { Prisma, Invoice } from "@/generated/prisma/client";
+import { Installment, CardInvoice, Invoice as CustomTypeInvoice, InvoiceDetails, ReturnTypeGetInvoiceCards } from "@/@types/prisma-customTypes";
 
 
 export interface InvoiceDatabaseInterface{
-
+ 
     advanceInvoices(): Promise<Prisma.InvoiceGetPayload<{
         include: {
             installment: {
@@ -32,6 +32,10 @@ export interface InvoiceDatabaseInterface{
 
     getCurrentInvoice(userId: string, dueDate: Date): Promise<CustomTypeInvoice[]>
     
+    getInvoiceCards(invoiceId: string): Promise<ReturnTypeGetInvoiceCards[]>
+
+    getInstallmentsByInvoice(invoiceId: string): Promise<Installment[]>
+
     invoiceDetails(invoiceId: string): Promise<InvoiceDetails[]>
     
     invoiceSearch(currentInvoiceDueDate: Date, where: Prisma.Sql, limit: Prisma.Sql): Promise<CustomTypeInvoice[]>

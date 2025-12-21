@@ -1,4 +1,5 @@
-import { Extract, Prisma } from "@prisma/client";
+import { Prisma, Extract } from "@/generated/prisma/client";
+
 
 
 export interface ExtractDatabaseInterface{

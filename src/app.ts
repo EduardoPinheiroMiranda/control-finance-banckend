@@ -1,26 +1,52 @@
 import Fastify from "fastify";
-import cors from "fastify-cors";
-import { userRoutes } from "./http/routes/user";
-import { invoiceRoutes } from "./http/routes/invoice";
-import { shoppingRoutes } from "./http/routes/shopping";
-import { startCronJobs } from "./cron-jobs";
-import { categoryRoutes } from "./http/routes/category";
-import { cardRoutes } from "./http/routes/card";
-import { applicationRoutes } from "./http/routes/application";
+import { jsonSchemaTransform, serializerCompiler, validatorCompiler, ZodTypeProvider } from "fastify-type-provider-zod";
+import { fastifyCors } from "@fastify/cors";
+import { fastifySwagger } from "@fastify/swagger";
+import { fastifySwaggerUi } from "@fastify/swagger-ui";
+import { registerAllRoutes } from "./routes";
 
 
-export const app = Fastify();
-
-app.register(cors);
+export const app = Fastify().withTypeProvider<ZodTypeProvider>();
 
 
-// register routes 
-app.register(userRoutes, {prefix: "user"});
-app.register(invoiceRoutes, {prefix: "invoice"});
-app.register(shoppingRoutes, {prefix: "shopping"});
-app.register(categoryRoutes, {prefix: "category"});
-app.register(cardRoutes, {prefix: "card"});
-app.register(applicationRoutes, {prefix: "application"});
+app.register(fastifyCors, { origin: "*"});
+app.setValidatorCompiler(validatorCompiler);
+app.setSerializerCompiler(serializerCompiler);
+app.register(fastifySwagger, {
+	openapi: {
+		info: {
+			title: "Control Finance",
+			version: "1.0.0"
+		},
+		components: {
+			securitySchemes: {
+				BearerAuth: {
+					type: "http",
+					scheme: "bearer",
+					bearerFormat: "JWT"
+				}
+			}
+		}
+	},
+	transform: jsonSchemaTransform,
+});
+app.register(fastifySwaggerUi, {routePrefix: "/docs"});
 
 
-startCronJobs();
+
+// register all routes 
+registerAllRoutes();
+
+
+
+app.setErrorHandler((err, _, reply) => {
+
+	if(Array.isArray(err.validation)){
+		return reply.status(err.statusCode ?? 400).send({
+			msg: "Data validation error.",
+			error: err.validation.map((issue) => issue.params)
+		});
+	}
+
+	console.log(err);
+});

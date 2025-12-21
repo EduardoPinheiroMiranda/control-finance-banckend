@@ -1,8 +1,7 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/libs/primsa";
 import { ShoppingDatabaseInterface } from "../interfaces/shopping";
-import { typeInvoices } from "@/utils/globalValues";
-import { ShoppingListByType } from "@/@types/prismaTypes";
+import { ShoppingListByType } from "@/@types/prisma-customTypes";
 
 
 export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
@@ -29,9 +28,9 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 		
 		const shoppingList = await prisma.shopping.findMany({
 			where: {
-				user_id: userId,
+				userId: userId,
 				pay: false,
-				type_invoice: typeInvoices[0] // fixed
+				typeInvoice: "FIXED_EXPENSE"
 			},
 			include: {
 				installment: true
@@ -52,7 +51,7 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 				}
 			}),
 			where:{
-				user_id: userId,
+				userId: userId,
 				...(name && {
 					name: {
 						contains: name,
@@ -61,7 +60,7 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 				})
 			},
 			orderBy: {
-				created_at: "desc"
+				createdAt: "desc"
 			}
 		});
 
@@ -100,17 +99,45 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 		}[]>`
 			select
 				json_build_object(
-					'fixed_expense', coalesce(
+					'fixedExpense', coalesce(
 						json_agg( 
-							shopping.* order by shopping.created_at desc
-						)filter (where shopping.type_invoice = 'fixedExpense'),
+							json_build_object(
+								'id', shopping.id,
+								'name', shopping.name,
+								'typeInvoice', shopping.type_invoice,
+								'paymentMethod', shopping.payment_method,
+								'value', shopping.value,
+								'totalInstallments', shopping.total_installments,
+								'pay', shopping.pay,
+								'description', shopping.description,
+								'createdAt', shopping.created_at,
+								'updatedAt', shopping.updated_at,
+								'cardId', shopping.card_id,
+								'categoryId', shopping.category_id,
+								'userId', shopping.user_id
+							) order by shopping.created_at desc
+						)filter (where shopping.type_invoice = 'FIXED_EXPENSE'),
 					'[]'::json
 					),
 				
-					'extra_expense', coalesce(
+					'extraExpense', coalesce(
 						json_agg(
-							shopping.* order by shopping.created_at desc
-						)filter (where shopping.type_invoice = 'extraExpense'),
+							json_build_object(
+								'id', shopping.id,
+								'name', shopping.name,
+								'typeInvoice', shopping.type_invoice,
+								'paymentMethod', shopping.payment_method,
+								'value', shopping.value,
+								'totalInstallments', shopping.total_installments,
+								'pay', shopping.pay,
+								'description', shopping.description,
+								'createdAt', shopping.created_at,
+								'updatedAt', shopping.updated_at,
+								'cardId', shopping.card_id,
+								'categoryId', shopping.category_id,
+								'userId', shopping.user_id
+							) order by shopping.created_at desc
+						)filter (where shopping.type_invoice = 'EXTRA_EXPENSE'),
 						'[]'::json
 					)
 			) as shopping
@@ -155,10 +182,10 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 		const update = await prisma.shopping.updateMany({
 			where: {
 				id: { in: shoppingIds },
-				type_invoice: typeInvoices[0]
+				typeInvoice: "FIXED_EXPENSE"
 			},
 			data: {
-				total_installments: {
+				totalInstallments: {
 					increment: 1
 				}
 			}

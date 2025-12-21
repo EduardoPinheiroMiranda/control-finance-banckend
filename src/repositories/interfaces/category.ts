@@ -1,4 +1,4 @@
-import { Category, Prisma } from "@prisma/client";
+import { Category, Prisma } from "@/generated/prisma/client";
 
 
 export interface CategoryDatabaseInterface{

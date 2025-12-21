@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/generated/prisma/client";
 import { CardDatabaseInterface } from "../interfaces/card";
 import { prisma } from "@/libs/primsa";
 
@@ -31,11 +31,11 @@ export class CardPrismaRepository implements CardDatabaseInterface{
 
 		const allCards = await prisma.card.findMany({
 			where: {
-				user_id: userId,
+				userId: userId,
 				active: true
 			},
 			orderBy: {
-				created_at: "asc"
+				createdAt: "asc"
 			}
 		});
 

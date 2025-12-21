@@ -1,6 +1,6 @@
 import { DataValidationError } from "@/errors/custonErros";
+import { PaymentMethod } from "@/generated/prisma";
 import { CardDatabaseInterface } from "@/repositories/interfaces/card";
-import { paymentMethods } from "@/utils/globalValues";
 import { HandlerDueDate } from "@/utils/handlerDueDate";
 
 
@@ -13,7 +13,7 @@ export async function cardValidation(
 	let startOnTheInvoice = false;
 
     
-	if(paymentMethod === paymentMethods[1]){
+	if(paymentMethod === PaymentMethod.CARD){
     
 		if(!cardId){
 			throw new DataValidationError("Cartão informado invalido.");
@@ -37,7 +37,7 @@ export async function cardValidation(
 		const closeDateTheCurrentMonth = handlerDueDate.formatDate(
 			year,
 			month,
-			card.closing_day
+			card.closingDay
 		);
 		
     
@@ -48,7 +48,7 @@ export async function cardValidation(
 
 		return {
 			startOnTheInvoice,
-			dueDay: card.due_day
+			dueDay: card.dueDay
 		};
 	}
 

@@ -1,6 +1,6 @@
 import { prisma } from "@/libs/primsa";
 import { UserDatabaseInterface } from "../interfaces/user";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/generated/prisma/client";
 
 
 export class UserPrismaRepository implements UserDatabaseInterface{
@@ -53,8 +53,8 @@ export class UserPrismaRepository implements UserDatabaseInterface{
 			},
 			data: {
 				limit,
-				due_day: dueDay,
-				closing_day: closingDay
+				dueDay: dueDay,
+				closingDay: closingDay
 			}
 		});
 

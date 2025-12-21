@@ -1,21 +1,11 @@
-import { DataValidationError, ResourceNotFoud } from "@/errors/custonErros";
+import { DataValidationError, ResourceNotFound } from "@/errors/custonErros";
 
 
-export function handleErrorsInControlles(err: any){
+export function handleErrorsInControlles(err: Error){
 
-	if(err.name === "ZodError"){
+	if(err instanceof ResourceNotFound){
 		return {
 			statusCode: 400,
-			error: {
-				msg: "dados enviados incorreto, verifique a estrutura do objeto ou seus valores",
-				err: err.errors
-			}
-		};
-	}
-
-	if(err instanceof ResourceNotFoud){
-		return {
-			statusCode: 204,
 			error: {
 				msg: err.message,
 			}

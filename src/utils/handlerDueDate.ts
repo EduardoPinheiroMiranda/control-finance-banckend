@@ -1,4 +1,4 @@
-import { Dates } from "@/@types/customTypes";
+import { Dates } from "src/@types/customTypes";
 
 
 export class HandlerDueDate{

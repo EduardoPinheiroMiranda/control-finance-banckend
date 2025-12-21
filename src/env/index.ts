@@ -5,8 +5,8 @@ import "dotenv/config";
 const environmentVariablesPattern = z.object({
 	PORT:           z.coerce.number().default(3300),
 	DATABASE_URL:   z.string(),
-	SECRET:		z.string(),
-	NODE_ENV: z.enum(["dev", "product", "test"]).default("dev"),
+	SECRET:			z.string(),
+	NODE_ENV: 		z.enum(["development", "product", "test"]).default("development"),
 
 	COLOR_BACKGROUND_DEFAULT: z.string(),
 	COLOR_FONT_DEFAULT: z.string(),

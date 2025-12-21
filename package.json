@@ -1,50 +1,47 @@
 {
-  "name": "control-finances-backend",
+  "name": "control-finance-banckend",
   "version": "1.0.0",
+  "description": "## 📄 Descrição do Projeto",
   "main": "index.js",
-  "engines": {
-    "node": "v22.12.0"
-  },
-  "type": "module",
   "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "seed": "tsx ./prisma/seed.ts"
   },
   "scripts": {
-    "dev": "tsx watch src/server.ts",
-    "test": "jest",
-    "test:watch": "jest --runInBand --watchAll test/",
-    "test:debug": "node --experimental-vm-modules --inspect-brk node_modules/.bin/jest --runInBand --watchAll test/",
-    "test:coverage": "jest --coverage"
+    "dev": "tsx watch ./src/server.ts",
+    "test": "vitest",
+    "test:covarage": "vitest run --coverage",
+    "build": "tsup src"
   },
-  "keywords": [],
   "author": "Eduardo Pinheiro Miranda",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
-    "@eslint/js": "9.21.0",
-    "@types/bcrypt": "5.0.2",
-    "@types/jest": "29.5.14",
-    "@types/jsonwebtoken": "9.0.9",
-    "@types/node": "22.13.9",
-    "eslint": "9.21.0",
-    "fastify": "5.3.3",
-    "globals": "16.0.0",
-    "jest": "29.7.0",
-    "prisma": "6.4.1",
-    "ts-jest": "29.2.6",
-    "ts-node": "10.9.2",
-    "tsup": "8.4.0",
-    "tsx": "4.19.3",
-    "typescript": "5.8.2",
-    "typescript-eslint": "8.26.0"
+    "@eslint/js": "9.33.0",
+    "@prisma/client": "6.13.0",
+    "@types/bcrypt": "6.0.0",
+    "@types/jsonwebtoken": "9.0.10",
+    "@types/node": "24.2.0",
+    "@vitest/coverage-v8": "3.2.4",
+    "eslint": "9.33.0",
+    "fastify": "5.4.0",
+    "globals": "16.3.0",
+    "jiti": "2.5.1",
+    "prisma": "6.14.0",
+    "tsup": "8.5.0",
+    "tsx": "4.20.3",
+    "typescript": "5.9.2",
+    "typescript-eslint": "8.40.0",
+    "vite-tsconfig-paths": "5.1.4",
+    "vitest": "3.2.4"
   },
   "dependencies": {
-    "@prisma/client": "6.4.1",
-    "bcrypt": "5.1.1",
-    "dotenv": "16.4.7",
-    "fastify-cors": "2.1.1",
+    "@fastify/cors": "11.1.0",
+    "@fastify/swagger": "9.5.1",
+    "@fastify/swagger-ui": "5.2.3",
+    "bcrypt": "6.0.0",
+    "dotenv": "17.2.1",
+    "fastify-type-provider-zod": "4.0.2",
     "jsonwebtoken": "9.0.2",
-    "node-cron": "4.0.5",
-    "zod": "3.24.2"
+    "node-cron": "4.2.1",
+    "zod": "3.25.76"
   }
 }

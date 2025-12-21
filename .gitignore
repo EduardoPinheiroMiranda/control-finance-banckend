@@ -1,4 +1,4 @@
-# DDEPENDENCIES
+# DEPENDENCIES
 node_modules
 
 # test
@@ -6,7 +6,9 @@ coverage
 
 # ENVIRONMENTS
 .env
+oldCode
 
 # DATABASE FILE
 prisma/controlFinance.db
 prisma/controlFinance.db-journal
+/src/generated/prisma

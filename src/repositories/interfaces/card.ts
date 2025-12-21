@@ -1,4 +1,5 @@
-import { Card, Prisma } from "@prisma/client";
+import { Card, Prisma } from "@/generated/prisma/client";
+
 
 
 export interface CardDatabaseInterface{

@@ -1,8 +1,8 @@
-import { Prisma } from "@prisma/client";
 import { InvoiceDatabaseInterface } from "../interfaces/invoice";
 import { prisma } from "@/libs/primsa";
-import { CardInvoice, Invoice, InvoiceDetails } from "@/@types/prismaTypes";
+import { CardInvoice, Installment, Invoice, InvoiceDetails, ReturnTypeGetInvoiceCards } from "@/@types/prisma-customTypes";
 import { Decimal } from "@prisma/client/runtime/library";
+import { Prisma } from "@/generated/prisma/client";
 
 
 export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
@@ -12,7 +12,7 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 		const invoices = await prisma.invoice.findMany({
 			where: {
 				pay: false,
-				closing_date: {
+				closingDate: {
 					lte: new Date()
 				}
 			},
@@ -42,7 +42,7 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 		const invoices = await prisma.invoice.findMany({
 			where: {
 				OR: dueDates.map((date) => {
-					return { due_date: date, user_id: userId };
+					return { dueDate: date, userId: userId };
 				})
 			}
 		});
@@ -54,11 +54,11 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 		
 		const invoices = await prisma.invoice.findMany({
 			where:{
-				user_id: userId,
+				userId: userId,
 				pay: false,
 			},
 			orderBy: {
-				due_date: "asc"
+				dueDate: "asc"
 			}
 		});
 
@@ -76,16 +76,17 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 				sum(installments.installment_value) as amount,
 				json_agg(
 					json_build_object(
-						'installment_id', installments.id,
-						'installment_number', installments.installment_number,
-						'installment_value', installments.installment_value,
-						'due_date', installments.due_date,
+						'installmentId', installments.id,
+						'installmentNumber', installments.installment_number,
+						'installmentValue', installments.installment_value,
+						'dueDate', installments.due_date,
 						'pay', installments.pay,
-						'shopping_id', installments.shopping_id,
-						'total_installments', shopping.total_installments,
-						'type_invoice', shopping.type_invoice,
-						'payment_method', shopping.payment_method,
-						'name', shopping.name
+						'shoppingId', installments.shopping_id,
+						'totalInstallments', shopping.total_installments,
+						'typeInvoice', shopping.type_invoice,
+						'paymentMethod', shopping.payment_method,
+						'name', shopping.name,
+						'purchaseDate', shopping.created_at
 					)
 					order by installments.created_at desc
 				) as installments
@@ -109,11 +110,11 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 		const invoices: CardInvoice[] = result.map((invoice) => {
 
 			return{
-				invoice_id: invoice.invoice_id,
+				invoiceId: invoice.invoice_id,
 				pay: invoice.pay,
-				due_date: invoice.due_date,
+				dueDate: invoice.due_date,
 				current: invoice.current,
-				amount: Decimal(invoice.amount),
+				amount: invoice.amount,
 				installments: invoice.installments
 			};
 			
@@ -167,6 +168,53 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 		return invoice;		
 	}
 
+	async getInstallmentsByInvoice(invoiceId: string){
+		
+		const installments = await prisma.$queryRaw<Installment[]>`
+			select
+				installments.id as installment_id,
+				installments.installment_number,
+				installments.installment_value,
+				installments.due_date,
+				installments.pay,
+				installments.shopping_id,
+				shopping.total_installments,
+				shopping.type_invoice,
+				shopping.payment_method,
+				shopping.name,
+				shopping.created_at
+			from
+				invoices
+				inner join installments on installments.invoice_id = invoices.id
+				inner join shopping on shopping.id = installments.shopping_id
+			where
+				invoices.id = ${invoiceId}
+		`;
+
+		return installments;
+	}
+
+	async getInvoiceCards(invoiceId: string){
+		
+		const cards = await prisma.$queryRaw<ReturnTypeGetInvoiceCards[]>`
+			select
+				cards.id,
+				cards.name,
+				cards.due_day,
+				sum(case when installments.pay = false then installments.installment_value else 0 end) as amount
+			from
+				invoices
+				INNER JOIN installments ON installments.invoice_id = invoices.id
+				INNER JOIN shopping ON shopping.id = installments.shopping_id
+				INNER JOIN cards ON cards.id = shopping.card_id
+			where
+				invoices.id = ${invoiceId} 
+			group by cards.id
+		`;
+
+		return cards;
+	}
+
 	async invoiceDetails(invoiceId: string){
 		
 		const result = await prisma.$queryRaw<any[]>`
@@ -192,11 +240,11 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 		const details: InvoiceDetails[] = result.map((invoice) => {
 			return {
 				id: invoice.id,
-				due_date: invoice.due_date,
-				closing_date: invoice.closing_date,
-				total_installments_on_invoice: Number(invoice.total_installments_on_invoice),
-				installments_paid: Number(invoice.installments_paid),
-				installments_pending: Number(invoice.installments_pending)
+				dueDate: invoice.due_date,
+				closingDate: invoice.closing_date,
+				totalInstallmentsOnInvoice: Number(invoice.total_installments_on_invoice),
+				installmentsPaid: Number(invoice.installments_paid),
+				installmentsPending: Number(invoice.installments_pending)
 			};
 		});
 
@@ -214,49 +262,49 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 				users.limit,
 				case when invoices.due_date = ${currentInvoiceDueDate} then true else false end as "current",
 				sum(installments.installment_value) as amount,
-				sum(case when shopping.type_invoice = 'fixedExpense' then installments.installment_value else 0 end) as total_fixed_expense,
-				sum(case when shopping.type_invoice = 'extraExpense' then installments.installment_value else 0 end) as total_extra_expense,
-				sum(case when shopping.payment_method = 'invoice' then installments.installment_value else 0 end) as total_invoice,
-				sum(case when shopping.payment_method = 'card' then installments.installment_value else 0 end) as total_card,
-				sum(case when shopping.payment_method = 'money' then installments.installment_value else 0 end) as total_money,
+				sum(case when shopping.type_invoice = 'FIXED_EXPENSE' then installments.installment_value else 0 end) as total_fixed_expense,
+				sum(case when shopping.type_invoice = 'EXTRA_EXPENSE' then installments.installment_value else 0 end) as total_extra_expense,
+				sum(case when shopping.payment_method = 'INVOICE' then installments.installment_value else 0 end) as total_invoice,
+				sum(case when shopping.payment_method = 'CARD' then installments.installment_value else 0 end) as total_card,
+				sum(case when shopping.payment_method = 'MONEY' then installments.installment_value else 0 end) as total_money,
 				json_build_object(
-					'fixed_expense', coalesce(
+					'fixedExpense', coalesce(
 						json_agg(
 							json_build_object(
-								'installment_id', installments.id,
-								'installment_number', installments.installment_number,
-								'installment_value', installments.installment_value,
+								'installmentId', installments.id,
+								'installmentNumber', installments.installment_number,
+								'installmentValue', installments.installment_value,
 								'pay', installments.pay,
-								'due_date', installments.due_date,
-								'shopping_id', installments.shopping_id,
-								'total_installments', shopping.total_installments,
-								'type_invoice', shopping.type_invoice,
-								'payment_method', shopping.payment_method,
+								'dueDate', installments.due_date,
+								'shoppingId', installments.shopping_id,
+								'totalInstallments', shopping.total_installments,
+								'typeInvoice', shopping.type_invoice,
+								'paymentMethod', shopping.payment_method,
 								'name', shopping.name,
-          						'purchase_date', shopping.created_at
+          						'purchaseDate', shopping.created_at
 							)
 							order by installments.created_at desc
-						)filter (where shopping.type_invoice = 'fixedExpense'),
+						)filter (where shopping.type_invoice = 'FIXED_EXPENSE'),
 					'[]'::json
 					),
 					
-					'extra_expense', coalesce(
+					'extraExpense', coalesce(
 						json_agg(
 							json_build_object(
-								'installment_id', installments.id,
-								'installment_number', installments.installment_number,
-								'installment_value', installments.installment_value,
-								'due_date', installments.due_date,
+								'installmentId', installments.id,
+								'installmentNumber', installments.installment_number,
+								'installmentValue', installments.installment_value,
+								'dueDate', installments.due_date,
       							'pay', installments.pay,
-								'shopping_id', installments.shopping_id,
-								'total_installments', shopping.total_installments,
-								'type_invoice', shopping.type_invoice,
-								'payment_method', shopping.payment_method,
+								'shoppingId', installments.shopping_id,
+								'totalInstallments', shopping.total_installments,
+								'typeInvoice', shopping.type_invoice,
+								'paymentMethod', shopping.payment_method,
 								'name', shopping.name,
-          						'purchase_date', shopping.created_at
+          						'purchaseDate', shopping.created_at
 							)
 							order by installments.created_at desc
-						)filter (where shopping.type_invoice = 'extraExpense'),
+						)filter (where shopping.type_invoice = 'EXTRA_EXPENSE'),
 					'[]'::json
 					)
 					
@@ -279,19 +327,19 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 
 		const invoice: Invoice[] = result.map((invoice) => {
 			return {
-				invoice_id: invoice.invoice_id,
+				invoiceId: invoice.invoice_id,
 				pay: invoice.pay,
-				due_date: invoice.due_date,
-				closing_date: invoice.closing_date,
+				dueDate: invoice.due_date,
+				closingDate: invoice.closing_date,
 				current: invoice.current,
-				amount: Decimal(invoice.amount),
-				limit: Decimal(invoice.limit),
-				available: Decimal(invoice.limit - invoice.amount),
-				total_fixed_expense: Decimal(invoice.total_fixed_expense),
-				total_extra_expense: Decimal(invoice.total_extra_expense),
-				total_invoice: Decimal(invoice.total_invoice),
-				total_card: Decimal(invoice.total_card),
-				total_money: Decimal(invoice.total_money),
+				amount: Number(invoice.amount),
+				limit: Number(invoice.limit),
+				available: Number(invoice.limit - invoice.amount),
+				totalFixedExpense: Number(invoice.total_fixed_expense),
+				totalExtraExpense: Number(invoice.total_extra_expense),
+				totalInvoice: Number(invoice.total_invoice),
+				totalCard: Number(invoice.total_card),
+				totalMoney: Number(invoice.total_money),
 				installments: invoice.installments
 			};
 		});
@@ -312,7 +360,6 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 		});
 
 
-		 return invoicePaid;
+		return invoicePaid;
 	}
-
 }

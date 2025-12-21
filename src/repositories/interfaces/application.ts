@@ -1,6 +1,6 @@
-import { Filter } from "@/@types/customTypes";
-import { Application, Extract, Prisma } from "@prisma/client";
-import { Decimal } from "@prisma/client/runtime/library";
+import { Application, Prisma, Extract } from "@/generated/prisma/client";
+import { Decimal } from "@/generated/prisma/runtime/library";
+import { Filter } from "src/@types/customTypes";
 
 
 export interface ApplicationDatabaseInterface{

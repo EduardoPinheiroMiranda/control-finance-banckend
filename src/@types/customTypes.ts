@@ -1,4 +1,5 @@
-import { Decimal } from "@prisma/client/runtime/library";
+import { PaymentMethod, TypeExtract, TypeInvoice } from "@/generated/prisma/client";
+import { Decimal } from "@/generated/prisma/runtime/library";
 
 
 export interface User{
@@ -12,8 +13,8 @@ export interface User{
 
 export interface Shopping{
     name: string,
-    typeInvoice: string,
-    paymentMethod: string,
+    typeInvoice: TypeInvoice,
+    paymentMethod: PaymentMethod,
     value: number,
     totalInstallments: number,
     description: string | null,
@@ -33,17 +34,17 @@ export interface ShoppingUpdate{
 }
 
 export interface Invoice{
-    due_date: Date,
-	closing_date: Date,
-    user_id: string
+    dueDate: Date,
+	closingDate: Date,
+    userId: string
 }
 
 export interface Installment{
-    installment_number: number,
-    installment_value: Decimal,
-    due_date: Date,
-    shopping_id: string,
-    invoice_id: string,
+    installmentNumber: number,
+    installmentValue: Decimal,
+    dueDate: Date,
+    shoppingId: string,
+    invoiceId: string,
 }
 
 export interface Dates{
@@ -81,5 +82,5 @@ export interface Application{
 export interface Filter{
     date: string | null,
     applicationId: string | null,
-    type: string | null
+    type: TypeExtract | null
 }

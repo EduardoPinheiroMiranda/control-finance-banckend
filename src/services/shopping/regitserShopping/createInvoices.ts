@@ -1,4 +1,4 @@
-import { Dates, Invoice } from "@/@types/customTypes";
+import { Dates, Invoice } from "src/@types/customTypes";
 import { InvoiceDatabaseInterface } from "@/repositories/interfaces/invoice";
 
 
@@ -15,7 +15,7 @@ export async function createInvoices(
 
 	if(invoicesCreated.length === dueDates.length){
 		return {
-			invoices: invoicesCreated.sort((a,b) => a.due_date.getTime() - b.due_date.getTime()),
+			invoices: invoicesCreated.sort((a,b) => a.dueDate.getTime() - b.dueDate.getTime()),
 			createNewInvoices
 		};
 	}
@@ -24,16 +24,16 @@ export async function createInvoices(
 	datesForInvoices.forEach((dates) => {
 
 		const invoice = invoicesCreated.find((invoiceCreated) => {
-			if(invoiceCreated.due_date.getTime() === dates.dueDate.getTime()){
+			if(invoiceCreated.dueDate.getTime() === dates.dueDate.getTime()){
 				return invoiceCreated;
 			}
 		});
 
 		if(!invoice){
 			createNewInvoices.push({
-				due_date: dates.dueDate,
-				closing_date: dates.closingDate,
-				user_id: userId
+				dueDate: dates.dueDate,
+				closingDate: dates.closingDate,
+				userId: userId
 			});
 		}
 	});
@@ -43,7 +43,7 @@ export async function createInvoices(
 
 
 	const allInvoices = [...invoices, ...invoicesCreated].sort(
-		(a,b) => a.due_date.getTime() - b.due_date.getTime()
+		(a,b) => a.dueDate.getTime() - b.dueDate.getTime()
 	);
 
 	

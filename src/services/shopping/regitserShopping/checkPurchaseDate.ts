@@ -16,7 +16,7 @@ export async function checkPurchaseDate(
 
 
 	if(purchaseDate && currentDate.getTime() < purchaseMoment.getTime()){
-		throw new DataValidationError("Data informada é invalidata.");
+		throw new DataValidationError("A data da compra informada é inválida. A data deve ser a atual ou anterior ao dia de lançamento da compra.");
 	}
 
 

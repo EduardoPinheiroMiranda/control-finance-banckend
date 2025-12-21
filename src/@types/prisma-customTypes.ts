@@ -75,7 +75,7 @@ export interface CardInvoice{
     pay: boolean,
     dueDate: Date,
     current: boolean,
-    amount: Decimal,
+    amount: number,
     installments: Installment[]
 }
 

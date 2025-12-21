@@ -69,7 +69,7 @@ export async function getAllCardInvoices(app: FastifyTypes){
 					request.params.cardId
 				);
 
-				
+				console.log(invoices.subtitles);
 				return reply.status(200).send(invoices);
 
 			}catch(err: unknown){

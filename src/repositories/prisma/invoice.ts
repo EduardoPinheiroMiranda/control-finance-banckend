@@ -76,16 +76,17 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 				sum(installments.installment_value) as amount,
 				json_agg(
 					json_build_object(
-						'installment_id', installments.id,
-						'installment_number', installments.installment_number,
-						'installment_value', installments.installment_value,
-						'due_date', installments.due_date,
+						'installmentId', installments.id,
+						'installmentNumber', installments.installment_number,
+						'installmentValue', installments.installment_value,
+						'dueDate', installments.due_date,
 						'pay', installments.pay,
-						'shopping_id', installments.shopping_id,
-						'total_installments', shopping.total_installments,
-						'type_invoice', shopping.type_invoice,
-						'payment_method', shopping.payment_method,
-						'name', shopping.name
+						'shoppingId', installments.shopping_id,
+						'totalInstallments', shopping.total_installments,
+						'typeInvoice', shopping.type_invoice,
+						'paymentMethod', shopping.payment_method,
+						'name', shopping.name,
+						'purchaseDate', shopping.created_at
 					)
 					order by installments.created_at desc
 				) as installments
@@ -113,7 +114,7 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 				pay: invoice.pay,
 				dueDate: invoice.due_date,
 				current: invoice.current,
-				amount: Decimal(invoice.amount),
+				amount: invoice.amount,
 				installments: invoice.installments
 			};
 			

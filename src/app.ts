@@ -42,9 +42,11 @@ registerAllRoutes();
 app.setErrorHandler((err, _, reply) => {
 
 	if(Array.isArray(err.validation)){
-		reply.status(err.statusCode ?? 400).send(JSON.stringify({
+		return reply.status(err.statusCode ?? 400).send({
 			msg: "Data validation error.",
 			error: err.validation.map((issue) => issue.params)
-		}));
+		});
 	}
+
+	console.log(err);
 });

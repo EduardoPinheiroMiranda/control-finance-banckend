@@ -1,5 +1,5 @@
 import { InvoicePrismaRepository } from "@/repositories/prisma/invoice";
-import { UserPrismaRepository } from "@/repositories/prisma/user";
+import { UserPrismaRepository } from "@/repositories/prisma/user/user";
 import { GetAllCardInvoices } from "@/services/invoice/getAllCardInvoices";
 
 

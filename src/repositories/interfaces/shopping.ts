@@ -1,5 +1,39 @@
 import { Prisma, Shopping } from "@/generated/prisma/client";
-import { ShoppingListByType } from "@/@types/prisma-customTypes";
+import { Decimal } from "@prisma/client/runtime/library";
+
+
+export type ShoppingWithInstallment = Prisma.ShoppingGetPayload<{
+    include: {
+        installment: true
+    }
+}>
+
+export interface StructShopping {
+    id: string,
+    name: string,
+    typeInvoice: string,
+    paymentMethod: string,
+    value: Decimal,
+    totalInstallments: number,
+    pay: boolean,
+    description: string | null,
+    createdAt: string,
+    updatedAt: string,
+    cardId: string | null,
+    categoryId: string,
+    userId: string
+}
+
+export interface ShoppingListByType{
+    fixedExpense: StructShopping[],
+    extraExpense: StructShopping[]
+}
+
+export interface DataToFind {
+    userId: string,
+    name: string | null,
+    cursor: string | null
+}
 
 
 export interface ShoppingDatabaseInterface{
@@ -8,21 +42,13 @@ export interface ShoppingDatabaseInterface{
 
     delete(shoppingId: string): Promise<Shopping>
 
-    findFixedTypeOpenPurchases(userId: string): Promise<Prisma.ShoppingGetPayload<{
-        include: {
-            installment: true
-        }
-    }>[]>
+    findFixedTypeOpenPurchases(userId: string): Promise<ShoppingWithInstallment[]>
 
-    getAllShopping(userId: string, name: string | null, cursor: string | null): Promise<Shopping[]>
+    getAllShopping(data: DataToFind): Promise<Shopping[]>
 
     getById(shoppingId: string): Promise<Shopping| null>
 
-    getFullDataById(shoppingId: string): Promise<Prisma.ShoppingGetPayload<{
-        include: {
-            installment: true
-        }
-    }> | null>
+    getFullDataById(shoppingId: string): Promise<ShoppingWithInstallment | null>
 
     listAllOpenPurchases(userId: string): Promise<ShoppingListByType>
 

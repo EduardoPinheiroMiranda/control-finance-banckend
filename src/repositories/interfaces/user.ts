@@ -1,6 +1,13 @@
 import { Prisma, User } from "@/generated/prisma/client";
 
 
+export interface DataToUpdateLimit {
+	userId: string, 
+	limit: number,
+	dueDay: number,
+	closingDay: number
+}
+
 
 export interface UserDatabaseInterface{
     
@@ -12,7 +19,7 @@ export interface UserDatabaseInterface{
 
     update(userId: string, data: Prisma.UserUncheckedUpdateInput): Promise<User>
 
-    updateLimit(userId: string, limit: number, dueDay: number, closingDay: number): Promise<User>
+    updateLimit(data: DataToUpdateLimit): Promise<User>
 
     updatePassword(userId: string, password: string): Promise<User>
 }

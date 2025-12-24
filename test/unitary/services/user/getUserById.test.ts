@@ -1,5 +1,5 @@
 import { ResourceNotFound } from "@/errors/custonErros";
-import { UserPrismaRepository } from "@/repositories/prisma/user";
+import { UserPrismaRepository } from "@/repositories/prisma/user/user";
 import { GetUserById } from "@/services/user/getUserById";
 import { describe, expect, vi, it, beforeEach } from "vitest";
 import { Decimal } from "@prisma/client/runtime/library";

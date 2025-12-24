@@ -1,5 +1,5 @@
 import { DataValidationError } from "@/errors/custonErros";
-import { UserPrismaRepository } from "@/repositories/prisma/user";
+import { UserPrismaRepository } from "@/repositories/prisma/user/user";
 import { AuthenticateUser } from "@/services/user/authenticateUser";
 import { expect, it, vi, describe, beforeEach } from "vitest";
 import { Decimal } from "@prisma/client/runtime/library";

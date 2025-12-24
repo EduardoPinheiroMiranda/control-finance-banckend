@@ -1,4 +1,4 @@
-import { UserPrismaRepository } from "@/repositories/prisma/user";
+import { UserPrismaRepository } from "@/repositories/prisma/user/user";
 import { UpdateUser } from "@/services/user/updateUser";
 import { describe, expect, vi, it, beforeEach } from "vitest";
 import { Decimal } from "@prisma/client/runtime/library";

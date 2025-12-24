@@ -10,43 +10,27 @@ export class CategoryPrismaRepository implements CategoryDatabaseInterface{
 		const currentDate = new Date();
 
 		const creteCategories = data.map((category, index) => {
-			
 			const createdAt = new Date(currentDate.setMilliseconds(index));
-			return {
-				name: category.name,
-				createdAt: createdAt,
-				updatedAt: createdAt
-			};
+			return { name: category.name, createdAt: createdAt, updatedAt: createdAt };
 		});
         
-		const category = await prisma.category.createManyAndReturn({data: creteCategories});
-		return category;
+		return await prisma.category.createManyAndReturn({data: creteCategories});
 	}
 
 	async getAllCategories(cursor: string | null){
 
 		if(!cursor){
-			const categories = await prisma.category.findMany({
+			return await prisma.category.findMany({
 				take: 20,
-				orderBy: {
-					createdAt: "asc"
-				}
+				orderBy: { createdAt: "asc" }
 			});
-	
-			return categories;
 		}
         
-		const categories = await prisma.category.findMany({
+		return await prisma.category.findMany({
 			take: 20,
 			skip: 1,
-			cursor: {
-				id: cursor
-			},
-			orderBy: {
-				createdAt: "asc"
-			}
+			cursor: { id: cursor },
+			orderBy: { createdAt: "asc" }
 		});
-
-		return categories;
 	}
 }

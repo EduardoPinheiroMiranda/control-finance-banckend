@@ -1,4 +1,4 @@
-import { UserPrismaRepository } from "@/repositories/prisma/user";
+import { UserPrismaRepository } from "@/repositories/prisma/user/user";
 import { ControlLimit } from "@/services/user/controlLimit";
 
 

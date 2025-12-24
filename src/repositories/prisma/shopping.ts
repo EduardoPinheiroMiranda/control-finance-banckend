@@ -1,102 +1,69 @@
 import { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/libs/primsa";
-import { ShoppingDatabaseInterface } from "../interfaces/shopping";
-import { ShoppingListByType } from "@/@types/prisma-customTypes";
+import { DataToFind, ShoppingDatabaseInterface } from "../interfaces/shopping";
 
 
 export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 
 	async create(data: Prisma.ShoppingUncheckedCreateInput){
-        
-		const shoping = await prisma.shopping.create({data});
-
-		return shoping;
+		return await prisma.shopping.create({data});
 	}
 
 	async delete(shoppingId: string){
-		
-		const installment = await prisma.shopping.delete({
-			where: {
-				id: shoppingId
-			}
+		return await prisma.shopping.delete({
+			where: { id: shoppingId }
 		});
-
-		return installment;
 	}
 
 	async findFixedTypeOpenPurchases(userId: string){
-		
-		const shoppingList = await prisma.shopping.findMany({
+		return await prisma.shopping.findMany({
 			where: {
 				userId: userId,
 				pay: false,
 				typeInvoice: "FIXED_EXPENSE"
 			},
-			include: {
-				installment: true
-			}
+			include: { installment: true }
 		});
-
-		return shoppingList;
 	}
 
-	async getAllShopping(userId: string, name: string | null, cursor: string | null){
-
-		const shoppings = await prisma.shopping.findMany({
+	async getAllShopping(data: DataToFind){
+		return await prisma.shopping.findMany({
 			take: 20,
-			...(cursor && {
+			...(data.cursor && {
 				skip: 1,
 				cursor: {
-					id: cursor
+					id: data.cursor
 				}
 			}),
 			where:{
-				userId: userId,
-				...(name && {
+				userId: data.userId,
+				...(data.name && {
 					name: {
-						contains: name,
+						contains: data.name,
 						mode: "insensitive"
 					}
 				})
 			},
-			orderBy: {
-				createdAt: "desc"
-			}
+			orderBy: { createdAt: "desc" }
 		});
-
-		return shoppings;
 	}
 
 	async getById(shoppingId: string){
-
-		const shoping = await prisma.shopping.findUnique({
-			where: {
-				id: shoppingId
-			},
+		return await prisma.shopping.findUnique({
+			where: { id: shoppingId },
 		});
-
-		return shoping;
 	}
 
 	async getFullDataById(shoppingId: string){
-		
-		const shoping = await prisma.shopping.findUnique({
-			where: {
-				id: shoppingId
-			},
-			include: {
-				installment: true
-			}
+		return await prisma.shopping.findUnique({
+			where: { id: shoppingId },
+			include: { installment: true }
 		});
-
-		return shoping;
 	}
 
 	async listAllOpenPurchases(userId: string){
 		
-		const shoppings = await prisma.$queryRaw<{
-			shopping: ShoppingListByType
-		}[]>`
+		const result = await prisma.$queryRaw<any[]>`
 			select
 				json_build_object(
 					'fixedExpense', coalesce(
@@ -147,34 +114,28 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 				shopping.user_id = ${userId} and shopping.pay = false
 		`;
 
+		
+
+
+
 		return shoppings[0].shopping;
 	}
 
 	async payShopping(shoppingId: string[]){
 		
 		const shopingPaid = await prisma.shopping.updateMany({
-			where: {
-				id: { in: shoppingId }
-			},
-			data: {
-				pay: true
-			}
+			where: { id: { in: shoppingId } },
+			data: { pay: true }
 		});
-
 
 		return shopingPaid.count;
 	}
 
 	async updateShopping(shoppingId: string, data: Prisma.ShoppingUncheckedUpdateInput){
-		
-		const shopping = await prisma.shopping.update({
-			where: {
-				id: shoppingId
-			},
+		return await prisma.shopping.update({
+			where: { id: shoppingId },
 			data
 		});
-
-		return shopping;
 	}
 
 	async updateTotalInstallments(shoppingIds: string[]){
@@ -190,7 +151,6 @@ export class ShoppingPrismaRepository implements ShoppingDatabaseInterface{
 				}
 			}
 		});
-
 
 		return update.count;
 	}

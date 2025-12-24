@@ -1,4 +1,4 @@
-import { PaymentMethod, TypeExtract, TypeInvoice } from "@/generated/prisma/client";
+import { PaymentMethod, TypeInvoice } from "@/generated/prisma/client";
 import { Decimal } from "@/generated/prisma/runtime/library";
 
 
@@ -76,11 +76,4 @@ export interface Application{
     colorFont: string | null,
     colorApplication: string | null,
     icon: string
-}
-
-
-export interface Filter{
-    date: string | null,
-    applicationId: string | null,
-    type: TypeExtract | null
 }

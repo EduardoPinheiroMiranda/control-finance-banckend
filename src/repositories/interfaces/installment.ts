@@ -1,5 +1,13 @@
 import { Installment, Prisma } from "@/generated/prisma/client";
-import { InstallmentWithTotalInstallments } from "@/@types/prisma-customTypes";
+
+
+export type InstallmentWithTotalInstallments = Prisma.InstallmentGetPayload<{
+    include: {
+        shopping: {
+            select: { totalInstallments: true }
+        }
+    }
+}>
 
 
 export interface InstallmentDatabaseInterface{

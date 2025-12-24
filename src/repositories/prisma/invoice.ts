@@ -1,68 +1,42 @@
-import { InvoiceDatabaseInterface } from "../interfaces/invoice";
+import { CardInvoice, DetailedInvoice, Installment, InvoiceDatabaseInterface, InvoiceDetails, ReturnTypeGetInvoiceCards } from "../interfaces/invoice";
 import { prisma } from "@/libs/primsa";
-import { CardInvoice, Installment, Invoice, InvoiceDetails, ReturnTypeGetInvoiceCards } from "@/@types/prisma-customTypes";
-import { Decimal } from "@prisma/client/runtime/library";
 import { Prisma } from "@/generated/prisma/client";
 
 
 export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 
 	async advanceInvoices(){
-
-		const invoices = await prisma.invoice.findMany({
+		return await prisma.invoice.findMany({
 			where: {
 				pay: false,
-				closingDate: {
-					lte: new Date()
-				}
+				closingDate: { lte: new Date() }
 			},
 			include: {
 				installment: {
-					select: {
-						pay: true
-					}
+					select: { pay: true }
 				}
 			},
 			take: 100
 		});
-
-
-		return invoices;
 	}
 
 	async create(data: Prisma.InvoiceUncheckedCreateInput[]){
-        
-		const invoices = await prisma.invoice.createManyAndReturn({data});
-
-		return invoices;
+		return await prisma.invoice.createManyAndReturn({data});
 	}
 
 	async findInvoicesFromDueDate(userId: string, dueDates: string[]){
-		
-		const invoices = await prisma.invoice.findMany({
-			where: {
-				OR: dueDates.map((date) => {
-					return { dueDate: date, userId: userId };
-				})
-			}
+		return await prisma.invoice.findMany({
+			where: { OR: dueDates.map((date) => {
+				return { dueDate: date, userId: userId };
+			})}
 		});
-
-		return invoices;
 	}
 
 	async findOpenInvoices(userId: string){
-		
-		const invoices = await prisma.invoice.findMany({
-			where:{
-				userId: userId,
-				pay: false,
-			},
-			orderBy: {
-				dueDate: "asc"
-			}
+		return await prisma.invoice.findMany({
+			where:{ userId: userId, pay: false, },
+			orderBy: { dueDate: "asc" }
 		});
-
-		return invoices;
 	}
 
 	async getAllCardInvoices(userId: string, cardId: string, dueDate: Date){
@@ -92,59 +66,54 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 				) as installments
 			from
 				invoices
-				
-				INNER JOIN installments ON
-				installments.invoice_id = invoices.id
-				
-				INNER JOIN shopping ON
-				shopping.id = installments.shopping_id
+				inner join installments on installments.invoice_id = invoices.id
+				inner join shopping on shopping.id = installments.shopping_id
 			where 
-				invoices.user_id = ${userId} and
-				shopping.card_id = ${cardId}
-			
+				invoices.user_id = ${userId} and shopping.card_id = ${cardId}
 			group by invoices.id, invoices.due_date
 			order by invoices.due_date;
 		`;
 
 
 		const invoices: CardInvoice[] = result.map((invoice) => {
-
-			return{
+			return {
 				invoiceId: invoice.invoice_id,
 				pay: invoice.pay,
 				dueDate: invoice.due_date,
 				current: invoice.current,
-				amount: invoice.amount,
-				installments: invoice.installments
+				amount: Prisma.Decimal(invoice.amount),
+				installments: invoice.installments.map((installment: any) => {
+					return{
+						installmentId: installment.id,
+						installmentNumber: installment.installment_number,
+						installmentValue: Prisma.Decimal(installment.installment_value),
+						dueDate: installment.due_date,
+						pay: installment.pay,
+						shoppingId: installment.shopping_id,
+						totalInstallments: installment.total_installments,
+						typeInvoice: installment.type_invoice,
+						paymentMethod: installment.payment_method,
+						name: installment.name,
+						purchaseDate: installment.created_at
+					};
+				})
 			};
-			
 		});
 
 		return invoices;
 	}
 
 	async getAllInvoices(userId: string, currentInvoiceDueDate: Date){
-		
 		const where = Prisma.sql`invoices.user_id = ${userId}`;
 		const limit = Prisma.sql``;
-		const invoices = await this.invoiceSearch(currentInvoiceDueDate, where, limit);
-		
-		return invoices;
+		return await this.invoiceSearch(currentInvoiceDueDate, where, limit);
 	}
 
 	async getById(invoiceId: string){
-		
-		const invoice = await prisma.invoice.findUnique({
-			where: {
-				id: invoiceId
-			},
-			include: {
-				installment: true
-			}
+		return await prisma.invoice.findUnique({
+			where: { id: invoiceId },
+			include: { installment: true }
 		});
-
-
-		return invoice;
 	}
 
 	async getCurrentInvoice(userId: string, dueDate: Date){
@@ -163,14 +132,12 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 			)
 		`;
 		const limit = Prisma.sql`limit 1`;
-		const invoice = await this.invoiceSearch(dueDate, where, limit);
-		
-		return invoice;		
+		return await this.invoiceSearch(dueDate, where, limit);
 	}
 
 	async getInstallmentsByInvoice(invoiceId: string){
 		
-		const installments = await prisma.$queryRaw<Installment[]>`
+		const result = await prisma.$queryRaw<any[]>`
 			select
 				installments.id as installment_id,
 				installments.installment_number,
@@ -191,12 +158,28 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 				invoices.id = ${invoiceId}
 		`;
 
+		const installments: Installment[] = result.map((installment) => {
+			return{
+				installmentId: installment.installment_id,
+				installmentNumber: Number(installment.installment_number),
+				installmentValue: Prisma.Decimal(installment.installment_value),
+				dueDate: installment.due_date,
+				pay: installment.pay,
+				shoppingId: installment.shopping_id,
+				totalInstallments: Number(installment.total_installments),
+				typeInvoice: installment.type_invoice,
+				paymentMethod: installment.payment_method,
+				name: installment.name,
+				purchaseDate: installment.created_at
+			};
+		});
+
 		return installments;
 	}
 
 	async getInvoiceCards(invoiceId: string){
 		
-		const cards = await prisma.$queryRaw<ReturnTypeGetInvoiceCards[]>`
+		const result = await prisma.$queryRaw<any[]>`
 			select
 				cards.id,
 				cards.name,
@@ -211,6 +194,15 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 				invoices.id = ${invoiceId} 
 			group by cards.id
 		`;
+
+		const cards: ReturnTypeGetInvoiceCards[] = result.map((card) => {
+			return{
+				id: card.id,
+				name: card.name,
+				deuDay: card.due_day,
+				amount: Prisma.Decimal(card.amount)
+			};
+		});
 
 		return cards;
 	}
@@ -230,8 +222,7 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 			where
 				invoices.id = ${invoiceId}
 			group by 
-				invoices.id,
-				invoices.due_date
+				invoices.id, invoices.due_date
 			order by 
 				invoices.due_date;
 		`;
@@ -281,7 +272,7 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 								'typeInvoice', shopping.type_invoice,
 								'paymentMethod', shopping.payment_method,
 								'name', shopping.name,
-          						'purchaseDate', shopping.created_at
+	      						'purchaseDate', shopping.created_at
 							)
 							order by installments.created_at desc
 						)filter (where shopping.type_invoice = 'FIXED_EXPENSE'),
@@ -295,13 +286,13 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 								'installmentNumber', installments.installment_number,
 								'installmentValue', installments.installment_value,
 								'dueDate', installments.due_date,
-      							'pay', installments.pay,
+	  							'pay', installments.pay,
 								'shoppingId', installments.shopping_id,
 								'totalInstallments', shopping.total_installments,
 								'typeInvoice', shopping.type_invoice,
 								'paymentMethod', shopping.payment_method,
 								'name', shopping.name,
-          						'purchaseDate', shopping.created_at
+	      						'purchaseDate', shopping.created_at
 							)
 							order by installments.created_at desc
 						)filter (where shopping.type_invoice = 'EXTRA_EXPENSE'),
@@ -325,41 +316,55 @@ export class InvoicePrismaRepository implements InvoiceDatabaseInterface{
 		`;
 
 
-		const invoice: Invoice[] = result.map((invoice) => {
+		function convertValues(installments: any[]){
+			return installments.map((installment) => {
+				return {
+					installmentId: installment.installmentId,
+					installmentNumber: Number(installment.installmentNumber),
+					installmentValue: Prisma.Decimal(installment.installmentValue),
+					dueDate: installment.dueDate,
+					pay: installment.pay,
+					shoppingId: installment.shoppingId,
+					totalInstallments: Number(installment.totalInstallments),
+					typeInvoice: installment.typeInvoice,
+					paymentMethod: installment.paymentMethod,
+					name: installment.name,
+					purchaseDate: installment.purchaseDate
+				};
+			});
+		}
+
+
+		const invoices: DetailedInvoice[] = result.map((invoice) => {
 			return {
 				invoiceId: invoice.invoice_id,
 				pay: invoice.pay,
 				dueDate: invoice.due_date,
 				closingDate: invoice.closing_date,
 				current: invoice.current,
-				amount: Number(invoice.amount),
-				limit: Number(invoice.limit),
-				available: Number(invoice.limit - invoice.amount),
-				totalFixedExpense: Number(invoice.total_fixed_expense),
-				totalExtraExpense: Number(invoice.total_extra_expense),
-				totalInvoice: Number(invoice.total_invoice),
-				totalCard: Number(invoice.total_card),
-				totalMoney: Number(invoice.total_money),
-				installments: invoice.installments
+				amount: Prisma.Decimal(invoice.amount),
+				limit: Prisma.Decimal(invoice.limit),
+				available: Prisma.Decimal(invoice.limit - invoice.amount),
+				totalFixedExpense: Prisma.Decimal(invoice.total_fixed_expense),
+				totalExtraExpense: Prisma.Decimal(invoice.total_extra_expense),
+				totalInvoice: Prisma.Decimal(invoice.total_invoice),
+				totalCard: Prisma.Decimal(invoice.total_card),
+				totalMoney: Prisma.Decimal(invoice.total_money),
+				installments: {
+					extraExpense: invoice.installments.extraExpense.length > 0 ? convertValues(invoice.extraExpense) : [],
+					fixedExpense: invoice.installments.fixedExpense.length > 0 ? convertValues(invoice.fixedExpense) : [],
+				}
 			};
 		});
 
 
-		return invoice;
+		return invoices;
 	}
 
 	async payInvoice(invoiceId: string[]){
-		
-		const invoicePaid = await prisma.invoice.updateManyAndReturn({
-			where: {
-				id: { in: invoiceId }
-			},
-			data: {
-				pay: true
-			}
+		return await prisma.invoice.updateManyAndReturn({
+			where: { id: { in: invoiceId } },
+			data: { pay: true }
 		});
-
-
-		return invoicePaid;
 	}
 }

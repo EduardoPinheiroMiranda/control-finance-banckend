@@ -1,27 +1,18 @@
 import { Prisma } from "@/generated/prisma/client";
-import { ApplicationDatabaseInterface } from "../interfaces/application";
+import { ApplicationDatabaseInterface, Filter } from "../interfaces/application";
 import { prisma } from "@/libs/primsa";
-import { Decimal } from "@prisma/client/runtime/library";
-import { Filter } from "src/@types/customTypes";
 
 
 export class ApplicationPrismaRepository implements ApplicationDatabaseInterface{
 
 	async create(data: Prisma.ApplicationUncheckedCreateInput){
-        
-		const application = await prisma.application.create({data});
-		return application;
+		return await prisma.application.create({data});
 	}
 
 	async delete(applicationId: string){
-		
-		const application = await prisma.application.delete({ 
-			where: {
-				id: applicationId
-			}
+		return await prisma.application.delete({ 
+			where: { id: applicationId }
 		});
-
-		return application;
 	}
 
 	async filterApplications(filter: Filter){
@@ -46,70 +37,47 @@ export class ApplicationPrismaRepository implements ApplicationDatabaseInterface
 
 
 		return {
-			amount: amount._sum.value ?? Decimal(0),
+			amount: amount._sum.value ?? Prisma.Decimal(0),
 			extracts
 		};
 	}
 
 	async getAllInfo(applicationId: string){
-		
-		const application = await prisma.application.findUnique({
-			where: {
-				id: applicationId
-			},
-			include: {
-				extract: true
-			}
+		return await prisma.application.findUnique({
+			where: { id: applicationId },
+			include: { extract: true }
 		});
-
-		return application;
 	}
 
 	async getAllApllications(userId: string){
 
 		const [ applications, sumOfValues ] = await Promise.all([
 			await prisma.application.findMany({
-				where:{
-					userId: userId
-				},
+				where:{ userId: userId },
 			}),
 			await prisma.application.aggregate({
-				_sum:{
-					value: true
-				},
-				where: {
-					userId: userId
-				}
+				_sum:{ value: true },
+				where: { userId: userId }
 			})
 		]);
 
 
 		return {
-			value: sumOfValues._sum.value ?? new Prisma.Decimal(0),
+			value: sumOfValues._sum.value ?? Prisma.Decimal(0),
 			applications
 		};
 	}
 
 	async getById(applicationId: string){
-		
-		const application = await prisma.application.findUnique({
-			where: {
-				id: applicationId
-			}
+		return await prisma.application.findUnique({
+			where: { id: applicationId }
 		});
-
-		return application;
 	}
 
 	async update(applicationId: string, data: Prisma.ApplicationUncheckedUpdateInput){
-		
-		const application = await prisma.application.update({
-			where: {
-				id: applicationId
-			},
+		return await prisma.application.update({
+			where: { id: applicationId },
 			data
 		});
-
-		return application;
 	}
 }

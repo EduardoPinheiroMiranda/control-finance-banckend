@@ -1,77 +1,48 @@
 import { prisma } from "@/libs/primsa";
-import { UserDatabaseInterface } from "../interfaces/user";
+import { DataToUpdateLimit, UserDatabaseInterface } from "../interfaces/user";
 import { Prisma } from "@/generated/prisma/client";
 
 
 export class UserPrismaRepository implements UserDatabaseInterface{
 
 	async create(data: Prisma.UserCreateInput){
-		const user = await prisma.user.create({data});
-	    return user;
+		return await prisma.user.create({data});
 	}
 
 	async findEmail(email: string){
-		
-		const user = prisma.user.findUnique({
-			where: {
-				email
-			}
+		return prisma.user.findUnique({
+			where: { email }
 		});
-
-		return user;
-
 	}
 
 	async getById(userId: string){
-		
-		const user = await prisma.user.findUnique({
-			where: {
-				id: userId
-			}
+		return await prisma.user.findUnique({
+			where: { id: userId }
 		});
-
-		return user;
 	}
 
 	async update(userId: string, data: Prisma.UserUncheckedUpdateInput){
-
-		const user = await prisma.user.update({
-			where: { 
-				id: userId
-			},
+		return await prisma.user.update({
+			where: { id: userId },
 			data
 		});
-
-		return user;
 	}
 
-	async updateLimit(userId: string, limit: number, dueDay: number, closingDay: number){
-		
-		const user = await prisma.user.update({
-			where: {
-				id: userId
-			},
+	async updateLimit(data: DataToUpdateLimit){
+		return await prisma.user.update({
+			where: { id: data.userId },
 			data: {
-				limit,
-				dueDay: dueDay,
-				closingDay: closingDay
+				limit: data.limit,
+				dueDay: data.dueDay,
+				closingDay: data.closingDay
 			}
 		});
-
-		return user;
 	}
 
 	async updatePassword(userId: string, password: string){
-		
-		const user = await prisma.user.update({
-			where: {
-				id: userId
-			},
-			data: {
-				password
-			}
+		return await prisma.user.update({
+			where: { id: userId },
+			data: { password }
 		});
-
-		return user;
 	}
 }

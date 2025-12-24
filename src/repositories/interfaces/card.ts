@@ -1,7 +1,6 @@
 import { Card, Prisma } from "@/generated/prisma/client";
 
 
-
 export interface CardDatabaseInterface{
     
     create(data: Prisma.CardUncheckedCreateInput): Promise<Card>

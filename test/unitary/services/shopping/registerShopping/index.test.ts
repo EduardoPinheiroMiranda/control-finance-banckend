@@ -3,7 +3,7 @@ import { CardPrismaRepository } from "@/repositories/prisma/card";
 import { InstallmentPrismaRepository } from "@/repositories/prisma/installment";
 import { InvoicePrismaRepository } from "@/repositories/prisma/invoice";
 import { ShoppingPrismaRepository } from "@/repositories/prisma/shopping";
-import { UserPrismaRepository } from "@/repositories/prisma/user";
+import { UserPrismaRepository } from "@/repositories/prisma/user/user";
 import { RegisterShopping } from "@/services/shopping/regitserShopping";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Decimal } from "@prisma/client/runtime/library";

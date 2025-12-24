@@ -6,8 +6,6 @@ import { prisma } from "@/libs/primsa";
 export class ExtractPrismaRepository implements ExtractDatabaseInterface{
 
 	async create(data: Prisma.ExtractUncheckedCreateInput){
-        
-		const extract = await prisma.extract.create({data});
-		return extract;
+		return await prisma.extract.create({data});
 	}
 }

@@ -1,6 +1,6 @@
 import { Decimal } from "@/generated/prisma/runtime/library";
 import { InvoicePrismaRepository } from "@/repositories/prisma/invoice";
-import { UserPrismaRepository } from "@/repositories/prisma/user";
+import { UserPrismaRepository } from "@/repositories/prisma/user/user";
 import { GetCurrentInvoice } from "@/services/invoice/getCurrentInvoice";
 import { HandlerDueDate } from "@/utils/handlerDueDate";
 import { describe, expect, it, beforeEach, vi, afterEach } from "vitest";

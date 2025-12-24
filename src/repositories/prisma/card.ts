@@ -6,65 +6,33 @@ import { prisma } from "@/libs/primsa";
 export class CardPrismaRepository implements CardDatabaseInterface{
 
 	async create(data: Prisma.CardUncheckedCreateInput){
-        
-		const card = await prisma.card.create({data});
-
-		return card;
+		return await prisma.card.create({data});
 	}
 
 	async disable(cardId: string){
-		
-		const disableCard = await prisma.card.update({
-			where: {
-				id: cardId,
-				active: true
-			},
-			data:{
-				active: false
-			}
+		return await prisma.card.update({
+			where: { id: cardId, active: true },
+			data:{ active: false }
 		});
-
-		return disableCard;
 	}
 
 	async getAllCards(userId: string){
-
-		const allCards = await prisma.card.findMany({
-			where: {
-				userId: userId,
-				active: true
-			},
-			orderBy: {
-				createdAt: "asc"
-			}
+		return await prisma.card.findMany({
+			where: { userId: userId, active: true },
+			orderBy: { createdAt: "asc" }
 		});
-
-		return allCards;
 	}
 
 	async getById(cardId: string){
-        
-		const card = await prisma.card.findUnique({
-			where: {
-				id: cardId,
-				active: true
-			}
+		return await prisma.card.findUnique({
+			where: { id: cardId, active: true }
 		});
-
-		return card;
 	}
 
 	async updateCartd(cardId: string, data: Prisma.CardUncheckedUpdateInput){
-		
-		const card = await prisma.card.update({
-			where: {
-				id: cardId,
-				active: true
-			},
+		return await prisma.card.update({
+			where: { id: cardId, active: true },
 			data
 		});
-
-		return card;
-
 	}
 }
